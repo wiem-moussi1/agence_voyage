@@ -1,82 +1,920 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>agence-voyage</title>
+    <title>Horizon Voyages</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Jost:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="../css/visitor.css">
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>
-    <div>
-        <ul class="navbar-local">
-            <li class="item"><a href="#home" class="active">Home</a></li>
-            <li class="item"><a href="#news">News</a></li>
-            <li class="item"><a href="#contact">Contact</a></li>
-            <li class="item" style="float:right"><a href="#about">About</a></li>
-        </ul>
-    </div>
 
+    <!-- ═══════════════ NAVBAR ═══════════════ -->
+    <nav id="mainNav">
+        <a href="#" class="nav-brand">
+            <div class="nav-logo">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2 L13.5 10 L22 12 L13.5 14 L12 22 L10.5 14 L2 12 L10.5 10 Z" />
+                    <circle cx="12" cy="12" r="2.5" />
+                </svg>
+            </div>
+            <div class="nav-name">
+                <span class="wordmark">Horizon</span>
+                <span class="tagline">Agence de Voyages</span>
+            </div>
+        </a>
 
-    <div id="demo" class="carousel slide" data-ride="carousel">
-        <ul class="carousel-indicators">
-            <li data-target="#demo" data-slide-to="0" class="active"></li>
-            <li data-target="#demo" data-slide-to="1"></li>
-            <li data-target="#demo" data-slide-to="2"></li>
+        <ul class="nav-links">
+            <li><a href="#home" class="active">Accueil</a></li>
+            <li><a href="#voyages">Voyages</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="#avis">Avis</a></li>
+            <li><a href="#newsletter">Newsletter</a></li>
         </ul>
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="../images/artparta-utah-5641320.jpg" alt="Los Angeles" width="1100" height="500">
-                <div class="carousel-caption">
-                    <h3>Los Angeles</h3>
-                    <p>We had such a great time in LA!</p>
+
+        <a href="login.html" class="btn-cnx">
+            <svg viewBox="0 0 24 24" stroke-width="1.5">
+                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3" />
+            </svg>
+            <span>Connexion</span>
+        </a>
+
+        <button class="nav-hamburger" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <!-- ═══════════════ VIDEO HERO CAROUSEL ═══════════════ -->
+    <section class="hero" id="heroCarousel">
+        <div class="video-track" id="videoTrack">
+
+            <div class="video-slide active">
+                <video src="../images/282814.mp4" autoplay muted loop playsinline></video>
+                <div class="slide-caption">
+                    <div class="destination">Paris</div>
+                    <div class="sub">La Ville Lumière · France</div>
                 </div>
             </div>
-            <div class="carousel-item">
-                <img src="../images/stocksnap-woman-2594934.jpg" alt="Chicago" width="1100" height="500">
-                <div class="carousel-caption">
-                    <h3>Chicago</h3>
-                    <p>Thank you, Chicago!</p>
+
+            <div class="video-slide">
+                <video src="../images/190884-888554421.mp4" muted loop playsinline></video>
+                <div class="slide-caption">
+                    <div class="destination">Turquie</div>
+                    <div class="sub">Pays des Sultans · Asie</div>
+                </div>
+            </div>
+
+            <div class="video-slide">
+                <video src="../images/112743-695433121.mp4" muted loop playsinline></video>
+                <div class="slide-caption">
+                    <div class="destination">Tunisie</div>
+                    <div class="sub">Capitale de la Tunisie · Afrique</div>
+                </div>
+            </div>
+
+            <div class="video-slide">
+                <video src="../images/137535-766715327.mp4" muted loop playsinline></video>
+                <div class="slide-caption">
+                    <div class="destination">Marrakech</div>
+                    <div class="sub">La Ville Rouge · Maroc</div>
+                </div>
+            </div>
+
+            <div class="video-slide">
+                <video src="../images/286652.mp4" muted loop playsinline></video>
+                <div class="slide-caption">
+                    <div class="destination">Maldives</div>
+                    <div class="sub">Atolls de Rêve · Océan Indien</div>
                 </div>
             </div>
 
         </div>
-        <a class="carousel-control-prev" href="#demo" data-slide="prev">
-            <span class="carousel-control-prev-icon"></span>
-        </a>
-        <a class="carousel-control-next" href="#demo" data-slide="next">
-            <span class="carousel-control-next-icon"></span>
-        </a>
+
+        <button class="carousel-btn prev" id="prevBtn" aria-label="Précédent">
+            <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6" /></svg>
+        </button>
+        <button class="carousel-btn next" id="nextBtn" aria-label="Suivant">
+            <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6" /></svg>
+        </button>
+
+        <div class="carousel-dots" id="dotsContainer">
+            <button class="dot active" data-index="0"></button>
+            <button class="dot" data-index="1"></button>
+            <button class="dot" data-index="2"></button>
+            <button class="dot" data-index="3"></button>
+            <button class="dot" data-index="4"></button>
+        </div>
+
+        <div class="slide-counter">
+            <span id="curSlide">01</span> / 05
+        </div>
+    </section>
+
+     <!-- ═══════════════ HOME / ACCUEIL ═══════════════ -->
+    <section id="home" class="home-section">
+
+        <!-- Bloc identité agence -->
+        <div class="home-identity">
+            <div class="home-logo-wrap">
+                <div class="home-logo-ring">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2 L13.5 10 L22 12 L13.5 14 L12 22 L10.5 14 L2 12 L10.5 10 Z"/>
+                        <circle cx="12" cy="12" r="2.5"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="home-agency-name">
+                <span class="home-wordmark">Horizon</span>
+                <span class="home-tagline">Agence de Voyages</span>
+            </div>
+            <div class="home-divider-gold"></div>
+            <p class="home-desc">
+                Nous concevons des voyages d'exception pour les esprits curieux et les cœurs aventuriers.
+                Chaque itinéraire est une œuvre sur-mesure, pensée pour révéler l'âme véritable de chaque destination.
+            </p>
+            <div class="home-stats">
+                <div class="home-stat">
+                    <span class="stat-num">+120</span>
+                    <span class="stat-lbl">Destinations</span>
+                </div>
+                <div class="home-stat-sep"></div>
+                <div class="home-stat">
+                    <span class="stat-num">4 800+</span>
+                    <span class="stat-lbl">Voyageurs satisfaits</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grille services -->
+        <div class="home-services-wrap">
+            <div class="home-services-label">Nos Services</div>
+            <div class="home-services-grid">
+
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5">
+                            <path d="M3 17l1-5h16l1 5H3z"/>
+                            <path d="M7 17V8a5 5 0 0 1 10 0v9"/>
+                            <circle cx="12" cy="5" r="1.5"/>
+                        </svg>
+                    </div>
+                    <h4>Voyages Sur-Mesure</h4>
+                    <p>Itinéraires personnalisés selon vos envies, votre budget et votre rythme.</p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5">
+                            <rect x="2" y="7" width="20" height="14" rx="2"/>
+                            <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+                            <line x1="12" y1="12" x2="12" y2="16"/>
+                            <line x1="10" y1="14" x2="14" y2="14"/>
+                        </svg>
+                    </div>
+                    <h4>Réservations Hôtels</h4>
+                    <p>Sélection rigoureuse de boutique-hôtels, riads et resorts de prestige.</p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+                        </svg>
+                    </div>
+                    <h4>Assistance 24h/24</h4>
+                    <p>Un conseiller dédié joignable à tout moment pendant votre séjour.</p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                        </svg>
+                    </div>
+                    <h4>Visas & Formalités</h4>
+                    <p>Gestion complète des démarches administratives et visas pour tous pays.</p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                            <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                    </div>
+                    <h4>Circuits Guidés</h4>
+                    <p>Guides locaux certifiés, immersion culturelle et découvertes insolites.</p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        </svg>
+                    </div>
+                    <h4>Assurance Voyage</h4>
+                    <p>Couverture complète rapatriement, annulation et protection bagages.</p>
+                </div>
+
+            </div>
+        </div>
+
+    </section>
+
+    <!-- ═══════════════ NOS VOYAGES ═══════════════ -->
+    <section id="voyages" style="padding-top:100px">
+        <div class="section-label">Découvrez</div>
+        <h2 class="section-title">Nos Voyages d'Exception</h2>
+        <div class="divider"></div>
+        <div id="voyageCards" class="cards-grid">
+
+            <div class="voyage-card"
+                data-title="Paris Romantique"
+                data-label="Europe · France"
+                data-desc="5 jours au cœur de la capitale française, entre musées, gastronomie étoilée et promenades le long de la Seine. Un séjour pensé pour les amoureux de culture et de raffinement."
+                data-duree="5 jours"
+                data-depart="Tunis / Paris CDG"
+                data-places="12 places"
+                data-price="890 €"
+                data-img="../images/thedigitalartist-eiffel-tower-3349075.jpg">
+                <div>
+                    <img src="../images/thedigitalartist-eiffel-tower-3349075.jpg" alt="Paris">
+                </div>
+                <div>
+                    <h3>Paris Romantique</h3>
+                    <p>5 jours au cœur de la capitale française, entre musées et gastronomie.</p>
+                    <div class="price">À partir de 890 €</div>
+                    <button class="btn-details" onclick="openModal(this.closest('.voyage-card'))">
+                        <span>Voir détails</span>
+                        <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="voyage-card"
+                data-title="Tokyo Moderne"
+                data-label="Asie · Japon"
+                data-desc="Plongez dans le Japon contemporain où tradition millénaire et innovation se côtoient. Temples shintoïstes, quartiers néon, gastronomie et cerisiers en fleurs."
+                data-duree="8 jours"
+                data-depart="Tunis / Paris CDG"
+                data-places="10 places"
+                data-price="1 450 €"
+                data-img="../images/tokyo-for-digital-nomads.jpg">
+                <div>
+                    <img src="../images/tokyo-for-digital-nomads.jpg" alt="Tokyo">
+                </div>
+                <div>
+                    <h3>Tokyo Moderne</h3>
+                    <p>Plongez dans le Japon contemporain, tradition et innovation réunies.</p>
+                    <div class="price">À partir de 1 450 €</div>
+                    <button class="btn-details" onclick="openModal(this.closest('.voyage-card'))">
+                        <span>Voir détails</span>
+                        <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="voyage-card"
+                data-title="Maldives Luxe"
+                data-label="Océan Indien · Maldives"
+                data-desc="Bungalows sur pilotis, lagons turquoise, plongée avec les raies manta et couchers de soleil spectaculaires. Le paradis absolu pour un séjour hors du temps."
+                data-duree="7 jours"
+                data-depart="Tunis / Malé"
+                data-places="8 places"
+                data-price="2 200 €"
+                data-img="../images/Bodu.jpg">
+                <div>
+                    <img src="../images/Bodu.jpg" alt="Maldives">
+                </div>
+                <div>
+                    <h3>Maldives Luxe</h3>
+                    <p>Bungalows sur l'eau, plongée et couchers de soleil sur l'Océan Indien.</p>
+                    <div class="price">À partir de 2 200 €</div>
+                    <button class="btn-details" onclick="openModal(this.closest('.voyage-card'))">
+                        <span>Voir détails</span>
+                        <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+   
+
+    <!-- ═══════════════ CONTACT US ═══════════════ -->
+    <section id="contact" class="contact-section">
+
+        <!-- En-tête -->
+        <div class="contact-header">
+            <div class="section-label">Nous Joindre</div>
+            <h2 class="section-title">Parlons de Votre Prochain Voyage</h2>
+            <div class="divider"></div>
+            <p class="contact-intro">Notre équipe est à votre écoute du lundi au samedi, de 9h à 19h.
+                Remplissez le formulaire ou contactez-nous directement.</p>
+        </div>
+
+        <!-- Grille principale : formulaire | carte -->
+        <div class="contact-grid">
+
+            <!-- Formulaire -->
+            <div class="contact-form-wrap">
+                <div class="cf-group">
+                    <div class="cf-field">
+                        <label for="cf-nom">Nom complet</label>
+                        <input type="text" id="cf-nom" placeholder="ex. Ahmed Ben Ali">
+                    </div>
+                    <div class="cf-field">
+                        <label for="cf-email">Email</label>
+                        <input type="email" id="cf-email" placeholder="vous@email.com">
+                    </div>
+                </div>
+                <div class="cf-group">
+                    <div class="cf-field">
+                        <label for="cf-tel">Téléphone</label>
+                        <input type="tel" id="cf-tel" placeholder="+216 XX XXX XXX">
+                    </div>
+                    <div class="cf-field">
+                        <label for="cf-sujet">Sujet</label>
+                        <select id="cf-sujet">
+                            <option value="">Choisir un sujet…</option>
+                            <option>Demande de devis</option>
+                            <option>Réservation</option>
+                            <option>Information voyage</option>
+                            <option>Réclamation</option>
+                            <option>Autre</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="cf-field">
+                    <label for="cf-msg">Message</label>
+                    <textarea id="cf-msg" rows="5" placeholder="Décrivez votre projet de voyage, vos dates, le nombre de personnes…"></textarea>
+                </div>
+                <button class="cf-submit" onclick="submitForm()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                        <line x1="22" y1="2" x2="11" y2="13"/>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                    </svg>
+                    <span>Envoyer le message</span>
+                </button>
+                <div class="cf-feedback" id="cfFeedback"></div>
+            </div>
+
+            <!-- Carte Google Maps -->
+            <div class="contact-map-wrap">
+                <iframe
+                    class="contact-map"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3193.7!2d10.1815!3d36.8065!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12fd337f5e7ef543%3A0xd671924e714a0275!2sTunis%2C%20Tunisie!5e0!3m2!1sfr!2stn!4v1680000000000"
+                    allowfullscreen="" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+
+        </div>
+
+        <!-- Bande infos contact -->
+        <div class="contact-infos-bar">
+
+            <div class="contact-info-item">
+                <div class="ci-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                        <circle cx="12" cy="10" r="3"/>
+                    </svg>
+                </div>
+                <div class="ci-text">
+                    <span class="ci-label">Adresse</span>
+                    <span class="ci-val">12 Avenue Habib Bourguiba, Tunis 1000, Tunisie</span>
+                </div>
+            </div>
+
+            <div class="contact-info-sep"></div>
+
+            <div class="contact-info-item">
+                <div class="ci-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+                    </svg>
+                </div>
+                <div class="ci-text">
+                    <span class="ci-label">Téléphone</span>
+                    <span class="ci-val">+216 71 000 000</span>
+                    <span class="ci-val">+216 98 000 000</span>
+                </div>
+            </div>
+
+            <div class="contact-info-sep"></div>
+
+            <div class="contact-info-item">
+                <div class="ci-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                        <polyline points="22,6 12,13 2,6"/>
+                    </svg>
+                </div>
+                <div class="ci-text">
+                    <span class="ci-label">Email</span>
+                    <span class="ci-val">contact@horizon-voyages.tn</span>
+                    <span class="ci-val">devis@horizon-voyages.tn</span>
+                </div>
+            </div>
+
+            <div class="contact-info-sep"></div>
+
+            <div class="contact-info-item">
+                <div class="ci-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                </div>
+                <div class="ci-text">
+                    <span class="ci-label">Horaires</span>
+                    <span class="ci-val">Lun – Sam : 9h00 – 19h00</span>
+                    <span class="ci-val">Dimanche : Fermé</span>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ═══════════════ AVIS CLIENTS ═══════════════ -->
+<section id="avis" class="avis-section">
+
+    <div class="avis-header">
+        <div class="section-label">Témoignages</div>
+        <h2 class="section-title">Ce que Disent Nos Voyageurs</h2>
+        <div class="divider"></div>
     </div>
 
-    <h1 class="title">Nos Voyages</h1>
-    <div id="voyages"></div>
+    <div class="avis-carousel-wrap">
 
-    <!-- Sections -->
-    <section id="home">
-        <h1 class="title" >Home</h1>
-        <p>Bienvenue sur notre site !</p>
-    </section>
+        <!-- Track -->
+        <div class="avis-track-outer">
+            <div class="avis-track" id="avisTrack">
 
-    <section id="news">
-        <h1 class="title">News</h1>
-        <p>Dernières actualités de l'agence...</p>
-    </section>
+                <div class="avis-card">
+                    <div class="avis-stars">★★★★★</div>
+                    <p class="avis-text">« Un voyage à Tokyo absolument parfait. Chaque détail était pensé, les hôtels magnifiques et notre guide local exceptionnel. Je recommande Horizon les yeux fermés. »</p>
+                    <div class="avis-author">
+                        <div class="avis-avatar">SM</div>
+                        <div class="avis-info">
+                            <span class="avis-name">Sarra Mansouri</span>
+                            <span class="avis-dest">Tokyo · Japon</span>
+                        </div>
+                        <div class="avis-quote-icon">❝</div>
+                    </div>
+                </div>
 
-    <section id="contact">
-        <h1 class="title">Contact</h1>
-        <p>Formulaire ou infos de contact ici.</p>
-    </section>
+                <div class="avis-card">
+                    <div class="avis-stars">★★★★★</div>
+                    <p class="avis-text">« Les Maldives comme on me les avait promises. L'équipe d'Horizon a géré tout : vols, transferts, plongée. On n'a eu qu'à profiter. Une expérience inoubliable. »</p>
+                    <div class="avis-author">
+                        <div class="avis-avatar">KA</div>
+                        <div class="avis-info">
+                            <span class="avis-name">Karim Ayari</span>
+                            <span class="avis-dest">Maldives · Océan Indien</span>
+                        </div>
+                        <div class="avis-quote-icon">❝</div>
+                    </div>
+                </div>
 
-    <script src="../js/main.js"></script>
-    <script src="../js/visitor.js"></script>
+                <div class="avis-card">
+                    <div class="avis-stars">★★★★★</div>
+                    <p class="avis-text">« Marrakech était un rêve éveillé. Le riad choisi était sublime, les souks magiques. L'assistance 24h était vraiment rassurante pour une première expérience au Maroc. »</p>
+                    <div class="avis-author">
+                        <div class="avis-avatar">LB</div>
+                        <div class="avis-info">
+                            <span class="avis-name">Leila Belhaj</span>
+                            <span class="avis-dest">Marrakech · Maroc</span>
+                        </div>
+                        <div class="avis-quote-icon">❝</div>
+                    </div>
+                </div>
 
+                <div class="avis-card">
+                    <div class="avis-stars">★★★★☆</div>
+                    <p class="avis-text">« Paris avec Horizon c'est une autre dimension. Ils nous ont déniché des adresses que les touristes ne connaissent pas. Gastronomie, musées, shopping — tout était au top. »</p>
+                    <div class="avis-author">
+                        <div class="avis-avatar">RG</div>
+                        <div class="avis-info">
+                            <span class="avis-name">Rania Gharbi</span>
+                            <span class="avis-dest">Paris · France</span>
+                        </div>
+                        <div class="avis-quote-icon">❝</div>
+                    </div>
+                </div>
+
+                <div class="avis-card">
+                    <div class="avis-stars">★★★★★</div>
+                    <p class="avis-text">« Je voyage souvent pour le travail mais avec Horizon j'ai découvert le vrai plaisir du voyage. Le circuit en Turquie était parfaitement rythmé, sans jamais être surchargé. »</p>
+                    <div class="avis-author">
+                        <div class="avis-avatar">MB</div>
+                        <div class="avis-info">
+                            <span class="avis-name">Mohamed Brik</span>
+                            <span class="avis-dest">Istanbul · Turquie</span>
+                        </div>
+                        <div class="avis-quote-icon">❝</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Contrôles -->
+        <button class="avis-btn avis-prev" id="avisPrev" aria-label="Précédent">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <button class="avis-btn avis-next" id="avisNext" aria-label="Suivant">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+
+    </div>
+
+    <!-- Dots + note globale -->
+    <div class="avis-footer">
+        <div class="avis-dots" id="avisDots"></div>
+        <div class="avis-rating">
+            <span class="avis-rating-stars">★★★★★</span>
+            <span class="avis-rating-score">4.9 / 5</span>
+            <span class="avis-rating-count">sur 312 avis</span>
+        </div>
+    </div>
+
+</section>
+
+    <!-- ═══════════════ NEWSLETTER ═══════════════ -->
+<section id="newsletter" class="newsletter-section">
+    <div class="nl-bg-deco"></div>
+    <div class="nl-content">
+        <div class="nl-left">
+            <div class="nl-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                    <polyline points="22,6 12,13 2,6"/>
+                </svg>
+            </div>
+            <div class="nl-text">
+                <span class="nl-label">Newsletter</span>
+                <h3 class="nl-title">Inspirations & Offres<br>en Avant-Première</h3>
+                <p class="nl-desc">Recevez chaque mois nos meilleures destinations, bons plans exclusifs et conseils de voyage directement dans votre boîte mail.</p>
+                <div class="nl-badges">
+                    <span class="nl-badge">✦ Offres exclusives</span>
+                    <span class="nl-badge">✦ Sans spam</span>
+                    <span class="nl-badge">✦ Désinscription facile</span>
+                </div>
+            </div>
+        </div>
+        <div class="nl-right">
+            <div class="nl-form">
+                <div class="nl-field">
+                    <label for="nl-nom">Prénom</label>
+                    <input type="text" id="nl-nom" placeholder="Votre prénom">
+                </div>
+                <div class="nl-field">
+                    <label for="nl-email">Email</label>
+                    <input type="email" id="nl-email" placeholder="vous@email.com">
+                </div>
+                <button class="nl-btn" onclick="subscribeNewsletter()">
+                    <span>S'abonner</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                        <polyline points="12 5 19 12 12 19"/>
+                    </svg>
+                </button>
+                <div class="nl-feedback" id="nlFeedback"></div>
+                <p class="nl-privacy">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="12" height="12">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                    Vos données sont protégées et ne seront jamais partagées.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+    <!-- ═══════════════ MODAL DÉTAILS VOYAGE ═══════════════ -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+        <div class="modal-box" id="modalBox">
+
+            <button class="modal-close" onclick="closeModal()" aria-label="Fermer">
+                <svg viewBox="0 0 24 24">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+            </button>
+
+            <img class="modal-img" id="modalImg" src="" alt="">
+
+            <div class="modal-body">
+                <div class="modal-label" id="modalLabel"></div>
+                <div class="modal-title" id="modalTitle"></div>
+                <p class="modal-desc"   id="modalDesc"></p>
+
+                <div class="modal-infos">
+                    <div class="modal-info-item">
+                        <span class="info-label">Durée</span>
+                        <span class="info-val" id="modalDuree"></span>
+                    </div>
+                    <div class="modal-info-item">
+                        <span class="info-label">Départ</span>
+                        <span class="info-val" id="modalDepart"></span>
+                    </div>
+                    <div class="modal-info-item">
+                        <span class="info-label">Disponibilité</span>
+                        <span class="info-val" id="modalPlaces"></span>
+                    </div>
+                    <div class="modal-info-item">
+                        <span class="info-label">Prix / personne</span>
+                        <span class="info-val price-val" id="modalPrice"></span>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button class="btn-reserver" onclick="reserver()">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M20 12V22H4V12"/>
+                            <path d="M22 7H2v5h20V7z"/>
+                            <path d="M12 22V7"/>
+                            <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/>
+                            <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+                        </svg>
+                        <span>Réserver maintenant</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════ FOOTER ═══════════════ -->
+    <footer>
+        <span>© 2026 Horizon Voyages. Tous droits réservés.</span>
+        <span style="letter-spacing:0.3em;color:var(--gold);font-size:0.65rem;">HORIZON VOYAGES</span>
+        
+    </footer>
+
+    <!-- ═══════════════ SCRIPTS ═══════════════ -->
+    <script>
+        /* ── Navbar scroll ── */
+        const nav = document.getElementById('mainNav');
+        window.addEventListener('scroll', () => {
+            nav.classList.toggle('scrolled', window.scrollY > 30);
+        });
+/* ── Hamburger Mobile ── */
+const hamburger = document.querySelector('.nav-hamburger');
+const navMenu   = document.querySelector('.nav-links');
+
+hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    navMenu.classList.toggle('open');
+});
+
+navMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+        hamburger.classList.remove('open');
+        navMenu.classList.remove('open');
+    });
+});
+
+document.addEventListener('click', (e) => {
+    if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
+        hamburger.classList.remove('open');
+        navMenu.classList.remove('open');
+    }
+});
+        /* ── Active nav link on scroll ── */
+        const navLinks = document.querySelectorAll('.nav-links a');
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    navLinks.forEach(a => {
+                        a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id);
+                    });
+                }
+            });
+        }, { rootMargin: '-40% 0px -55% 0px' });
+        document.querySelectorAll('section[id]').forEach(s => observer.observe(s));
+
+        /* ── Video Carousel ── */
+        const track      = document.getElementById('videoTrack');
+        const slides     = document.querySelectorAll('.video-slide');
+        const dots       = document.querySelectorAll('.dot');
+        const curSlideEl = document.getElementById('curSlide');
+        const total      = slides.length;
+        let current      = 0;
+        let autoTimer;
+
+        function goTo(index) {
+            slides[current].classList.remove('active');
+            slides[current].querySelector('video').pause();
+            dots[current].classList.remove('active');
+
+            current = (index + total) % total;
+
+            slides[current].classList.add('active');
+            track.style.transform = `translateX(-${current * (100 / total)}%)`;
+
+            const newVideo = slides[current].querySelector('video');
+            newVideo.currentTime = 0;
+            newVideo.play();
+
+            dots[current].classList.add('active');
+            curSlideEl.textContent = String(current + 1).padStart(2, '0');
+        }
+
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            clearInterval(autoTimer); goTo(current - 1); startAuto();
+        });
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            clearInterval(autoTimer); goTo(current + 1); startAuto();
+        });
+        dots.forEach(d => {
+            d.addEventListener('click', () => {
+                clearInterval(autoTimer); goTo(parseInt(d.dataset.index)); startAuto();
+            });
+        });
+
+        function startAuto() {
+            autoTimer = setInterval(() => goTo(current + 1), 7000);
+        }
+
+        slides[0].querySelector('video').play().catch(() => {});
+        startAuto();
+
+        /* ── Modal Voyage ── */
+        const overlay = document.getElementById('modalOverlay');
+
+        // ↓ Passe à true quand l'utilisateur est connecté (à brancher sur ta session)
+        const isLoggedIn = false;
+        const loginUrl   = 'login.html'; // ← adapte selon ton projet
+
+        function openModal(card) {
+            document.getElementById('modalImg').src            = card.dataset.img    || '';
+            document.getElementById('modalImg').alt            = card.dataset.title  || '';
+            document.getElementById('modalLabel').textContent  = card.dataset.label  || '';
+            document.getElementById('modalTitle').textContent  = card.dataset.title  || '';
+            document.getElementById('modalDesc').textContent   = card.dataset.desc   || '';
+            document.getElementById('modalDuree').textContent  = card.dataset.duree  || '—';
+            document.getElementById('modalDepart').textContent = card.dataset.depart || '—';
+            document.getElementById('modalPlaces').textContent = card.dataset.places || '—';
+            document.getElementById('modalPrice').textContent  = 'À partir de ' + (card.dataset.price || '—');
+
+            overlay.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            overlay.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        function closeModalOutside(e) {
+            if (e.target === overlay) closeModal();
+        }
+
+        function reserver() {
+            if (isLoggedIn) {
+                // Utilisateur connecté → ta logique de réservation ici
+                alert('Redirection vers le formulaire de réservation…');
+            } else {
+                window.location.href = loginUrl;
+            }
+        }
+
+        /* ── Formulaire Contact ── */
+        function submitForm() {
+            const nom    = document.getElementById('cf-nom').value.trim();
+            const email  = document.getElementById('cf-email').value.trim();
+            const msg    = document.getElementById('cf-msg').value.trim();
+            const fb     = document.getElementById('cfFeedback');
+
+            if (!nom || !email || !msg) {
+                fb.textContent = 'Veuillez remplir au minimum le nom, l\'email et le message.';
+                fb.className   = 'cf-feedback cf-error';
+                return;
+            }
+            // Ici tu brancheras ton appel API / backend
+            fb.textContent = '✓ Message envoyé ! Nous vous répondrons sous 24h.';
+            fb.className   = 'cf-feedback cf-success';
+            document.getElementById('cf-nom').value   = '';
+            document.getElementById('cf-email').value = '';
+            document.getElementById('cf-tel').value   = '';
+            document.getElementById('cf-sujet').value = '';
+            document.getElementById('cf-msg').value   = '';
+        }
+
+        /* ── Keyboard ── */
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape')     closeModal();
+            if (e.key === 'ArrowLeft')  { clearInterval(autoTimer); goTo(current - 1); startAuto(); }
+            if (e.key === 'ArrowRight') { clearInterval(autoTimer); goTo(current + 1); startAuto(); }
+        });
+
+        /* ── Newsletter ── */
+function subscribeNewsletter() {
+    const prenom = document.getElementById('nl-nom').value.trim();
+    const email  = document.getElementById('nl-email').value.trim();
+    const fb     = document.getElementById('nlFeedback');
+    const re     = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!prenom || !email) {
+        fb.textContent = 'Veuillez renseigner votre prénom et votre email.';
+        fb.className   = 'nl-feedback nl-error';
+        return;
+    }
+    if (!re.test(email)) {
+        fb.textContent = 'Adresse email invalide.';
+        fb.className   = 'nl-feedback nl-error';
+        return;
+    }
+    // Ici → appel API / backend pour enregistrer l'abonné
+    fb.textContent = '✓ Merci ' + prenom + ' ! Vous êtes bien inscrit(e).';
+    fb.className   = 'nl-feedback nl-success';
+    document.getElementById('nl-nom').value   = '';
+    document.getElementById('nl-email').value = '';
+}
+/* ── Carousel Avis ── */
+(function () {
+    const track     = document.getElementById('avisTrack');
+    const cards     = track.querySelectorAll('.avis-card');
+    const dotsWrap  = document.getElementById('avisDots');
+    const total     = cards.length;
+    let current     = 0;
+    let autoTimer;
+
+    // Calcule combien de cartes visibles selon la largeur
+    function perView() {
+        if (window.innerWidth <= 640)  return 1;
+        if (window.innerWidth <= 1024) return 2;
+        return 3;
+    }
+
+    // Nombre de positions possibles
+    function maxIndex() { return total - perView(); }
+
+    // Génère les dots
+    function buildDots() {
+        dotsWrap.innerHTML = '';
+        const count = maxIndex() + 1;
+        for (let i = 0; i < count; i++) {
+            const d = document.createElement('button');
+            d.className = 'avis-dot' + (i === current ? ' active' : '');
+            d.setAttribute('aria-label', 'Avis ' + (i + 1));
+            d.addEventListener('click', () => { clearInterval(autoTimer); goTo(i); startAuto(); });
+            dotsWrap.appendChild(d);
+        }
+    }
+
+    function goTo(index) {
+        current = Math.max(0, Math.min(index, maxIndex()));
+
+        // Largeur d'une carte + gap
+        const cardW = cards[0].offsetWidth + 24;
+        track.style.transform = `translateX(-${current * cardW}px)`;
+
+        // Mettre à jour les dots
+        dotsWrap.querySelectorAll('.avis-dot').forEach((d, i) => {
+            d.classList.toggle('active', i === current);
+        });
+    }
+
+    function startAuto() {
+        autoTimer = setInterval(() => {
+            goTo(current >= maxIndex() ? 0 : current + 1);
+        }, 5000);
+    }
+
+    document.getElementById('avisPrev').addEventListener('click', () => {
+        clearInterval(autoTimer);
+        goTo(current <= 0 ? maxIndex() : current - 1);
+        startAuto();
+    });
+    document.getElementById('avisNext').addEventListener('click', () => {
+        clearInterval(autoTimer);
+        goTo(current >= maxIndex() ? 0 : current + 1);
+        startAuto();
+    });
+
+    // Recalcule au resize
+    window.addEventListener('resize', () => {
+        buildDots();
+        goTo(0);
+    });
+
+    // Init
+    buildDots();
+    goTo(0);
+    startAuto();
+})();
+    </script>
 </body>
 
 </html>
