@@ -1607,6 +1607,12 @@ footer {
     .avis-next { right: 4px; }
 }
 @media (max-width: 768px) {
+    .btn-cnx {
+        display: inline-flex;  /* reste visible */
+        padding: 8px 14px;
+        font-size: 0.68rem;
+        letter-spacing: 0.15em;
+    }
     .nav-links {
         display: flex !important;
         flex-direction: column;
@@ -1629,7 +1635,7 @@ footer {
     .nav-links a { display: block; padding: 16px 28px; }
     .nav-links a:hover, .nav-links a.active { color: var(--gold); padding-left: 36px; }
     .nav-links a::after { display: none; }
-    .btn-cnx { display: none; }
+    
     .nav-hamburger span { transition: transform 0.3s, opacity 0.3s; }
     .nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
     .nav-hamburger.open span:nth-child(2) { opacity: 0; }
