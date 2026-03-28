@@ -1,0 +1,80 @@
+.title {
+    color: rgb(255, 0, 0);
+    text-align:left;
+    margin-top: 80px;
+}
+
+.voyage-card {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+/* Make the image fully responsive */
+  .carousel-inner img {
+    margin-top: 50px;
+    width: 100%;
+    height: 100%;
+  }
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    scroll-behavior: smooth;
+    /* smooth scrolling */
+}
+
+h2,
+p {
+    margin: 10px;
+}
+
+.navbar-local {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333333;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.navbar-local li {
+    float: left;
+}
+
+.navbar-local li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.navbar-local li a:hover:not(.active) {
+    background-color: #111111;
+}
+
+.navbar-local li a.active {
+    background-color: #04AA6D;
+}
+
+/* Carousel : toutes les images auront la même taille */
+.carousel-inner {
+    width: 100%;
+    height: calc(100vh - 48px); /* Hauteur dynamique = viewport moins la navbar */
+}
+
+.carousel-inner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    margin-top: 0; /* ← Supprimer ce margin-top ! C'était le problème principal */
+}
+
+/* Décaler le carousel pour qu'il commence sous la navbar fixe */
+#demo {
+    margin-top: 48px; /* Hauteur approximative de ta navbar */
+}
