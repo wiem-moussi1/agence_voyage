@@ -1,32 +1,109 @@
-/* ── RESET & BASE ── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* ============================================================
+   HORIZON VOYAGES — Feuille de styles principale
+   visitor.css
+   ============================================================
+   TABLE DES MATIÈRES
+   ─────────────────────────────────────────────────────────────
+   1.  RESET & BASE
+   2.  VARIABLES CSS (Design Tokens)
+   3.  NAVBAR
+       3a. Logo & Branding
+       3b. Liens de navigation
+       3c. Bouton CTA
+       3d. Hamburger mobile
+   4.  HERO — CARROUSEL VIDÉO
+       4a. Structure & piste
+       4b. Légendes des slides
+       4c. Contrôles (boutons, dots, compteur)
+   5.  SECTIONS GÉNÉRIQUES
+   6.  CARTES VOYAGE
+   7.  BOUTON "VOIR DÉTAILS"
+   8.  MODAL DÉTAILS VOYAGE
+   9.  SECTION HOME / ACCUEIL
+       9a. Colonne identité (gauche)
+       9b. Grille services (droite)
+   10. SECTION CONTACT
+       10a. En-tête
+       10b. Grille formulaire | carte
+       10c. Formulaire
+       10d. Bande d'informations
+   11. SECTION NEWSLETTER
+       11a. Fond décoratif
+       11b. Colonne gauche (texte)
+       11c. Formulaire (droite)
+   12. SECTION AVIS CLIENTS
+       12a. Carrousel
+       12b. Carte d'avis
+       12c. Contrôles & dots
+   13. FOOTER
+   14. MEDIA QUERIES (Responsive)
+   ============================================================ */
 
-:root {
-    --gold:      #C9A84C;
-    --gold-lt:   #E8C97A;
-    --dark:      #F8F5F0;
-    --dark2:     #141414;
-    --mid:       #1E1C1A;
-    --light:     #F5F0E8;
-    --muted:     rgba(245,240,232,0.55);
-    --nav-h:     72px;
+
+/* ============================================================
+   1. RESET & BASE
+   ============================================================ */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-html { scroll-behavior: smooth; }
+html {
+    scroll-behavior: smooth;
+}
 
 body {
     font-family: 'Jost', sans-serif;
-    background: var(--dark);
-    color: var(--light);
+    background: var(--clr-bg);
+    color: var(--clr-light);
     overflow-x: hidden;
 }
 
-/* ── NAVBAR ── */
+
+/* ============================================================
+   2. VARIABLES CSS (Design Tokens)
+   ============================================================ */
+:root {
+    /* Couleurs */
+    --clr-gold:        #C9A84C;
+    --clr-gold-light:  #E8C97A;
+    --clr-bg:          #F8F5F0;      /* fond global clair */
+    --clr-dark:        #141414;
+    --clr-surface:     #1E1C1A;      /* surface sombre (nav, cartes, etc.) */
+    --clr-light:       #F5F0E8;
+    --clr-muted:       rgba(245, 240, 232, 0.55);
+
+    /* Compatibilité avec l'ancien nommage (à supprimer progressivement) */
+    --gold:     var(--clr-gold);
+    --gold-lt:  var(--clr-gold-light);
+    --dark:     var(--clr-bg);
+    --dark2:    var(--clr-dark);
+    --mid:      var(--clr-surface);
+    --light:    var(--clr-light);
+    --muted:    var(--clr-muted);
+
+    /* Mise en page */
+    --nav-h:           72px;
+
+    /* Transitions réutilisables */
+    --ease-out:        cubic-bezier(.4, 0, .2, 1);
+    --ease-slide:      cubic-bezier(.77, 0, .175, 1);
+
+    /* Typographie */
+    --font-serif:  'Cormorant Garamond', serif;
+    --font-sans:   'Jost', sans-serif;
+}
+
+
+/* ============================================================
+   3. NAVBAR
+   ============================================================ */
 nav {
     position: fixed;
-    top: 0; left: 0; right: 0;
+    inset: 0 0 auto 0;
     height: var(--nav-h);
-    background-color: var(--mid);
+    background-color: var(--clr-surface);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -34,131 +111,179 @@ nav {
     z-index: 1000;
     transition: background 0.4s, backdrop-filter 0.4s, box-shadow 0.4s;
 }
+
 nav.scrolled {
-    background: rgba(13,13,13,0.92);
+    background: rgba(13, 13, 13, 0.92);
     backdrop-filter: blur(16px);
-    box-shadow: 0 1px 0 rgba(201,168,76,0.2);
+    box-shadow: 0 1px 0 rgba(201, 168, 76, 0.2);
 }
 
-/* Logo block */
+/* ── 3a. Logo & Branding ── */
 .nav-brand {
     display: flex;
     align-items: center;
     gap: 14px;
     text-decoration: none;
 }
+
 .nav-logo {
-    width: 42px; height: 42px;
-    border: 1.5px solid var(--gold);
+    width: 42px;
+    height: 42px;
+    border: 1.5px solid var(--clr-gold);
     border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     overflow: hidden;
 }
+
 .nav-logo svg {
-    width: 24px; height: 24px;
-    fill: var(--gold);
+    width: 24px;
+    height: 24px;
+    fill: var(--clr-gold);
 }
+
 .nav-name {
     display: flex;
     flex-direction: column;
     line-height: 1.15;
 }
+
 .nav-name .wordmark {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: var(--font-serif);
     font-size: 1.35rem;
     font-weight: 300;
     letter-spacing: 0.12em;
-    color: var(--light);
+    color: var(--clr-light);
 }
+
 .nav-name .tagline {
     font-size: 0.6rem;
     font-weight: 500;
     letter-spacing: 0.3em;
     text-transform: uppercase;
-    color: var(--gold);
+    color: var(--clr-gold);
 }
 
-/* Center links */
+/* ── 3b. Liens de navigation ── */
 .nav-links {
     display: flex;
     gap: 36px;
     list-style: none;
 }
+
 .nav-links a {
     font-size: 0.78rem;
     font-weight: 500;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--muted);
+    color: var(--clr-muted);
     text-decoration: none;
     position: relative;
     transition: color 0.3s;
 }
+
 .nav-links a::after {
     content: '';
     position: absolute;
-    bottom: -4px; left: 0;
-    width: 0; height: 1px;
-    background: var(--gold);
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--clr-gold);
     transition: width 0.3s;
 }
-.nav-links a:hover,
-.nav-links a.active { color: var(--light); }
-.nav-links a:hover::after,
-.nav-links a.active::after { width: 100%; }
 
-/* CTA button */
+.nav-links a:hover,
+.nav-links a.active {
+    color: var(--clr-light);
+}
+
+.nav-links a:hover::after,
+.nav-links a.active::after {
+    width: 100%;
+}
+
+/* ── 3c. Bouton CTA (Connexion) ── */
 .btn-cnx {
     display: inline-flex;
     align-items: center;
     gap: 8px;
     padding: 10px 24px;
     background: transparent;
-    border: 1px solid var(--gold);
-    color: var(--gold);
-    font-family: 'Jost', sans-serif;
+    border: 1px solid var(--clr-gold);
+    color: var(--clr-gold);
+    font-family: var(--font-sans);
     font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 0.2em;
     text-transform: uppercase;
     text-decoration: none;
     cursor: pointer;
-    transition: background 0.3s, color 0.3s, box-shadow 0.3s;
     position: relative;
     overflow: hidden;
+    transition: background 0.3s, color 0.3s, box-shadow 0.3s;
 }
+
+/* Fond doré qui glisse au survol */
 .btn-cnx::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: var(--gold);
+    background: var(--clr-gold);
     transform: translateX(-101%);
-    transition: transform 0.35s cubic-bezier(.4,0,.2,1);
+    transition: transform 0.35s var(--ease-out);
 }
-.btn-cnx:hover::before { transform: translateX(0); }
-.btn-cnx span { position: relative; z-index: 1; }
-.btn-cnx:hover span { color: var(--dark); }
-.btn-cnx svg { position: relative; z-index: 1; width: 14px; height: 14px; }
-.btn-cnx:hover svg { stroke: var(--dark); }
-.btn-cnx svg { stroke: var(--gold); fill: none; transition: stroke 0.3s; }
 
-/* Hamburger (mobile) */
+.btn-cnx:hover::before { transform: translateX(0); }
+
+.btn-cnx span,
+.btn-cnx svg {
+    position: relative;
+    z-index: 1;
+}
+
+.btn-cnx:hover span { color: var(--clr-bg); }
+
+.btn-cnx svg {
+    width: 14px;
+    height: 14px;
+    stroke: var(--clr-gold);
+    fill: none;
+    transition: stroke 0.3s;
+}
+
+.btn-cnx:hover svg { stroke: var(--clr-bg); }
+
+/* ── 3d. Hamburger (mobile) ── */
 .nav-hamburger {
     display: none;
     flex-direction: column;
     gap: 5px;
     cursor: pointer;
-    background: none; border: none;
-}
-.nav-hamburger span {
-    display: block;
-    width: 24px; height: 1.5px;
-    background: var(--light);
-    transition: transform 0.3s;
+    background: none;
+    border: none;
 }
 
-/* ── VIDEO CAROUSEL ── */
+.nav-hamburger span {
+    display: block;
+    width: 24px;
+    height: 1.5px;
+    background: var(--clr-light);
+    transition: transform 0.3s, opacity 0.3s;
+}
+
+/* Animation X lors de l'ouverture */
+.nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.nav-hamburger.open span:nth-child(2) { opacity: 0; }
+.nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+
+/* ============================================================
+   4. HERO — CARROUSEL VIDÉO
+   ============================================================ */
+
+/* ── 4a. Structure & piste ── */
 .hero {
     position: relative;
     width: 100%;
@@ -168,127 +293,169 @@ nav.scrolled {
 
 .video-track {
     display: flex;
-    width: 500%;
+    width: 500%;      /* 5 slides × 100% */
     height: 100%;
-    transition: transform 0.9s cubic-bezier(.77,0,.175,1);
+    transition: transform 0.9s var(--ease-slide);
 }
 
 .video-slide {
-    width: 20%;
+    width: 20%;       /* 1 / 5 slides */
     height: 100%;
     position: relative;
     flex-shrink: 0;
 }
 
 .video-slide video {
-    width: 100%; height: 100%;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
     display: block;
 }
 
-/* Dark gradient overlay */
+/* Dégradé sombre en bas pour lisibilité des légendes */
 .video-slide::after {
     content: '';
     position: absolute;
     inset: 0;
     background: linear-gradient(
         to bottom,
-        rgba(0,0,0,0.2) 0%,
-        rgba(0,0,0,0.1) 40%,
-        rgba(0,0,0,0.65) 100%
+        rgba(0, 0, 0, 0.2)  0%,
+        rgba(0, 0, 0, 0.1)  40%,
+        rgba(0, 0, 0, 0.65) 100%
     );
+    pointer-events: none;
 }
 
-/* Slide caption */
+/* ── 4b. Légendes des slides ── */
 .slide-caption {
     position: absolute;
     bottom: 100px;
     left: 80px;
     z-index: 10;
 }
+
+/* Animation d'entrée : apparaît uniquement sur la slide active */
 .slide-caption .destination {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: var(--font-serif);
     font-size: clamp(2.5rem, 6vw, 5rem);
     font-weight: 300;
     font-style: italic;
     line-height: 1;
-    color: var(--light);
-    text-shadow: 0 2px 30px rgba(0,0,0,0.4);
+    color: var(--clr-light);
+    text-shadow: 0 2px 30px rgba(0, 0, 0, 0.4);
     opacity: 0;
     transform: translateY(20px);
     transition: opacity 0.7s 0.3s, transform 0.7s 0.3s;
 }
+
 .slide-caption .sub {
     font-size: 0.75rem;
     font-weight: 500;
     letter-spacing: 0.35em;
     text-transform: uppercase;
-    color: var(--gold);
+    color: var(--clr-gold);
     margin-top: 8px;
     opacity: 0;
     transform: translateY(12px);
     transition: opacity 0.7s 0.5s, transform 0.7s 0.5s;
 }
+
 .video-slide.active .slide-caption .destination,
 .video-slide.active .slide-caption .sub {
-    opacity: 1; transform: translateY(0);
+    opacity: 1;
+    transform: translateY(0);
 }
 
-/* Carousel controls */
+/* ── 4c. Contrôles du carrousel ── */
+
+/* Boutons prev / next */
 .carousel-btn {
     position: absolute;
-    top: 50%; transform: translateY(-50%);
+    top: 50%;
+    transform: translateY(-50%);
     z-index: 20;
-    background: rgba(201,168,76,0.15);
-    border: 1px solid rgba(201,168,76,0.4);
-    color: var(--light);
-    width: 52px; height: 52px;
-    display: flex; align-items: center; justify-content: center;
+    background: rgba(201, 168, 76, 0.15);
+    border: 1px solid rgba(201, 168, 76, 0.4);
+    color: var(--clr-light);
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
     transition: background 0.3s, border-color 0.3s;
 }
-.carousel-btn:hover { background: rgba(201,168,76,0.35); border-color: var(--gold); }
+
+.carousel-btn:hover {
+    background: rgba(201, 168, 76, 0.35);
+    border-color: var(--clr-gold);
+}
+
 .carousel-btn.prev { left: 30px; }
 .carousel-btn.next { right: 30px; }
-.carousel-btn svg { width: 20px; height: 20px; stroke: var(--gold); fill: none; stroke-width: 1.5; }
 
-/* Dots */
+.carousel-btn svg {
+    width: 20px;
+    height: 20px;
+    stroke: var(--clr-gold);
+    fill: none;
+    stroke-width: 1.5;
+}
+
+/* Dots de navigation */
 .carousel-dots {
     position: absolute;
     bottom: 36px;
-    left: 50%; transform: translateX(-50%);
-    display: flex; gap: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
     z-index: 20;
 }
+
 .dot {
-    width: 28px; height: 2px;
-    background: rgba(0,0,0,0.3);
+    width: 28px;
+    height: 2px;
+    background: rgba(0, 0, 0, 0.3);
+    border: none;
     cursor: pointer;
     transition: background 0.3s, width 0.3s;
-    border: none;
 }
+
 .dot.active {
-    background: var(--gold);
+    background: var(--clr-gold);
     width: 48px;
 }
 
-/* Slide counter */
+/* Compteur de slides (ex : 01 / 05) */
 .slide-counter {
     position: absolute;
-    bottom: 42px; right: 50px;
+    bottom: 42px;
+    right: 50px;
     font-size: 0.7rem;
     letter-spacing: 0.2em;
     color: black;
     z-index: 20;
 }
-.slide-counter span { color: var(--gold); font-weight: 600; }
 
-/* ── CONTENT SECTIONS ── */
+.slide-counter span {
+    color: var(--clr-gold);
+    font-weight: 600;
+}
+
+
+/* ============================================================
+   5. SECTIONS GÉNÉRIQUES
+   ============================================================ */
 section {
     padding: 100px 80px;
 }
 
-#voyages, #home, #news, #contact {
+/* Contrainte de largeur pour les sections de contenu */
+#voyages,
+#home,
+#news,
+#contact {
     max-width: 1200px;
     margin: 0 auto;
 }
@@ -298,16 +465,16 @@ section {
     font-weight: 600;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--gold);
+    color: var(--clr-gold);
     margin-bottom: 16px;
 }
 
 .section-title {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: var(--font-serif);
     font-size: clamp(2rem, 4vw, 3.2rem);
     font-weight: 300;
     line-height: 1.15;
-    color: var(--dark2);
+    color: var(--clr-dark);
     margin-bottom: 40px;
 }
 
@@ -315,18 +482,22 @@ section {
     font-size: 1rem;
     font-weight: 300;
     line-height: 1.8;
-    color: var(--dark2);
+    color: var(--clr-dark);
     max-width: 600px;
 }
 
-/* Divider line */
+/* Ligne séparatrice dorée */
 .divider {
-    width: 60px; height: 1px;
-    background: var(--gold);
+    width: 60px;
+    height: 1px;
+    background: var(--clr-gold);
     margin-bottom: 30px;
 }
 
-/* ── VOYAGE CARDS ── */
+
+/* ============================================================
+   6. CARTES VOYAGE
+   ============================================================ */
 .cards-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -335,24 +506,26 @@ section {
 }
 
 .voyage-card {
-    border: 1px solid rgba(201,168,76,0.2);
+    border: 1px solid rgba(201, 168, 76, 0.2);
     padding: 28px;
-    background: var(--mid);
-    transition: border-color 0.3s, transform 0.3s;
+    background: var(--clr-surface);
     display: flex;
     flex-direction: column;
+    transition: border-color 0.3s, transform 0.3s;
 }
+
 .voyage-card:hover {
-    border-color: var(--gold);
+    border-color: var(--clr-gold);
     transform: translateY(-4px);
 }
 
-/* Image dans la carte */
+/* Conteneur image : remonte dans les marges de la carte */
 .voyage-card > div:first-child {
     margin: -28px -28px 20px -28px;
     overflow: hidden;
     border-radius: 2px 2px 0 0;
 }
+
 .voyage-card img {
     width: 100%;
     height: 200px;
@@ -360,41 +533,48 @@ section {
     display: block;
     transition: transform 0.4s ease;
 }
+
 .voyage-card:hover > div:first-child img {
     transform: scale(1.05);
 }
 
 .voyage-card h3 {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: var(--font-serif);
     font-size: 1.4rem;
     font-weight: 300;
-    color: var(--light);
+    color: var(--clr-light);
     margin-bottom: 8px;
 }
+
 .voyage-card p {
-    color: var(--muted);
+    color: var(--clr-muted);
     font-size: 0.9rem;
     line-height: 1.6;
 }
+
 .voyage-card .price {
     margin-top: 12px;
     font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 0.15em;
-    color: var(--gold);
+    color: var(--clr-gold);
 }
 
-/* ── BOUTON VOIR DÉTAILS ── */
+
+/* ============================================================
+   7. BOUTON "VOIR DÉTAILS"
+   ============================================================ */
 .btn-details {
     display: inline-flex;
     align-items: center;
     gap: 6px;
+    align-self: flex-start;
     margin-top: 18px;
     padding: 9px 20px;
     background: transparent;
-    border: 1px solid var(--gold);
-    color: var(--gold);
-    font-family: 'Jost', sans-serif;
+    border: 1px solid var(--clr-gold);
+    color: var(--clr-gold);
+    font-family: var(--font-sans);
     font-size: 0.72rem;
     font-weight: 600;
     letter-spacing: 0.18em;
@@ -403,63 +583,80 @@ section {
     position: relative;
     overflow: hidden;
     transition: color 0.3s;
-    align-self: flex-start;
 }
+
 .btn-details::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: var(--gold);
+    background: var(--clr-gold);
     transform: translateX(-101%);
-    transition: transform 0.32s cubic-bezier(.4,0,.2,1);
+    transition: transform 0.32s var(--ease-out);
 }
+
 .btn-details:hover::before { transform: translateX(0); }
+
 .btn-details span,
 .btn-details svg {
     position: relative;
     z-index: 1;
     transition: color 0.3s;
 }
-.btn-details:hover span { color: var(--mid); }
+
+.btn-details:hover span { color: var(--clr-surface); }
+
 .btn-details svg {
-    width: 13px; height: 13px;
-    stroke: var(--gold);
+    width: 13px;
+    height: 13px;
+    stroke: var(--clr-gold);
     fill: none;
     stroke-width: 2;
     transition: stroke 0.3s;
 }
-.btn-details:hover svg { stroke: var(--mid); }
 
-/* ── MODAL OVERLAY ── */
+.btn-details:hover svg { stroke: var(--clr-surface); }
+
+
+/* ============================================================
+   8. MODAL DÉTAILS VOYAGE
+   ============================================================ */
+
+/* Fond semi-transparent avec flou */
 .modal-overlay {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.7);
+    background: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(6px);
     z-index: 2000;
     align-items: center;
     justify-content: center;
     padding: 20px;
 }
+
 .modal-overlay.open {
     display: flex;
     animation: fadeIn 0.25s ease;
 }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
 
 .modal-box {
-    background: #1E1C1A;
-    border: 1px solid rgba(201,168,76,0.25);
+    background: var(--clr-surface);
+    border: 1px solid rgba(201, 168, 76, 0.25);
     width: 100%;
     max-width: 1000px;
     max-height: 90vh;
     overflow-y: auto;
     border-radius: 4px;
-    box-shadow: 0 24px 80px rgba(0,0,0,0.6);
-    animation: slideUp 0.3s cubic-bezier(.4,0,.2,1);
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.6);
     position: relative;
+    animation: slideUp 0.3s var(--ease-out);
 }
+
 @keyframes slideUp {
     from { opacity: 0; transform: translateY(30px); }
     to   { opacity: 1; transform: translateY(0); }
@@ -472,6 +669,7 @@ section {
     display: block;
 }
 
+/* Corps textuel */
 .modal-body {
     padding: 32px 36px 36px;
 }
@@ -481,15 +679,15 @@ section {
     font-weight: 600;
     letter-spacing: 0.4em;
     text-transform: uppercase;
-    color: var(--gold);
+    color: var(--clr-gold);
     margin-bottom: 8px;
 }
 
 .modal-title {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: var(--font-serif);
     font-size: 2rem;
     font-weight: 300;
-    color: var(--light);
+    color: var(--clr-light);
     margin-bottom: 16px;
 }
 
@@ -497,18 +695,19 @@ section {
     font-size: 0.95rem;
     font-weight: 300;
     line-height: 1.8;
-    color: var(--muted);
+    color: var(--clr-muted);
     margin-bottom: 24px;
 }
 
+/* Grille d'informations (durée, départ, prix…) */
 .modal-infos {
     display: flex;
     gap: 28px;
     flex-wrap: wrap;
     margin-bottom: 28px;
     padding: 20px;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(201,168,76,0.15);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(201, 168, 76, 0.15);
     border-radius: 2px;
 }
 
@@ -517,33 +716,36 @@ section {
     flex-direction: column;
     gap: 5px;
 }
+
 .modal-info-item .info-label {
     font-size: 0.6rem;
     font-weight: 600;
     letter-spacing: 0.3em;
     text-transform: uppercase;
-    color: var(--muted);
+    color: var(--clr-muted);
 }
+
 .modal-info-item .info-val {
     font-size: 0.95rem;
     font-weight: 500;
-    color: var(--light);
+    color: var(--clr-light);
 }
+
 .modal-info-item .info-val.price-val {
-    color: var(--gold);
+    color: var(--clr-gold);
     font-size: 1.05rem;
 }
 
-/* Btn Réserver */
+/* Bouton Réserver */
 .btn-reserver {
     display: inline-flex;
     align-items: center;
     gap: 8px;
     padding: 13px 32px;
-    background: var(--gold);
+    background: var(--clr-gold);
     border: none;
-    color: var(--mid);
-    font-family: 'Jost', sans-serif;
+    color: var(--clr-surface);
+    font-family: var(--font-sans);
     font-size: 0.78rem;
     font-weight: 700;
     letter-spacing: 0.2em;
@@ -551,85 +753,70 @@ section {
     cursor: pointer;
     position: relative;
     overflow: hidden;
-    transition: background 0.3s;
     text-decoration: none;
+    transition: background 0.3s;
 }
+
 .btn-reserver::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: var(--gold-lt);
+    background: var(--clr-gold-light);
     transform: translateX(-101%);
-    transition: transform 0.32s cubic-bezier(.4,0,.2,1);
+    transition: transform 0.32s var(--ease-out);
 }
+
 .btn-reserver:hover::before { transform: translateX(0); }
+
 .btn-reserver span,
 .btn-reserver svg {
     position: relative;
     z-index: 1;
 }
+
 .btn-reserver svg {
-    width: 15px; height: 15px;
-    stroke: var(--mid);
+    width: 15px;
+    height: 15px;
+    stroke: var(--clr-surface);
     fill: none;
     stroke-width: 2;
 }
 
-/* Btn fermer */
+/* Bouton fermer (×) */
 .modal-close {
     position: absolute;
-    top: 14px; right: 14px;
-    width: 34px; height: 34px;
-    background: rgba(201,168,76,0.12);
-    border: 1px solid rgba(201,168,76,0.3);
+    top: 14px;
+    right: 14px;
+    width: 34px;
+    height: 34px;
+    background: rgba(201, 168, 76, 0.12);
+    border: 1px solid rgba(201, 168, 76, 0.3);
     border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
     z-index: 10;
     transition: background 0.2s, border-color 0.2s;
 }
+
 .modal-close:hover {
-    background: rgba(201,168,76,0.25);
-    border-color: var(--gold);
+    background: rgba(201, 168, 76, 0.25);
+    border-color: var(--clr-gold);
 }
+
 .modal-close svg {
-    width: 15px; height: 15px;
-    stroke: var(--gold);
+    width: 15px;
+    height: 15px;
+    stroke: var(--clr-gold);
     fill: none;
     stroke-width: 2.5;
 }
 
-/* Footer line */
-footer {
-    border-top: 1px solid rgba(201,168,76,0.15);
-    padding: 30px 80px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    color: var(--muted);
-    background-color: var(--mid);
-    font-size: 0.75rem;
-    letter-spacing: 0.1em;
-}
 
-/* ── RESPONSIVE ── */
-@media (max-width: 768px) {
-    nav { padding: 0 20px; }
-    .nav-links { display: none; }
-    .nav-hamburger { display: flex; }
-    .slide-caption { left: 30px; bottom: 80px; }
-    section { padding: 80px 24px; }
-    footer { flex-direction: column; gap: 10px; padding: 24px; }
-    .carousel-btn.prev { left: 12px; }
-    .carousel-btn.next { right: 12px; }
-    .modal-body { padding: 24px 20px; }
-    .modal-img { height: 200px; }
-    .modal-infos { gap: 16px; }
-}
-
-/* ══════════════════════════════════════════
-   SECTION ACCUEIL / HOME
-══════════════════════════════════════════ */
+/* ============================================================
+   9. SECTION HOME / ACCUEIL
+   ============================================================ */
 .home-section {
     padding: 0;
     max-width: none;
@@ -638,9 +825,9 @@ footer {
     min-height: 100vh;
 }
 
-/* ── Colonne gauche : identité ── */
+/* ── 9a. Colonne identité (gauche) ── */
 .home-identity {
-    background: var(--mid);
+    background: var(--clr-surface);
     padding: 80px 52px;
     display: flex;
     flex-direction: column;
@@ -650,26 +837,27 @@ footer {
     overflow: hidden;
 }
 
-/* motif de fond subtil */
+/* Lueurs dorées subtiles en fond */
 .home-identity::before {
     content: '';
     position: absolute;
     inset: 0;
     background:
-        radial-gradient(circle at 20% 80%, rgba(201,168,76,0.08) 0%, transparent 60%),
-        radial-gradient(circle at 80% 20%, rgba(201,168,76,0.05) 0%, transparent 50%);
+        radial-gradient(circle at 20% 80%, rgba(201, 168, 76, 0.08) 0%, transparent 60%),
+        radial-gradient(circle at 80% 20%, rgba(201, 168, 76, 0.05) 0%, transparent 50%);
     pointer-events: none;
 }
 
-/* grand cercle décoratif */
+/* Grand cercle décoratif en bas à droite */
 .home-identity::after {
     content: '';
     position: absolute;
     bottom: -120px;
     right: -120px;
-    width: 340px; height: 340px;
+    width: 340px;
+    height: 340px;
     border-radius: 50%;
-    border: 1px solid rgba(201,168,76,0.1);
+    border: 1px solid rgba(201, 168, 76, 0.1);
     pointer-events: none;
 }
 
@@ -680,23 +868,30 @@ footer {
 }
 
 .home-logo-ring {
-    width: 80px; height: 80px;
-    border: 2px solid var(--gold);
+    width: 80px;
+    height: 80px;
+    border: 2px solid var(--clr-gold);
     border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    background: rgba(201,168,76,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(201, 168, 76, 0.08);
     position: relative;
 }
+
+/* Anneau intérieur */
 .home-logo-ring::before {
     content: '';
     position: absolute;
     inset: 6px;
     border-radius: 50%;
-    border: 1px solid rgba(201,168,76,0.25);
+    border: 1px solid rgba(201, 168, 76, 0.25);
 }
+
 .home-logo-ring svg {
-    width: 36px; height: 36px;
-    fill: var(--gold);
+    width: 36px;
+    height: 36px;
+    fill: var(--clr-gold);
 }
 
 .home-agency-name {
@@ -707,73 +902,85 @@ footer {
     line-height: 1.1;
     margin-bottom: 28px;
 }
+
 .home-wordmark {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: var(--font-serif);
     font-size: 3rem;
     font-weight: 300;
     letter-spacing: 0.08em;
-    color: var(--light);
+    color: var(--clr-light);
 }
+
 .home-tagline {
     font-size: 0.65rem;
     font-weight: 600;
     letter-spacing: 0.4em;
     text-transform: uppercase;
-    color: var(--gold);
+    color: var(--clr-gold);
     margin-top: 2px;
 }
 
+/* Ligne de séparation dégradée */
 .home-divider-gold {
-    width: 48px; height: 2px;
-    background: linear-gradient(to right, var(--gold), transparent);
+    width: 48px;
+    height: 2px;
+    background: linear-gradient(to right, var(--clr-gold), transparent);
     margin-bottom: 24px;
-    position: relative; z-index: 1;
+    position: relative;
+    z-index: 1;
 }
 
 .home-desc {
     font-size: 0.92rem;
     font-weight: 300;
     line-height: 1.85;
-    color: rgba(245,240,232,0.65);
+    color: rgba(245, 240, 232, 0.65);
     max-width: 320px;
     margin-bottom: 40px;
-    position: relative; z-index: 1;
+    position: relative;
+    z-index: 1;
 }
 
-/* Stats */
+/* Statistiques (destinations, voyageurs) */
 .home-stats {
     display: flex;
     align-items: center;
     gap: 20px;
-    position: relative; z-index: 1;
+    position: relative;
+    z-index: 1;
 }
+
 .home-stat {
     display: flex;
     flex-direction: column;
     gap: 3px;
 }
+
 .stat-num {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: var(--font-serif);
     font-size: 1.6rem;
     font-weight: 300;
-    color: var(--gold);
+    color: var(--clr-gold);
     line-height: 1;
 }
+
 .stat-lbl {
     font-size: 0.6rem;
     font-weight: 600;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: rgba(245,240,232,0.45);
-}
-.home-stat-sep {
-    width: 1px; height: 36px;
-    background: rgba(201,168,76,0.25);
+    color: rgba(245, 240, 232, 0.45);
 }
 
-/* ── Colonne droite : services ── */
+.home-stat-sep {
+    width: 1px;
+    height: 36px;
+    background: rgba(201, 168, 76, 0.25);
+}
+
+/* ── 9b. Grille services (droite) ── */
 .home-services-wrap {
-    background: #F8F5F0;
+    background: var(--clr-bg);
     padding: 80px 64px;
     display: flex;
     flex-direction: column;
@@ -785,18 +992,22 @@ footer {
     font-weight: 600;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--gold);
+    color: var(--clr-gold);
     margin-bottom: 36px;
     position: relative;
     padding-left: 20px;
 }
+
+/* Tiret décoratif avant le label */
 .home-services-label::before {
     content: '';
     position: absolute;
-    left: 0; top: 50%;
+    left: 0;
+    top: 50%;
     transform: translateY(-50%);
-    width: 12px; height: 1px;
-    background: var(--gold);
+    width: 12px;
+    height: 1px;
+    background: var(--clr-gold);
 }
 
 .home-services-grid {
@@ -805,56 +1016,70 @@ footer {
     gap: 2px;
 }
 
+/* Carte de service individuelle */
 .service-card {
     padding: 32px 28px;
     background: #FFFFFF;
-    border: 1px solid rgba(26,58,92,0.07);
+    border: 1px solid rgba(26, 58, 92, 0.07);
     position: relative;
-    transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
     overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
 }
+
+/* Barre dorée qui s'étend depuis le bas */
 .service-card::before {
     content: '';
     position: absolute;
-    bottom: 0; left: 0;
-    width: 0; height: 2px;
-    background: var(--gold);
-    transition: width 0.4s cubic-bezier(.4,0,.2,1);
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--clr-gold);
+    transition: width 0.4s var(--ease-out);
 }
+
 .service-card:hover::before { width: 100%; }
+
 .service-card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 12px 40px rgba(26,58,92,0.08);
-    border-color: rgba(201,168,76,0.3);
+    box-shadow: 0 12px 40px rgba(26, 58, 92, 0.08);
+    border-color: rgba(201, 168, 76, 0.3);
     z-index: 1;
 }
 
 .service-icon {
-    width: 48px; height: 48px;
-    border: 1.5px solid rgba(201,168,76,0.35);
+    width: 48px;
+    height: 48px;
+    border: 1.5px solid rgba(201, 168, 76, 0.35);
     border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin-bottom: 18px;
     transition: background 0.3s, border-color 0.3s;
 }
+
 .service-card:hover .service-icon {
-    background: rgba(201,168,76,0.1);
-    border-color: var(--gold);
+    background: rgba(201, 168, 76, 0.1);
+    border-color: var(--clr-gold);
 }
+
 .service-icon svg {
-    width: 20px; height: 20px;
-    stroke: var(--gold);
+    width: 20px;
+    height: 20px;
+    stroke: var(--clr-gold);
     fill: none;
 }
 
 .service-card h4 {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: var(--font-serif);
     font-size: 1.1rem;
     font-weight: 400;
-    color: #1E1C1A;
+    color: var(--clr-surface);
     margin-bottom: 8px;
     letter-spacing: 0.02em;
 }
+
 .service-card p {
     font-size: 0.82rem;
     font-weight: 300;
@@ -862,65 +1087,49 @@ footer {
     color: #6B6460;
 }
 
-/* ── Responsive ── */
-@media (max-width: 1024px) {
-    .home-section { grid-template-columns: 1fr; }
-    .home-identity { padding: 70px 40px; min-height: auto; }
-    .home-identity::after { display: none; }
-    .home-services-wrap { padding: 60px 40px; }
-    .home-services-grid { grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 600px) {
-    .home-services-grid { grid-template-columns: 1fr; }
-    .home-services-wrap { padding: 50px 24px; }
-    .home-identity { padding: 60px 24px; }
-    .home-stats { flex-wrap: wrap; gap: 16px; }
-    .home-stat-sep { display: none; }
-}
 
-/* ══════════════════════════════════════════
-   SECTION CONTACT US
-══════════════════════════════════════════ */
+/* ============================================================
+   10. SECTION CONTACT
+   ============================================================ */
 .contact-section {
     padding: 0;
     max-width: none;
-    background: #F8F5F0;
+    background: var(--clr-bg);
 }
 
-/* En-tête */
+/* ── 10a. En-tête ── */
 .contact-header {
     padding: 80px 80px 50px;
-    
 }
+
 .contact-intro {
     font-size: 0.95rem;
     font-weight: 300;
     line-height: 1.8;
     color: #6B6460;
-    margin-top: 0;
     max-width: 560px;
 }
 
-/* Grille formulaire | map */
+/* ── 10b. Grille formulaire | carte ── */
 .contact-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 0;
     min-height: 480px;
-    border: 3px solid var(--gold);
+    border: 3px solid var(--clr-gold);
     padding: 10px;
     margin-bottom: 1rem;
 }
 
-/* ── Formulaire ── */
+/* ── 10c. Formulaire de contact ── */
 .contact-form-wrap {
-    padding: 20px 80px 20px;
+    padding: 20px 80px;
     display: flex;
     flex-direction: column;
     gap: 20px;
     justify-content: center;
 }
 
+/* Rangée de deux champs côte à côte */
 .cf-group {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -938,25 +1147,28 @@ footer {
     font-weight: 600;
     letter-spacing: 0.25em;
     text-transform: uppercase;
-    color: #1E1C1A;
+    color: var(--clr-surface);
 }
 
+/* Styles partagés pour input / select / textarea */
 .cf-field input,
 .cf-field select,
 .cf-field textarea {
     width: 100%;
     padding: 12px 16px;
     background: #FFFFFF;
-    border: 1px solid rgba(26,58,92,0.15);
+    border: 1px solid rgba(26, 58, 92, 0.15);
     border-radius: 2px;
-    font-family: 'Jost', sans-serif;
+    font-family: var(--font-sans);
     font-size: 0.88rem;
     font-weight: 300;
-    color: #1E1C1A;
+    color: var(--clr-surface);
     outline: none;
-    transition: border-color 0.3s, box-shadow 0.3s;
     appearance: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
 }
+
+/* Flèche personnalisée pour le select */
 .cf-field select {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B6460' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
@@ -964,32 +1176,35 @@ footer {
     padding-right: 36px;
     cursor: pointer;
 }
+
 .cf-field input:focus,
 .cf-field select:focus,
 .cf-field textarea:focus {
-    border-color: #C9A84C;
-    box-shadow: 0 0 0 3px rgba(201,168,76,0.12);
+    border-color: var(--clr-gold);
+    box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.12);
 }
+
 .cf-field textarea {
     resize: vertical;
     min-height: 120px;
 }
+
 .cf-field input::placeholder,
 .cf-field textarea::placeholder {
-    color: rgba(107,100,96,0.5);
+    color: rgba(107, 100, 96, 0.5);
 }
 
-/* Bouton envoyer */
+/* Bouton d'envoi */
 .cf-submit {
     display: inline-flex;
     align-items: center;
     gap: 10px;
     align-self: flex-start;
     padding: 13px 32px;
-    background: #1E1C1A;
+    background: var(--clr-surface);
     border: none;
-    color: #F5F0E8;
-    font-family: 'Jost', sans-serif;
+    color: var(--clr-light);
+    font-family: var(--font-sans);
     font-size: 0.78rem;
     font-weight: 600;
     letter-spacing: 0.2em;
@@ -999,27 +1214,33 @@ footer {
     overflow: hidden;
     transition: background 0.3s;
 }
+
 .cf-submit::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: #C9A84C;
+    background: var(--clr-gold);
     transform: translateX(-101%);
-    transition: transform 0.35s cubic-bezier(.4,0,.2,1);
+    transition: transform 0.35s var(--ease-out);
 }
+
 .cf-submit:hover::before { transform: translateX(0); }
+
 .cf-submit span,
 .cf-submit svg {
-    position: relative; z-index: 1;
+    position: relative;
+    z-index: 1;
 }
+
 .cf-submit svg {
-    width: 15px; height: 15px;
-    stroke: #F5F0E8;
+    width: 15px;
+    height: 15px;
+    stroke: var(--clr-light);
     fill: none;
     stroke-width: 2;
 }
 
-/* Feedback */
+/* Messages de feedback (succès / erreur) */
 .cf-feedback {
     font-size: 0.82rem;
     font-weight: 500;
@@ -1027,24 +1248,27 @@ footer {
     border-radius: 2px;
     display: none;
 }
+
 .cf-feedback.cf-success {
     display: block;
-    background: rgba(34,139,34,0.08);
-    border: 1px solid rgba(34,139,34,0.25);
+    background: rgba(34, 139, 34, 0.08);
+    border: 1px solid rgba(34, 139, 34, 0.25);
     color: #228B22;
 }
+
 .cf-feedback.cf-error {
     display: block;
-    background: rgba(180,50,50,0.07);
-    border: 1px solid rgba(180,50,50,0.25);
+    background: rgba(180, 50, 50, 0.07);
+    border: 1px solid rgba(180, 50, 50, 0.25);
     color: #B43232;
 }
 
-/* ── Carte ── */
+/* Carte Google Maps intégrée */
 .contact-map-wrap {
     position: relative;
     overflow: hidden;
 }
+
 .contact-map {
     width: 100%;
     height: 100%;
@@ -1054,11 +1278,11 @@ footer {
     filter: grayscale(15%) contrast(1.02);
 }
 
-/* ── Bande infos ── */
+/* ── 10d. Bande d'informations de contact ── */
 .contact-infos-bar {
     display: flex;
     align-items: stretch;
-    background: #1E1C1A;
+    background: var(--clr-surface);
     padding: 0 80px;
 }
 
@@ -1071,20 +1295,26 @@ footer {
 }
 
 .ci-icon {
-    width: 44px; height: 44px;
-    border: 1px solid rgba(201,168,76,0.3);
+    width: 44px;
+    height: 44px;
+    border: 1px solid rgba(201, 168, 76, 0.3);
     border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     flex-shrink: 0;
     transition: background 0.3s, border-color 0.3s;
 }
+
 .contact-info-item:hover .ci-icon {
-    background: rgba(201,168,76,0.1);
-    border-color: #C9A84C;
+    background: rgba(201, 168, 76, 0.1);
+    border-color: var(--clr-gold);
 }
+
 .ci-icon svg {
-    width: 18px; height: 18px;
-    stroke: #C9A84C;
+    width: 18px;
+    height: 18px;
+    stroke: var(--clr-gold);
     fill: none;
 }
 
@@ -1093,80 +1323,72 @@ footer {
     flex-direction: column;
     gap: 3px;
 }
+
 .ci-label {
     font-size: 0.58rem;
     font-weight: 600;
     letter-spacing: 0.35em;
     text-transform: uppercase;
-    color: #C9A84C;
+    color: var(--clr-gold);
 }
+
 .ci-val {
     font-size: 0.82rem;
     font-weight: 300;
-    color: rgba(245,240,232,0.75);
+    color: rgba(245, 240, 232, 0.75);
     line-height: 1.5;
 }
 
+/* Séparateur vertical entre les items */
 .contact-info-sep {
     width: 1px;
-    background: rgba(201,168,76,0.15);
+    background: rgba(201, 168, 76, 0.15);
     margin: 0 32px;
     flex-shrink: 0;
 }
 
-/* ── Responsive ── */
-@media (max-width: 1024px) {
-    .contact-header { padding: 60px 40px 40px; }
-    .contact-form-wrap { padding: 0 40px 50px; }
-    .contact-infos-bar { padding: 0 40px; flex-wrap: wrap; }
-    .contact-info-sep { display: none; }
-    .contact-info-item { flex: 0 0 calc(50% - 20px); padding: 24px 0; }
-}
-@media (max-width: 768px) {
-    .contact-grid { grid-template-columns: 1fr; }
-    .contact-map { min-height: 300px; }
-    .contact-header { padding: 50px 24px 32px; }
-    .contact-form-wrap { padding: 0 24px 40px; }
-    .cf-group { grid-template-columns: 1fr; }
-    .contact-infos-bar { padding: 0 24px; }
-    .contact-info-item { flex: 0 0 100%; }
-    .cf-submit { width: 100%; justify-content: center; }
-}
 
-/* ══════════════════════════════════════════
-   SECTION NEWSLETTER
-══════════════════════════════════════════ */
+/* ============================================================
+   11. SECTION NEWSLETTER
+   ============================================================ */
 .newsletter-section {
     position: relative;
-    border: 2px solid var(--gold);
     overflow: hidden;
+    border: 2px solid var(--clr-gold);
     padding: 80px;
     margin: 2rem;
 }
 
-/* Cercles décoratifs en fond */
+/* ── 11a. Fond décoratif (cercles et lueurs) ── */
 .nl-bg-deco {
     position: absolute;
     inset: 0;
     pointer-events: none;
     background:
-        radial-gradient(circle at 10% 50%, rgba(201,168,76,0.07) 0%, transparent 55%),
-        radial-gradient(circle at 90% 50%, rgba(201,168,76,0.05) 0%, transparent 50%);
+        radial-gradient(circle at 10% 50%, rgba(201, 168, 76, 0.07) 0%, transparent 55%),
+        radial-gradient(circle at 90% 50%, rgba(201, 168, 76, 0.05) 0%, transparent 50%);
 }
+
 .nl-bg-deco::before,
 .nl-bg-deco::after {
     content: '';
     position: absolute;
     border-radius: 50%;
-    border: 5px solid rgba(201, 168, 76, 0.219);
+    border: 5px solid rgba(201, 168, 76, 0.22);
 }
+
 .nl-bg-deco::before {
-    width: 500px; height: 500px;
-    top: -200px; left: -150px;
+    width: 500px;
+    height: 500px;
+    top: -200px;
+    left: -150px;
 }
+
 .nl-bg-deco::after {
-    width: 350px; height: 350px;
-    bottom: -150px; right: -100px;
+    width: 350px;
+    height: 350px;
+    bottom: -150px;
+    right: -100px;
 }
 
 .nl-content {
@@ -1180,7 +1402,7 @@ footer {
     margin: 0 auto;
 }
 
-/* ── Gauche ── */
+/* ── 11b. Colonne gauche (texte) ── */
 .nl-left {
     display: flex;
     flex-direction: column;
@@ -1188,15 +1410,20 @@ footer {
 }
 
 .nl-icon {
-    width: 52px; height: 52px;
-    border: 1.5px solid rgba(201,168,76,0.4);
+    width: 52px;
+    height: 52px;
+    border: 1.5px solid rgba(201, 168, 76, 0.4);
     border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    background: rgba(201,168,76,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(201, 168, 76, 0.08);
 }
+
 .nl-icon svg {
-    width: 22px; height: 22px;
-    stroke: #C9A84C;
+    width: 22px;
+    height: 22px;
+    stroke: var(--clr-gold);
 }
 
 .nl-label {
@@ -1205,16 +1432,16 @@ footer {
     font-weight: 600;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: #C9A84C;
+    color: var(--clr-gold);
     margin-bottom: 10px;
 }
 
 .nl-title {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: var(--font-serif);
     font-size: clamp(1.6rem, 3vw, 2.2rem);
     font-weight: 300;
     line-height: 1.2;
-    color: var(--dark2);
+    color: var(--clr-dark);
     margin: 0 0 14px;
 }
 
@@ -1222,28 +1449,30 @@ footer {
     font-size: 0.88rem;
     font-weight: 300;
     line-height: 1.8;
-    color: var(--mid);
+    color: var(--clr-surface);
     max-width: 400px;
 }
 
+/* Badges de garantie (sans spam, offres exclusives…) */
 .nl-badges {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
     margin-top: 4px;
 }
+
 .nl-badge {
     font-size: 0.68rem;
     font-weight: 500;
     letter-spacing: 0.08em;
-    color: rgba(201,168,76,0.8);
-    background: rgba(201,168,76,0.08);
-    border: 1px solid rgba(201,168,76,0.2);
+    color: rgba(201, 168, 76, 0.8);
+    background: rgba(201, 168, 76, 0.08);
+    border: 1px solid rgba(201, 168, 76, 0.2);
     padding: 5px 12px;
     border-radius: 2px;
 }
 
-/* ── Droite : formulaire ── */
+/* ── 11c. Formulaire newsletter (droite) ── */
 .nl-right {
     display: flex;
     align-items: center;
@@ -1255,8 +1484,8 @@ footer {
     display: flex;
     flex-direction: column;
     gap: 16px;
-    background: #1e1c1a;
-    border: 3px solid rgba(201,168,76,0.15);
+    background: var(--clr-surface);
+    border: 3px solid rgba(201, 168, 76, 0.15);
     padding: 40px 36px;
     border-radius: 4px;
 }
@@ -1266,6 +1495,7 @@ footer {
     flex-direction: column;
     gap: 7px;
 }
+
 .nl-field label {
     font-size: 0.62rem;
     font-weight: 600;
@@ -1273,27 +1503,32 @@ footer {
     text-transform: uppercase;
     color: rgba(255, 255, 255, 0.6);
 }
+
 .nl-field input {
     width: 100%;
     padding: 12px 16px;
-    background: rgba(249, 249, 249, 0.947);
-    border: 1px solid rgba(201,168,76,0.2);
+    background: rgba(249, 249, 249, 0.95);
+    border: 1px solid rgba(201, 168, 76, 0.2);
     border-radius: 2px;
-    font-family: 'Jost', sans-serif;
+    font-family: var(--font-sans);
     font-size: 0.88rem;
     font-weight: 300;
-    color: #000000;
+    color: #000;
     outline: none;
-    transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
+    transition: border-color 0.3s, background 0.3s, box-shadow 0.3s;
 }
-.nl-field input:focus {
-    border-color: #C9A84C;
-    background: rgba(253, 234, 183, 0.986);
-    box-shadow: 0 0 0 3px rgba(201,168,76,0.1);
-}
-.nl-field input::placeholder { color: rgba(0, 0, 0, 0.532); }
 
-/* Bouton */
+.nl-field input:focus {
+    border-color: var(--clr-gold);
+    background: rgba(253, 234, 183, 0.99);
+    box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.1);
+}
+
+.nl-field input::placeholder {
+    color: rgba(0, 0, 0, 0.53);
+}
+
+/* Bouton d'abonnement */
 .nl-btn {
     display: flex;
     align-items: center;
@@ -1301,10 +1536,10 @@ footer {
     gap: 10px;
     width: 100%;
     padding: 14px;
-    background: #C9A84C;
+    background: var(--clr-gold);
     border: none;
-    color: #1E1C1A;
-    font-family: 'Jost', sans-serif;
+    color: var(--clr-surface);
+    font-family: var(--font-sans);
     font-size: 0.8rem;
     font-weight: 700;
     letter-spacing: 0.2em;
@@ -1312,28 +1547,36 @@ footer {
     cursor: pointer;
     position: relative;
     overflow: hidden;
-    transition: background 0.3s;
     border-radius: 2px;
     margin-top: 4px;
+    transition: background 0.3s;
 }
+
 .nl-btn::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: #E8C97A;
+    background: var(--clr-gold-light);
     transform: translateX(-101%);
-    transition: transform 0.35s cubic-bezier(.4,0,.2,1);
-}
-.nl-btn:hover::before { transform: translateX(0); }
-.nl-btn span, .nl-btn svg {
-    position: relative; z-index: 1;
-}
-.nl-btn svg {
-    width: 15px; height: 15px;
-    stroke: #1E1C1A; fill: none;
+    transition: transform 0.35s var(--ease-out);
 }
 
-/* Feedback */
+.nl-btn:hover::before { transform: translateX(0); }
+
+.nl-btn span,
+.nl-btn svg {
+    position: relative;
+    z-index: 1;
+}
+
+.nl-btn svg {
+    width: 15px;
+    height: 15px;
+    stroke: var(--clr-surface);
+    fill: none;
+}
+
+/* Feedback abonnement */
 .nl-feedback {
     font-size: 0.82rem;
     font-weight: 500;
@@ -1341,16 +1584,18 @@ footer {
     border-radius: 2px;
     display: none;
 }
+
 .nl-feedback.nl-success {
     display: block;
-    background: rgba(34,139,34,0.1);
-    border: 1px solid rgba(34,139,34,0.3);
+    background: rgba(34, 139, 34, 0.1);
+    border: 1px solid rgba(34, 139, 34, 0.3);
     color: #5cb85c;
 }
+
 .nl-feedback.nl-error {
     display: block;
-    background: rgba(180,50,50,0.1);
-    border: 1px solid rgba(180,50,50,0.3);
+    background: rgba(180, 50, 50, 0.1);
+    border: 1px solid rgba(180, 50, 50, 0.3);
     color: #d9534f;
 }
 
@@ -1361,49 +1606,33 @@ footer {
     gap: 6px;
     font-size: 0.9rem;
     font-weight: 300;
-    color: rgba(255, 255, 255, 0.772);
+    color: rgba(255, 255, 255, 0.77);
     line-height: 1.5;
 }
-.nl-privacy svg { stroke: rgba(201,168,76,0.5); flex-shrink: 0; }
 
-/* ── Responsive ── */
-@media (max-width: 900px) {
-    .newsletter-section { padding: 60px 40px; }
-    .nl-content { grid-template-columns: 1fr; gap: 40px; }
-    .nl-desc { max-width: 100%; }
+.nl-privacy svg {
+    stroke: rgba(201, 168, 76, 0.5);
+    flex-shrink: 0;
 }
-@media (max-width: 600px) {
-    .newsletter-section { padding: 50px 24px; }
-    .nl-form { padding: 28px 20px; }
-}
-/* ══════════════════════════════════════════
-   SECTION AVIS CLIENTS
-══════════════════════════════════════════ */
+
+
+/* ============================================================
+   12. SECTION AVIS CLIENTS
+   ============================================================ */
 .avis-section {
     padding: 90px 15px 60px;
-    
     overflow: hidden;
     position: relative;
     max-width: 1300px;
-    margin: 0 auto;
-    margin-top: 2rem;
-}
-
-/* Motif de fond */
-.avis-section::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
+    margin: 2rem auto 0;
 }
 
 .avis-header {
     padding: 0 80px;
     margin-bottom: 52px;
-    position: relative;
 }
 
-/* ── Carousel wrap ── */
+/* ── 12a. Carrousel ── */
 .avis-carousel-wrap {
     position: relative;
 }
@@ -1416,35 +1645,41 @@ footer {
 .avis-track {
     display: flex;
     gap: 24px;
-    transition: transform 0.6s cubic-bezier(.77,0,.175,1);
     will-change: transform;
+    transition: transform 0.6s var(--ease-slide);
 }
 
-/* ── Carte avis ── */
+/* ── 12b. Carte d'avis ── */
 .avis-card {
     flex: 0 0 calc(33.333% - 16px);
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(201, 168, 76, 0.447);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(201, 168, 76, 0.45);
     padding: 36px 32px;
     border-radius: 3px;
     display: flex;
     flex-direction: column;
     gap: 20px;
-    transition: border-color 0.3s, transform 0.3s, background 0.3s;
     position: relative;
     overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s, background 0.3s;
 }
+
+/* Barre verticale dorée au survol */
 .avis-card::before {
     content: '';
     position: absolute;
-    top: 0; left: 0;
-    width: 3px; height: 0;
-    background: var(--gold);
-    transition: height 0.4s cubic-bezier(.4,0,.2,1);
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 0;
+    background: var(--clr-gold);
+    transition: height 0.4s var(--ease-out);
 }
+
 .avis-card:hover::before { height: 100%; }
+
 .avis-card:hover {
-    border-color: rgba(201,168,76,0.4);
+    border-color: rgba(201, 168, 76, 0.4);
     background: rgba(201, 168, 76, 0.16);
     transform: translateY(-4px);
 }
@@ -1459,7 +1694,7 @@ footer {
     font-size: 0.9rem;
     font-weight: 300;
     line-height: 1.85;
-    color: rgb(0, 0, 0);
+    color: #000;
     font-style: italic;
     flex: 1;
 }
@@ -1469,20 +1704,23 @@ footer {
     align-items: center;
     gap: 14px;
     padding-top: 16px;
-    border-top: 1px solid rgba(201,168,76,0.12);
-    position: relative;
+    border-top: 1px solid rgba(201, 168, 76, 0.12);
 }
 
+/* Initiales dans un avatar circulaire */
 .avis-avatar {
-    width: 42px; height: 42px;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
-    background: rgba(201,168,76,0.15);
-    border: 1.5px solid rgba(201,168,76,0.35);
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Cormorant Garamond', serif;
+    background: rgba(201, 168, 76, 0.15);
+    border: 1.5px solid rgba(201, 168, 76, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-serif);
     font-size: 0.85rem;
     font-weight: 400;
-    color: #C9A84C;
+    color: var(--clr-gold);
     flex-shrink: 0;
     letter-spacing: 0.05em;
 }
@@ -1493,56 +1731,65 @@ footer {
     gap: 3px;
     flex: 1;
 }
+
 .avis-name {
     font-size: 0.85rem;
     font-weight: 600;
-    color: #000000;
+    color: #000;
     letter-spacing: 0.04em;
 }
+
 .avis-dest {
     font-size: 0.68rem;
     font-weight: 400;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: #C9A84C;
+    color: var(--clr-gold);
 }
 
 .avis-quote-icon {
     font-size: 2.5rem;
-    color: rgba(201, 168, 76, 0.564);
+    color: rgba(201, 168, 76, 0.56);
     line-height: 1;
     font-family: Georgia, serif;
     margin-left: auto;
     align-self: flex-start;
 }
 
-/* ── Boutons prev/next ── */
+/* ── 12c. Boutons prev/next & dots ── */
 .avis-btn {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    width: 46px; height: 46px;
-    background: rgba(201,168,76,0.1);
-    border: 1px solid rgba(201,168,76,0.3);
+    width: 46px;
+    height: 46px;
+    background: rgba(201, 168, 76, 0.1);
+    border: 1px solid rgba(201, 168, 76, 0.3);
     border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
     z-index: 10;
     transition: background 0.3s, border-color 0.3s, transform 0.3s;
 }
+
 .avis-btn:hover {
-    background: rgba(201,168,76,0.25);
-    border-color: #C9A84C;
+    background: rgba(201, 168, 76, 0.25);
+    border-color: var(--clr-gold);
     transform: translateY(-50%) scale(1.08);
 }
+
 .avis-prev { left: 20px; }
 .avis-next { right: 20px; }
+
 .avis-btn svg {
-    width: 18px; height: 18px;
-    stroke: #C9A84C;
+    width: 18px;
+    height: 18px;
+    stroke: var(--clr-gold);
 }
 
-/* ── Footer dots + rating ── */
+/* Pied de section : dots + note globale */
 .avis-footer {
     display: flex;
     align-items: center;
@@ -1555,16 +1802,19 @@ footer {
     gap: 8px;
     align-items: center;
 }
+
 .avis-dot {
-    width: 24px; height: 2px;
-    background: rgba(201,168,76,0.25);
+    width: 24px;
+    height: 2px;
+    background: rgba(201, 168, 76, 0.25);
     border: none;
     cursor: pointer;
-    transition: background 0.3s, width 0.3s;
     border-radius: 2px;
+    transition: background 0.3s, width 0.3s;
 }
+
 .avis-dot.active {
-    background: #C9A84C;
+    background: var(--clr-gold);
     width: 40px;
 }
 
@@ -1573,71 +1823,179 @@ footer {
     align-items: center;
     gap: 10px;
 }
+
 .avis-rating-stars {
     font-size: 0.95rem;
-    color: #C9A84C;
+    color: var(--clr-gold);
     letter-spacing: 2px;
 }
+
 .avis-rating-score {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: var(--font-serif);
     font-size: 1.3rem;
     font-weight: 300;
-    color: #000000;
+    color: #000;
 }
+
 .avis-rating-count {
     font-size: 0.72rem;
     font-weight: 400;
-    color: rgba(0, 0, 0, 0.584);
+    color: rgba(0, 0, 0, 0.58);
     letter-spacing: 0.1em;
 }
 
-/* ── Responsive ── */
+
+/* ============================================================
+   13. FOOTER
+   ============================================================ */
+footer {
+    border-top: 1px solid rgba(201, 168, 76, 0.15);
+    padding: 30px 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--clr-surface);
+    color: var(--clr-muted);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+}
+
+
+/* ============================================================
+   14. MEDIA QUERIES (Responsive)
+   ============================================================ */
+
+/* ── Tablette large (≤ 1024px) ── */
 @media (max-width: 1024px) {
-    .avis-card { flex: 0 0 calc(50% - 12px); }
-    .avis-header { padding: 0 40px; }
-    .avis-track-outer { padding: 12px 40px 20px; }
-    .avis-footer { padding: 24px 40px 0; }
+    /* Home */
+    .home-section          { grid-template-columns: 1fr; }
+    .home-identity         { padding: 70px 40px; min-height: auto; }
+    .home-identity::after  { display: none; }
+    .home-services-wrap    { padding: 60px 40px; }
+    .home-services-grid    { grid-template-columns: repeat(2, 1fr); }
+
+    /* Contact */
+    .contact-header       { padding: 60px 40px 40px; }
+    .contact-form-wrap    { padding: 0 40px 50px; }
+    .contact-infos-bar    { padding: 0 40px; flex-wrap: wrap; }
+    .contact-info-sep     { display: none; }
+    .contact-info-item    { flex: 0 0 calc(50% - 20px); padding: 24px 0; }
+
+    /* Avis */
+    .avis-card            { flex: 0 0 calc(50% - 12px); }
+    .avis-header          { padding: 0 40px; }
+    .avis-track-outer     { padding: 12px 40px 20px; }
+    .avis-footer          { padding: 24px 40px 0; }
 }
-@media (max-width: 640px) {
-    .avis-card { flex: 0 0 calc(100% - 0px); }
-    .avis-header { padding: 0 24px; }
-    .avis-track-outer { padding: 12px 24px 20px; }
-    .avis-footer { padding: 20px 24px 0; flex-direction: column; gap: 16px; align-items: flex-start; }
-    .avis-prev { left: 4px; }
-    .avis-next { right: 4px; }
+
+/* ── Tablette & mobile (≤ 900px) ── */
+@media (max-width: 900px) {
+    .newsletter-section { padding: 60px 40px; }
+    .nl-content         { grid-template-columns: 1fr; gap: 40px; }
+    .nl-desc            { max-width: 100%; }
 }
+
+/* ── Mobile (≤ 768px) ── */
 @media (max-width: 768px) {
-    .btn-cnx {
-        display: inline-flex;  /* reste visible */
-        padding: 8px 14px;
-        font-size: 0.68rem;
-        letter-spacing: 0.15em;
-    }
+    /* Navbar */
+    nav               { padding: 0 20px; }
+    .nav-hamburger    { display: flex; }
+
+    /* Menu mobile : drawer déroulant */
     .nav-links {
         display: flex !important;
         flex-direction: column;
         gap: 0;
         position: fixed;
         top: var(--nav-h);
-        left: 0; right: 0;
-        background: rgba(13,13,13,0.97);
+        inset-inline: 0;
+        background: rgba(13, 13, 13, 0.97);
         backdrop-filter: blur(20px);
-        border-top: 1px solid rgba(201,168,76,0.2);
-        padding: 0;
+        border-top: 1px solid rgba(201, 168, 76, 0.2);
         z-index: 999;
         max-height: 0;
         overflow: hidden;
-        transition: max-height 0.4s cubic-bezier(.4,0,.2,1), padding 0.3s;
         pointer-events: none;
+        transition: max-height 0.4s var(--ease-out), padding 0.3s;
     }
-    .nav-links.open { max-height: 400px; padding: 12px 0; pointer-events: all; }
-    .nav-links li { border-bottom: 1px solid rgba(201,168,76,0.07); }
-    .nav-links a { display: block; padding: 16px 28px; }
-    .nav-links a:hover, .nav-links a.active { color: var(--gold); padding-left: 36px; }
+
+    .nav-links.open {
+        max-height: 400px;
+        padding: 12px 0;
+        pointer-events: all;
+    }
+
+    .nav-links li   { border-bottom: 1px solid rgba(201, 168, 76, 0.07); }
+    .nav-links a    { display: block; padding: 16px 28px; }
+
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--clr-gold); padding-left: 36px; }
+
+    /* Supprime le soulignement animé en mobile (peu utile) */
     .nav-links a::after { display: none; }
-    
-    .nav-hamburger span { transition: transform 0.3s, opacity 0.3s; }
-    .nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
-    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
-    .nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    /* Bouton Connexion réduit sur mobile */
+    .btn-cnx {
+        padding: 8px 14px;
+        font-size: 0.68rem;
+        letter-spacing: 0.15em;
+    }
+
+    /* Hero */
+    .slide-caption    { left: 30px; bottom: 80px; }
+    .carousel-btn.prev { left: 12px; }
+    .carousel-btn.next { right: 12px; }
+
+    /* Sections */
+    section { padding: 80px 24px; }
+
+    /* Contact */
+    .contact-grid       { grid-template-columns: 1fr; }
+    .contact-map        { min-height: 300px; }
+    .contact-header     { padding: 50px 24px 32px; }
+    .contact-form-wrap  { padding: 0 24px 40px; }
+    .cf-group           { grid-template-columns: 1fr; }
+    .contact-infos-bar  { padding: 0 24px; }
+    .contact-info-item  { flex: 0 0 100%; }
+    .cf-submit          { width: 100%; justify-content: center; }
+
+    /* Avis */
+    .avis-card        { flex: 0 0 100%; }
+    .avis-header      { padding: 0 24px; }
+    .avis-track-outer { padding: 12px 24px 20px; }
+    .avis-prev        { left: 4px; }
+    .avis-next        { right: 4px; }
+    .avis-footer      {
+        padding: 20px 24px 0;
+        flex-direction: column;
+        gap: 16px;
+        align-items: flex-start;
+    }
+
+    /* Footer */
+    footer { flex-direction: column; gap: 10px; padding: 24px; }
+
+    /* Modal */
+    .modal-body   { padding: 24px 20px; }
+    .modal-img    { height: 200px; }
+    .modal-infos  { gap: 16px; }
+}
+
+/* ── Petit mobile (≤ 640px) ── */
+@media (max-width: 640px) {
+    .avis-card { flex: 0 0 100%; }
+}
+
+/* ── Petit mobile (≤ 600px) ── */
+@media (max-width: 600px) {
+    /* Home */
+    .home-services-grid  { grid-template-columns: 1fr; }
+    .home-services-wrap  { padding: 50px 24px; }
+    .home-identity       { padding: 60px 24px; }
+    .home-stats          { flex-wrap: wrap; gap: 16px; }
+    .home-stat-sep       { display: none; }
+
+    /* Newsletter */
+    .newsletter-section { padding: 50px 24px; }
+    .nl-form            { padding: 28px 20px; }
 }
