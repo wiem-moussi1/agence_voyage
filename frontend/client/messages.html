@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Messagerie · Horizon</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/client.css">
+</head>
+<body>
+  <div id="navbar"></div>
+
+  <div class="page-wrap">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Messagerie avec <span>l'administrateur</span></h1>
+        <div class="page-subtitle">Échangez avec notre équipe</div>
+      </div>
+    </div>
+
+    <div class="content-card">
+      <div id="chat" class="chat-box">
+        <div class="empty-chat">Chargement des messages...</div>
+      </div>
+      <div class="input-area">
+        <input type="text" id="messageInput" class="form-input" placeholder="Écrivez votre message...">
+        <button id="sendBtn" class="btn-primary">Envoyer</button>
+      </div>
+    </div>
+  </div>
+
+    <script>
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (!user) window.location.href = 'index.html';
+
+        fetch('navBar.html')
+            .then(r => r.text())
+            .then(html => {
+                document.getElementById('navbar').innerHTML = html;
+
+                // Show user name
+                if (user) {
+                    const initials = ((user.prenom?.[0] || '') + (user.nom?.[0] || '')).toUpperCase() || '?';
+                    const el = document.getElementById('navUserAvatar');
+                    const nm = document.getElementById('navUserName');
+                    if (el) el.textContent = initials;
+                    if (nm) nm.textContent = `${user.prenom || ''} ${user.nom || ''}`.trim();
+                }
+
+                // Active link
+                const page = window.location.pathname.split('/').pop();
+                const map = {
+                    'dashboard.html':    'nav-dashboard',
+                    'reservations.html': 'nav-reservations',
+                    'addAvis.html':      'nav-avis',
+                    'messages.html':     'nav-messages'
+                };
+                if (map[page]) document.getElementById(map[page])?.classList.add('active');
+
+                // Logout
+                document.getElementById('logoutBtn')?.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    localStorage.removeItem('user');
+                    window.location.href = '../visitor/home.html';
+                });
+            });
+
+        let adminId = null;
+        let lastRefresh = 0;
+
+        function loadMessages() {
+            fetch(`http://localhost/AGENCE_VOYAGE/backend/index.php?uri=messages&user_id=${user.id}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.error) {
+                        document.getElementById('chat').innerHTML = `<div class="empty-chat">Erreur : ${data.error}</div>`;
+                        return;
+                    }
+                    adminId = data.admin_id;
+                    const messages = data.messages;
+                    const chatDiv = document.getElementById('chat');
+                    if (messages.length === 0) {
+                        chatDiv.innerHTML = '<div class="empty-chat">Aucun message pour le moment. Commencez la conversation !</div>';
+                        return;
+                    }
+                    chatDiv.innerHTML = messages.map(msg => {
+                        const isSent = msg.sender_id == user.id;
+                        return `
+                            <div class="message ${isSent ? 'sent' : 'received'}">
+                                <div>${msg.message}</div>
+                                <div class="time">${new Date(msg.date_envoi).toLocaleString()}</div>
+                            </div>
+                        `;
+                    }).join('');
+                    // Scroll en bas
+                    chatDiv.scrollTop = chatDiv.scrollHeight;
+                });
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const text = input.value.trim();
+            if (!text) return;
+            if (!adminId) {
+                alert("Impossible d'envoyer : admin non trouvé.");
+                return;
+            }
+            fetch('http://localhost/AGENCE_VOYAGE/backend/index.php?uri=messages', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    sender_id: user.id,
+                    receiver_id: adminId,
+                    message: text
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    input.value = '';
+                    loadMessages();
+                } else {
+                    alert('Erreur : ' + data.error);
+                }
+            });
+        }
+
+        document.getElementById('sendBtn').addEventListener('click', sendMessage);
+        document.getElementById('messageInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        // Charger les messages toutes les 3 secondes
+        loadMessages();
+        setInterval(loadMessages, 3000);
+    </script>
+</body>
+</html>

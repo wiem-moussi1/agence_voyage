@@ -1,0 +1,119 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messagerie — Horizon Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --gold: #C9A84C;
+            --gold-lt: #E8C97A;
+            --gold-dim: rgba(201,168,76,0.12);
+            --dark: #0D0B09;
+            --ink: #1C1814;
+            --ink-2: #4A3F35;
+            --ink-3: #8C7B6E;
+            --sand: #F7F3ED;
+            --sand-2: #EDE6DB;
+            --sand-3: #E0D5C5;
+            --white: #FDFBF8;
+            --border: rgba(28,24,20,0.1);
+            --border-gold: rgba(201,168,76,0.25);
+            --shadow-sm: 0 1px 3px rgba(28,24,20,0.06), 0 1px 2px rgba(28,24,20,0.04);
+            --shadow-md: 0 4px 16px rgba(28,24,20,0.08), 0 2px 6px rgba(28,24,20,0.04);
+            --shadow-lg: 0 12px 40px rgba(28,24,20,0.1), 0 4px 12px rgba(28,24,20,0.06);
+        }
+
+        body { font-family: 'DM Sans', sans-serif; background: var(--sand); color: var(--ink); min-height: 100vh; }
+        #navbar { position: sticky; top: 0; z-index: 200; }
+        .page-wrap { max-width: 1200px; margin: 0 auto; padding: 2.5rem 2rem 4rem; }
+
+        .page-header {
+            display: flex; align-items: flex-end; justify-content: space-between;
+            margin-bottom: 2.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border);
+            gap: 1.5rem; flex-wrap: wrap;
+        }
+        .page-header-left { display: flex; flex-direction: column; gap: 4px; }
+        .page-eyebrow {
+            font-family: 'DM Sans', sans-serif; font-size: 0.6rem; font-weight: 600;
+            letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold);
+            display: flex; align-items: center; gap: 8px;
+        }
+        .page-eyebrow::before { content: ''; display: inline-block; width: 20px; height: 1px; background: var(--gold); }
+        .page-title { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; font-weight: 400; color: var(--ink); line-height: 1.1; }
+        .page-title em { color: var(--gold); font-style: italic; }
+        .page-subtitle { max-width: 680px; color: var(--ink-3); line-height: 1.7; margin-top: 0.75rem; }
+
+        .empty-state {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            min-height: 340px; padding: 3rem 2rem; background: var(--white);
+            border: 1px solid var(--border); border-radius: 18px; box-shadow: var(--shadow-sm);
+            text-align: center; gap: 1rem;
+        }
+        .empty-state .icon {
+            width: 56px; height: 56px; display: grid; place-items: center;
+            border-radius: 50%; background: var(--sand-2); border: 1px solid var(--border);
+        }
+        .empty-state .icon svg { width: 26px; height: 26px; stroke: var(--ink-3); fill: none; stroke-width: 1.6; }
+        .empty-state h2 { font-size: 1.5rem; color: var(--ink); }
+        .empty-state p { max-width: 520px; color: var(--ink-3); line-height: 1.75; font-size: 0.95rem; }
+
+        .toast {
+            position: fixed; bottom: 2rem; right: 2rem; padding: 0.75rem 1.25rem;
+            border-radius: 8px; font-size: 0.83rem; font-weight: 500;
+            opacity: 0; transform: translateY(8px); transition: opacity 0.25s, transform 0.25s;
+            pointer-events: none; z-index: 999; box-shadow: var(--shadow-lg);
+            display: flex; align-items: center; gap: 8px;
+        }
+        .toast.show { opacity: 1; transform: translateY(0); }
+        .toast.success { background: var(--white); color: #1a7a4a; border: 1px solid rgba(26,122,74,0.2); }
+        .toast.error { background: var(--white); color: #c0392b; border: 1px solid rgba(192,57,43,0.2); }
+    </style>
+</head>
+
+<body>
+
+    <div id="navbar"></div>
+
+    <div class="page-wrap">
+
+        <div class="page-header">
+            <div class="page-header-left">
+                <div class="page-eyebrow">Administration</div>
+                <h1 class="page-title">Messagerie — <em>En attente</em></h1>
+            </div>
+        </div>
+
+        <div class="empty-state">
+            <div class="icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M4 4h16v12H4z"/><path d="M4 8h16"/><path d="M8 16h8"/></svg>
+            </div>
+            <h2>Aucun message disponible</h2>
+            <p>La messagerie sera bientôt gérée dans cette interface. Pour l'instant, la page affiche un état vide propre et harmonisé.</p>
+        </div>
+
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (!user || user.role !== 'Admin') window.location.href = '../visitor/home.html';
+
+        fetch('navBarAdmin.html').then(r => r.text()).then(html => {
+            document.getElementById('navbar').innerHTML = html;
+            document.getElementById('nav-messages')?.classList.add('active');
+            document.getElementById('logoutBtn')?.addEventListener('click', e => {
+                e.preventDefault();
+                localStorage.removeItem('user');
+                window.location.href = '../visitor/home.html';
+            });
+        });
+    </script>
+</body>
+
+</html>

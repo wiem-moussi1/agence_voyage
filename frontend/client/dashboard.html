@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau de bord - Horizon Voyages</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/client.css">
+</head>
+<body>
+    <div id="navbar"></div>
+
+    <div class="page-wrap">
+        <div class="page-header">
+            <div>
+                <h1  class="page-title">Tableau de <span>bord</span></h1>
+                <div class="page-subtitle">Votre espace personnel</div>
+            </div>
+        </div>
+
+        <div class="welcome-card">
+            <h1>Bonjour, <span id="userName">Client</span></h1>
+            <p>Bienvenue dans votre espace personnel. Gérez vos voyages, partagez votre expérience et restez connecté avec nous.</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="reservationsCount">0</div>
+                <div class="stat-label">Réservations</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="avisCount">0</div>
+                <div class="stat-label">Avis publiés</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="messagesCount">0</div>
+                <div class="stat-label">Messages non lus</div>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h3>Mes dernières réservations</h3>
+            <div id="recentReservations">
+                <p>Chargement...</p>
+            </div>
+            <a href="reservations.html" class="btn" style="margin-top: 1rem;display: flex;justify-content: center;align-items: center;">Voir toutes mes réservations</a>
+        </div>
+    </div>
+
+    <script>
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (!user) window.location.href = 'index.html';
+
+        document.getElementById('userName').innerText = user.prenom + ' ' + user.nom;
+
+        // Charger navbar
+        fetch('navBar.html')
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById('navbar').innerHTML = html;
+
+                // Show user name
+                if (user) {
+                    const initials = ((user.prenom?.[0] || '') + (user.nom?.[0] || '')).toUpperCase() || '?';
+                    const el = document.getElementById('navUserAvatar');
+                    const nm = document.getElementById('navUserName');
+                    if (el) el.textContent = initials;
+                    if (nm) nm.textContent = `${user.prenom || ''} ${user.nom || ''}`.trim();
+                }
+
+                // Active link
+                const page = window.location.pathname.split('/').pop();
+                const map = {
+                    'dashboard.html':    'nav-dashboard',
+                    'reservations.html': 'nav-reservations',
+                    'addAvis.html':      'nav-avis',
+                    'messages.html':     'nav-messages'
+                };
+                if (map[page]) document.getElementById(map[page])?.classList.add('active');
+
+                // Logout
+                document.getElementById('logoutBtn')?.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    localStorage.removeItem('user');
+                    window.location.href = '../visitor/home.html';
+                });
+            });
+
+        // Récupérer les statistiques
+        fetch(`http://localhost/AGENCE_VOYAGE/backend/index.php?uri=reservations&user_id=${user.id}`)
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('reservationsCount').innerText = data.length;
+                // Afficher les 3 dernières
+                const recent = data.slice(0,3);
+                const container = document.getElementById('recentReservations');
+                if (recent.length === 0) container.innerHTML = '<p style="text-align: center;">Aucune réservation pour le moment.</p>';
+                else {
+                    container.innerHTML = recent.map(r => `
+                        <div class="reservation-item">
+                            <span>${r.titre}</span>
+                            <span>${r.nb_personnes} pers. | ${new Date(r.date_depart).toLocaleDateString()}</span>
+                            <span>${r.statut}</span>
+                        </div>
+                    `).join('');
+                }
+            });
+
+        fetch(`http://localhost/AGENCE_VOYAGE/backend/index.php?uri=avis&user_id=${user.id}`)
+            .then(res => res.json())
+            .then(data => document.getElementById('avisCount').innerText = data.length);
+
+        fetch(`http://localhost/AGENCE_VOYAGE/backend/index.php?uri=messages&user_id=${user.id}`)
+            .then(res => res.json())
+            .then(data => {
+                const unread = data.messages.filter(m => m.receiver_id === user.id && m.lu == 0).length;
+                document.getElementById('messagesCount').innerText = unread;
+            });
+    </script>
+</body>
+</html>

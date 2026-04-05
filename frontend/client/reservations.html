@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mes réservations · Horizon</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/client.css">
+</head>
+<body>
+  <div id="navbar"></div>
+
+  <div class="page-wrap">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Mes <span>réservations</span></h1>
+        <div class="page-subtitle">Gérez vos voyages réservés</div>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-strip" id="statsStrip">
+      <div class="stat-card">
+        <div class="stat-label">Total</div>
+        <div class="stat-value" id="statTotal">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Confirmées</div>
+        <div class="stat-value" id="statConfirmees" style="color:#5cb85c">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">En attente</div>
+        <div class="stat-value" id="statAttente">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Montant total</div>
+        <div class="stat-value" id="statMontant">—</div>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="filter-tabs">
+      <button class="filter-tab active" onclick="filterBy('all', this)">Tous</button>
+      <button class="filter-tab" onclick="filterBy('en_attente', this)">En attente</button>
+      <button class="filter-tab" onclick="filterBy('confirmee', this)">Confirmées</button>
+      <button class="filter-tab" onclick="filterBy('annulee', this)">Annulées</button>
+    </div>
+
+    <!-- Reservations Grid -->
+    <div id="reservationsGrid" class="reservations-grid">
+      <div class="state-loading">Chargement de vos réservations</div>
+    </div>
+  </div>
+
+  <!-- Confirm Modal -->
+  <div class="modal-overlay" id="confirmModal">
+    <div class="modal-box">
+      <div class="modal-icon">
+        <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+      </div>
+      <div class="modal-title">Annuler la réservation</div>
+      <div class="modal-text" id="confirmText">Voulez-vous vraiment annuler cette réservation ? Les places seront remises à disposition.</div>
+      <div class="modal-actions">
+        <button class="btn-dismiss" onclick="closeConfirm()">Garder</button>
+        <button class="btn-confirm-cancel" id="confirmBtn" onclick="doCancel()">Annuler la réservation</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast">
+    <svg viewBox="0 0 24 24" id="toastIcon"></svg>
+    <span id="toastMsg"></span>
+  </div>
+
+  <script>
+    const BASE = 'http://localhost/agence_voyage/backend/index.php';
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user) window.location.href = '../visitor/home.html';
+
+    let allReservations = [];
+    let cancelTargetId = null;
+
+    // ── Load Navbar ──
+    fetch('navBar.html')
+      .then(r => r.text())
+      .then(html => {
+        document.getElementById('navbar').innerHTML = html;
+
+        // Show user name
+        if (user) {
+          const initials = ((user.prenom?.[0] || '') + (user.nom?.[0] || '')).toUpperCase() || '?';
+          const el = document.getElementById('navUserAvatar');
+          const nm = document.getElementById('navUserName');
+          if (el) el.textContent = initials;
+          if (nm) nm.textContent = `${user.prenom || ''} ${user.nom || ''}`.trim();
+        }
+
+        // Active link
+        const page = window.location.pathname.split('/').pop();
+        const map = {
+          'dashboard.html':    'nav-dashboard',
+          'reservations.html': 'nav-reservations',
+          'addAvis.html':      'nav-avis',
+          'messages.html':     'nav-messages'
+        };
+        if (map[page]) document.getElementById(map[page])?.classList.add('active');
+
+        // Logout
+        document.getElementById('logoutBtn')?.addEventListener('click', (e) => {
+          e.preventDefault();
+          localStorage.removeItem('user');
+          window.location.href = '../visitor/home.html';
+        });
+      });
+
+    // ── Toast ──
+    function showToast(msg, type = 'success') {
+      const t = document.getElementById('toast');
+      document.getElementById('toastMsg').textContent = msg;
+      document.getElementById('toastIcon').innerHTML = type === 'success'
+        ? '<polyline points="20 6 9 17 4 12"/>'
+        : '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>';
+      t.className = `toast ${type} show`;
+      setTimeout(() => t.classList.remove('show'), 3500);
+    }
+
+    // ── Format date ──
+    function fmtDate(d) {
+      if (!d) return '—';
+      return new Date(d).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' });
+    }
+
+    // ── Load reservations ──
+    function loadReservations() {
+      document.getElementById('reservationsGrid').innerHTML = '<div class="state-loading">Chargement de vos réservations</div>';
+
+      fetch(`${BASE}?uri=reservations&user_id=${user.id}`)
+        .then(r => r.json())
+        .then(data => {
+          if (data.error) {
+            document.getElementById('reservationsGrid').innerHTML = `<div class="state-empty"><p>${data.error}</p></div>`;
+            return;
+          }
+          allReservations = data;
+          updateStats(data);
+          renderGrid(data);
+        })
+        .catch(() => {
+          document.getElementById('reservationsGrid').innerHTML =
+            '<div class="state-empty"><p>Erreur de connexion au serveur.</p></div>';
+        });
+    }
+
+    // ── Update Stats ──
+    function updateStats(data) {
+      const confirmees = data.filter(r => r.statut === 'confirmee').length;
+      const attente    = data.filter(r => r.statut === 'en_attente').length;
+      const montant    = data
+        .filter(r => r.statut !== 'annulee')
+        .reduce((s, r) => s + parseFloat(r.prix_total || 0), 0);
+
+      document.getElementById('statTotal').textContent      = data.length;
+      document.getElementById('statConfirmees').textContent = confirmees;
+      document.getElementById('statAttente').textContent    = attente;
+      document.getElementById('statMontant').textContent    = montant.toLocaleString('fr-FR') + ' TND';
+    }
+
+    // ── Render Grid ──
+    function renderGrid(data) {
+      const container = document.getElementById('reservationsGrid');
+
+      if (data.length === 0) {
+        container.innerHTML = `
+          <div class="state-empty">
+            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <p>Aucune réservation trouvée</p>
+          </div>`;
+        return;
+      }
+
+      const cards = data.map(r => {
+        const badgeClass = r.statut === 'confirmee' ? 'badge-confirmee'
+                         : r.statut === 'annulee'   ? 'badge-annulee'
+                         : 'badge-attente';
+        const statutLabel = r.statut === 'confirmee' ? 'Confirmée'
+                          : r.statut === 'annulee'   ? 'Annulée'
+                          : 'En attente';
+
+        const thumb = r.image
+          ? `<img src="${r.image}" alt="" class="reservation-thumb" onerror="this.style.display='none'">`
+          : `<div class="reservation-thumb-placeholder"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>`;
+
+        const canCancel = r.statut === 'en_attente' || r.statut === 'confirmee';
+
+        return `
+          <div class="reservation-card">
+            <div class="reservation-header">
+              ${thumb}
+              <div class="reservation-status">
+                <span class="status-badge ${badgeClass}">${statutLabel}</span>
+              </div>
+            </div>
+            <div class="reservation-body">
+              <h3 class="reservation-title">${r.titre}</h3>
+              <div class="reservation-dates">
+                <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                ${fmtDate(r.date_depart)} → ${fmtDate(r.date_retour)}
+              </div>
+              <div class="reservation-details">
+                <div class="detail-item">
+                  <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 2l-1 1"/><path d="M22 8l-1-1"/><path d="M18 2l1 1"/><path d="M18 8l1-1"/></svg>
+                  ${r.nb_personnes} personne${r.nb_personnes > 1 ? 's' : ''}
+                </div>
+                <div class="detail-item">
+                  <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M16 8l-4 4-4-4"/></svg>
+                  ${r.mode_paiement || '—'}
+                </div>
+              </div>
+              <div class="reservation-price">
+                <strong>${parseFloat(r.prix_total).toLocaleString('fr-FR')} TND</strong>
+              </div>
+              <div class="reservation-date">
+                Réservé le ${fmtDate(r.date_reserv)}
+              </div>
+            </div>
+            <div class="reservation-actions">
+              ${canCancel
+                ? `<button class="btn-cancel" onclick="askCancel(${r.id}, '${(r.titre || '').replace(/'/g, "\\'")}')">
+                     <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                     Annuler
+                   </button>`
+                : ''}
+            </div>
+          </div>`;
+      }).join('');
+
+      container.innerHTML = cards;
+    }
+
+    // ── Filter ──
+    function filterBy(status, btn) {
+      document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filtered = status === 'all' ? allReservations : allReservations.filter(r => r.statut === status);
+      renderGrid(filtered);
+    }
+
+    // ── Cancel Flow ──
+    function askCancel(id, titre) {
+      cancelTargetId = id;
+      document.getElementById('confirmText').textContent =
+        `Voulez-vous vraiment annuler "${titre}" ? Les places seront remises à disposition.`;
+      document.getElementById('confirmModal').classList.add('open');
+    }
+
+    function closeConfirm() {
+      cancelTargetId = null;
+      document.getElementById('confirmModal').classList.remove('open');
+    }
+
+    function doCancel() {
+      if (!cancelTargetId) return;
+      const btn = document.getElementById('confirmBtn');
+      btn.disabled = true;
+      btn.textContent = 'Annulation…';
+
+      fetch(`${BASE}?uri=reservations&id=${cancelTargetId}&user_id=${user.id}`, { method: 'DELETE' })
+        .then(r => r.json())
+        .then(data => {
+          btn.disabled = false;
+          btn.textContent = 'Annuler la réservation';
+          closeConfirm();
+          if (data.success) {
+            showToast('Réservation annulée avec succès');
+            loadReservations();
+          } else {
+            showToast(data.error || 'Erreur lors de l\'annulation', 'error');
+          }
+        })
+        .catch(() => {
+          btn.disabled = false;
+          btn.textContent = 'Annuler la réservation';
+          showToast('Erreur de connexion', 'error');
+          closeConfirm();
+        });
+    }
+
+    // close modal on backdrop click / Escape
+    document.getElementById('confirmModal').addEventListener('click', function(e) {
+      if (e.target === this) closeConfirm();
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeConfirm();
+    });
+
+    // ── Init ──
+    loadReservations();
+  </script>
+</body>
+</html>

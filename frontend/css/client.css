@@ -1,0 +1,946 @@
+/* ============================================================
+   HORIZON VOYAGES — Feuille de styles client (mode clair)
+   client.css
+   ============================================================
+   TABLE DES MATIÈRES
+   ─────────────────────────────────────────────────────────────
+   1.  RESET & BASE
+   2.  VARIABLES CSS (Design Tokens)
+   3.  PAGE STRUCTURE
+   4.  CARDS & COMPONENTS
+   5.  FORMS & INPUTS
+   6.  TABLES & LISTS
+   7.  BUTTONS
+   8.  MODALS & OVERLAYS
+   9.  RESPONSIVE
+   ============================================================ */
+
+/* ============================================================
+   1. RESET & BASE
+   ============================================================ */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Jost', sans-serif;
+    background: var(--clr-bg);
+    color: var(--clr-dark);
+    line-height: 1.6;
+}
+
+/* ============================================================
+   2. VARIABLES CSS (Design Tokens)
+   ============================================================ */
+:root {
+    /* Couleurs */
+    --clr-gold:        #C9A84C;
+    --clr-gold-light:  #E8C97A;
+    --clr-bg:          #F8F5F0;      /* fond global clair */
+    --clr-dark:        #1E1C1A;      /* surface sombre (cartes, etc.) */
+    --clr-light:       #F5F0E8;
+    --clr-muted:       rgba(30, 28, 26, 0.55);
+    --clr-border:      rgba(201, 168, 76, 0.2);
+    --clr-border-strong: rgba(201, 168, 76, 0.35);
+    --clr-surface:     rgba(255, 255, 255, 0.8);
+    --clr-surface-hover: rgba(255, 255, 255, 0.95);
+
+    /* Mise en page */
+    --nav-h:           72px;
+    --container-max:   1200px;
+    --spacing-sm:      0.5rem;
+    --spacing-md:      1rem;
+    --spacing-lg:      1.5rem;
+    --spacing-xl:      2rem;
+
+    /* Transitions */
+    --ease-out:        cubic-bezier(.4, 0, .2, 1);
+    --ease-slide:      cubic-bezier(.77, 0, .175, 1);
+
+    /* Typographie */
+    --font-serif:  'Cormorant Garamond', serif;
+    --font-sans:   'Jost', sans-serif;
+}
+
+/* ============================================================
+   3. PAGE STRUCTURE
+   ============================================================ */
+.page-wrap {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: var(--spacing-xl) var(--spacing-lg) 5rem;
+}
+
+.page-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-xl);
+    padding-bottom: var(--spacing-lg);
+    border-bottom: 1px solid var(--clr-border);
+}
+
+.page-title {
+    font-family: var(--font-serif);
+    font-size: clamp(2rem, 4vw, 2.5rem);
+    font-weight: 300;
+    letter-spacing: 0.04em;
+    color: var(--clr-dark);
+}
+
+.page-title span {
+    color: var(--clr-gold);
+}
+
+.page-subtitle {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--clr-muted);
+    margin-top: 4px;
+}
+
+/* ============================================================
+   4. CARDS & COMPONENTS
+   ============================================================ */
+.welcome-card {
+    background: var(--clr-surface);
+    border: 1px solid var(--clr-border);
+    border-left: 4px solid var(--clr-gold);
+    border-radius: 8px;
+    padding: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
+    box-shadow: 0 2px 8px rgba(201, 168, 76, 0.08);
+}
+
+.welcome-card h1 {
+    font-family: var(--font-serif);
+    font-size: 1.8rem;
+    font-weight: 300;
+    color: var(--clr-dark);
+    margin-bottom: var(--spacing-sm);
+}
+
+.welcome-card p {
+    color: var(--clr-muted);
+    font-size: 0.95rem;
+    line-height: 1.7;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+}
+
+.stats-strip {
+    display: flex;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+    overflow-x: auto;
+    padding-bottom: var(--spacing-sm);
+}
+
+.stats-strip .stat-card {
+    flex: 1;
+    min-width: 140px;
+}
+
+/* Filter Tabs */
+.filter-tabs {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+    border-bottom: 1px solid var(--clr-border);
+}
+
+.filter-tab {
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: transparent;
+    border: 1px solid var(--clr-border);
+    border-bottom: none;
+    border-radius: 6px 6px 0 0;
+    color: var(--clr-muted);
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.filter-tab:hover {
+    color: var(--clr-dark);
+    background: var(--clr-light);
+}
+
+.filter-tab.active {
+    background: var(--clr-gold);
+    color: white;
+    border-color: var(--clr-gold);
+}
+
+.stat-card {
+    background: var(--clr-surface);
+    border: 1px solid var(--clr-border);
+    border-radius: 8px;
+    padding: var(--spacing-lg);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(201, 168, 76, 0.12);
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(to right, var(--clr-gold), transparent);
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--clr-gold);
+    margin-bottom: var(--spacing-sm);
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--clr-dark);
+}
+
+.content-card {
+    background: var(--clr-surface);
+    border: 1px solid var(--clr-border);
+    border-radius: 8px;
+    padding: var(--spacing-xl);
+    margin-bottom: var(--spacing-lg);
+    box-shadow: 0 2px 8px rgba(201, 168, 76, 0.08);
+}
+
+.content-card h3 {
+    font-family: var(--font-serif);
+    font-size: 1.4rem;
+    font-weight: 300;
+    color: var(--clr-dark);
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 1px solid var(--clr-border);
+}
+
+/* Reservation Cards */
+/* .reservations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-xl);
+} */
+
+.reservation-card {
+    background: var(--clr-surface);
+    border: 1px solid var(--clr-border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    position: relative;
+}
+
+.reservation-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(201, 168, 76, 0.15);
+    border-color: var(--clr-gold);
+}
+
+.reservation-header {
+    position: relative;
+    height: 160px;
+    overflow: hidden;
+}
+
+.reservation-thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.reservation-thumb-placeholder {
+    width: 100%;
+    height: 100%;
+    background: var(--clr-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--clr-muted);
+}
+
+.reservation-thumb-placeholder svg {
+    width: 48px;
+    height: 48px;
+}
+
+.reservation-status {
+    position: absolute;
+    top: var(--spacing-md);
+    right: var(--spacing-md);
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.badge-confirmee {
+    background: rgba(92, 184, 92, 0.1);
+    color: #5cb85c;
+    border: 1px solid rgba(92, 184, 92, 0.2);
+}
+
+.badge-attente {
+    background: rgba(240, 173, 78, 0.1);
+    color: #f0ad4e;
+    border: 1px solid rgba(240, 173, 78, 0.2);
+}
+
+.badge-annulee {
+    background: rgba(217, 83, 79, 0.1);
+    color: #d9534f;
+    border: 1px solid rgba(217, 83, 79, 0.2);
+}
+
+.reservation-body {
+    padding: var(--spacing-lg);
+}
+
+.reservation-title {
+    font-family: var(--font-serif);
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: var(--clr-dark);
+    margin-bottom: var(--spacing-sm);
+    line-height: 1.3;
+}
+
+.reservation-dates {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: 0.85rem;
+    color: var(--clr-muted);
+    margin-bottom: var(--spacing-md);
+}
+
+.reservation-dates svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+.reservation-details {
+    display: flex;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-md);
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: 0.8rem;
+    color: var(--clr-muted);
+}
+
+.detail-item svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+}
+
+.reservation-price {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--clr-gold);
+    margin-bottom: var(--spacing-sm);
+}
+
+.reservation-date {
+    font-size: 0.75rem;
+    color: var(--clr-muted);
+    margin-bottom: var(--spacing-lg);
+}
+
+.reservation-actions {
+    padding: 0 var(--spacing-lg) var(--spacing-lg);
+}
+
+.btn-cancel {
+    width: 100%;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: rgba(217, 83, 79, 0.1);
+    border: 1px solid rgba(217, 83, 79, 0.2);
+    border-radius: 6px;
+    color: #d9534f;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+}
+
+.btn-cancel:hover {
+    background: #d9534f;
+    color: white;
+    border-color: #d9534f;
+}
+
+.btn-cancel svg {
+    width: 14px;
+    height: 14px;
+}
+
+/* ============================================================
+   5. FORMS & INPUTS
+   ============================================================ */
+.form-group {
+    margin-bottom: var(--spacing-lg);
+}
+
+.form-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--clr-dark);
+    margin-bottom: var(--spacing-sm);
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+    width: 100%;
+    padding: var(--spacing-md);
+    border: 1px solid var(--clr-border);
+    border-radius: 6px;
+    background: var(--clr-light);
+    color: var(--clr-dark);
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+    outline: none;
+    border-color: var(--clr-gold);
+    box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.1);
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+/* ============================================================
+   6. TABLES & LISTS
+   ============================================================ */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: var(--spacing-lg);
+}
+
+.data-table th,
+.data-table td {
+    padding: var(--spacing-md);
+    text-align: left;
+    border-bottom: 1px solid var(--clr-border);
+}
+
+.data-table th {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--clr-muted);
+    background: rgba(201, 168, 76, 0.05);
+}
+
+.data-table td {
+    color: var(--clr-dark);
+}
+
+.data-table tr:hover {
+    background: rgba(201, 168, 76, 0.02);
+}
+
+.reservation-item,
+.message-item {
+    border: 1px solid var(--clr-border);
+    border-radius: 6px;
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-md);
+    background: var(--clr-surface);
+    transition: border-color 0.2s ease;
+}
+
+.reservation-item:hover,
+.message-item:hover {
+    border-color: var(--clr-gold);
+}
+
+.item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--spacing-sm);
+}
+
+.item-title {
+    font-weight: 600;
+    color: var(--clr-dark);
+}
+
+.item-meta {
+    font-size: 0.8rem;
+    color: var(--clr-muted);
+}
+
+.item-content {
+    color: var(--clr-dark);
+    line-height: 1.6;
+}
+
+/* ============================================================
+   7. BUTTONS
+   ============================================================ */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: var(--clr-gold);
+    color: var(--clr-dark);
+    border: none;
+    border-radius: 6px;
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(201, 168, 76, 0.2);
+}
+
+.btn:hover {
+    background: var(--clr-gold-light);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(201, 168, 76, 0.25);
+}
+
+.btn-outline {
+    background: transparent;
+    border: 1px solid var(--clr-gold);
+    color: var(--clr-gold);
+    box-shadow: none;
+}
+
+.btn-outline:hover {
+    background: var(--clr-gold);
+    color: var(--clr-dark);
+}
+
+.btn-sm {
+    padding: 8px 16px;
+    font-size: 0.8rem;
+}
+
+.btn-danger {
+    background: #dc3545;
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #c82333;
+}
+
+/* ============================================================
+   8. MODALS & OVERLAYS
+   ============================================================ */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal-overlay.open {
+    display: flex;
+}
+
+.modal-box {
+    background: var(--clr-light);
+    border: 1px solid var(--clr-border);
+    border-radius: 12px;
+    width: 100%;
+    max-width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    position: relative;
+}
+
+.modal-header {
+    padding: var(--spacing-xl);
+    border-bottom: 1px solid var(--clr-border);
+}
+
+.modal-title {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    font-weight: 300;
+    color: var(--clr-dark);
+}
+
+.modal-body {
+    padding: var(--spacing-xl);
+}
+
+.modal-footer {
+    padding: var(--spacing-lg) var(--spacing-xl);
+    border-top: 1px solid var(--clr-border);
+    display: flex;
+    gap: var(--spacing-md);
+    justify-content: flex-end;
+}
+
+.modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 32px;
+    height: 32px;
+    background: transparent;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--clr-muted);
+    transition: color 0.2s ease;
+}
+
+.modal-close:hover {
+    color: var(--clr-dark);
+}
+
+/* ============================================================
+   9. RESPONSIVE
+   ============================================================ */
+@media (max-width: 768px) {
+    .page-wrap {
+        padding: var(--spacing-lg) var(--spacing-md) 4rem;
+    }
+
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-md);
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .data-table {
+        font-size: 0.9rem;
+    }
+
+    .data-table th,
+    .data-table td {
+        padding: var(--spacing-sm);
+    }
+
+    .modal-box {
+        margin: var(--spacing-md);
+    }
+}
+
+/* ============================================================
+   10. CHAT COMPONENTS
+   ============================================================ */
+.chat-box {
+    background: var(--clr-surface);
+    border: 1px solid var(--clr-border);
+    border-radius: 8px;
+    padding: var(--spacing-lg);
+    height: 500px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.message {
+    max-width: 70%;
+    padding: var(--spacing-md);
+    border-radius: 16px;
+    position: relative;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.message.sent {
+    background: var(--clr-gold);
+    color: var(--clr-dark);
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+}
+
+.message.received {
+    background: var(--clr-surface2);
+    color: var(--clr-dark);
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+}
+
+.message .time {
+    font-size: 0.75rem;
+    opacity: 0.7;
+    margin-top: var(--spacing-xs);
+    text-align: right;
+}
+
+.input-area {
+    margin-top: var(--spacing-lg);
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.input-area .form-input {
+    flex: 1;
+}
+
+.empty-chat {
+    text-align: center;
+    color: var(--clr-muted);
+    margin-top: var(--spacing-xl);
+    font-style: italic;
+}
+
+/* ============================================================
+   11. FORM COMPONENTS
+   ============================================================ */
+.form-section {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.form-group {
+    margin-bottom: var(--spacing-lg);
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: var(--spacing-sm);
+    color: var(--clr-gold);
+    font-weight: 500;
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.form-input {
+    width: 100%;
+    padding: var(--spacing-md);
+    background: var(--clr-light);
+    border: 1px solid var(--clr-border);
+    border-radius: 6px;
+    color: var(--clr-dark);
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--clr-gold);
+    box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.1);
+}
+
+.form-input::placeholder {
+    color: var(--clr-muted);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--spacing-xl);
+}
+
+.btn-primary {
+    background: var(--clr-gold);
+    color: var(--clr-dark);
+    border: none;
+    padding: var(--spacing-md) var(--spacing-xl);
+    border-radius: 6px;
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(201, 168, 76, 0.2);
+}
+
+.btn-primary:hover {
+    background: var(--clr-gold-light);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(201, 168, 76, 0.25);
+}
+
+/* ============================================================
+   12. STARS RATING
+   ============================================================ */
+.stars {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+}
+
+.star {
+    font-size: 2rem;
+    cursor: pointer;
+    color: #ddd;
+    transition: color 0.2s ease;
+}
+
+.star:hover,
+.star.selected {
+    color: var(--clr-gold);
+}
+
+/* ============================================================
+   13. FEEDBACK MESSAGES
+   ============================================================ */
+.feedback-message {
+    margin-top: var(--spacing-lg);
+    padding: var(--spacing-md);
+    border-radius: 6px;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.feedback-message.error {
+    background: rgba(220, 53, 69, 0.1);
+    border: 1px solid rgba(220, 53, 69, 0.2);
+    color: #dc3545;
+}
+
+.feedback-message.success {
+    background: rgba(40, 167, 69, 0.1);
+    border: 1px solid rgba(40, 167, 69, 0.2);
+    color: #28a745;
+}
+
+/* ============================================================
+   14. TOAST NOTIFICATIONS
+   ============================================================ */
+.toast {
+    position: fixed;
+    bottom: var(--spacing-xl);
+    right: var(--spacing-xl);
+    background: var(--clr-dark);
+    color: white;
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: 0.9rem;
+    font-weight: 500;
+    z-index: 1000;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.toast.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.toast.error {
+    background: #d9534f;
+}
+
+.toast svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+/* ============================================================
+   15. STATE MESSAGES
+   ============================================================ */
+.state-loading {
+    text-align: center;
+    padding: var(--spacing-xl);
+    color: var(--clr-muted);
+    font-style: italic;
+}
+
+.state-empty {
+    text-align: center;
+    padding: var(--spacing-xl);
+    color: var(--clr-muted);
+}
+
+.state-empty svg {
+    width: 48px;
+    height: 48px;
+    margin-bottom: var(--spacing-md);
+    opacity: 0.5;
+}
+
+.state-empty p {
+    font-size: 0.9rem;
+    margin: 0;
+}

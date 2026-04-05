@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ajouter un avis · Horizon</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/client.css">
+</head>
+<body>
+  <div id="navbar"></div>
+
+  <div class="page-wrap">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Laisser un <span>avis</span></h1>
+        <div class="page-subtitle">Partagez votre expérience</div>
+      </div>
+    </div>
+
+    <div class="content-card">
+      <div class="form-section">
+        <div class="form-group">
+          <label for="voyageSelect">Voyage</label>
+          <select id="voyageSelect" class="form-input">
+            <option value="">-- Chargement --</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Note</label>
+          <div class="stars" id="starRating">
+            <span class="star" data-value="1">★</span>
+            <span class="star" data-value="2">★</span>
+            <span class="star" data-value="3">★</span>
+            <span class="star" data-value="4">★</span>
+            <span class="star" data-value="5">★</span>
+          </div>
+          <input type="hidden" id="noteValue" value="0">
+        </div>
+
+        <div class="form-group">
+          <label for="commentaire">Commentaire</label>
+          <textarea id="commentaire" class="form-input" rows="6" placeholder="Partagez votre expérience..."></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button id="submitAvis" class="btn-primary">Publier l'avis</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="feedback" class="feedback-message" style="display: none;"></div>
+  </div>
+
+    <script>
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (!user) window.location.href = 'index.html';
+
+        fetch('navBar.html')
+            .then(r => r.text())
+            .then(html => {
+                document.getElementById('navbar').innerHTML = html;
+
+                // Show user name
+                if (user) {
+                    const initials = ((user.prenom?.[0] || '') + (user.nom?.[0] || '')).toUpperCase() || '?';
+                    const el = document.getElementById('navUserAvatar');
+                    const nm = document.getElementById('navUserName');
+                    if (el) el.textContent = initials;
+                    if (nm) nm.textContent = `${user.prenom || ''} ${user.nom || ''}`.trim();
+                }
+
+                // Active link
+                const page = window.location.pathname.split('/').pop();
+                const map = {
+                    'dashboard.html':    'nav-dashboard',
+                    'reservations.html': 'nav-reservations',
+                    'addAvis.html':      'nav-avis',
+                    'messages.html':     'nav-messages'
+                };
+                if (map[page]) document.getElementById(map[page])?.classList.add('active');
+
+                // Logout
+                document.getElementById('logoutBtn')?.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    localStorage.removeItem('user');
+                    window.location.href = '../visitor/home.html';
+                });
+            });
+
+        // Étoiles
+        const stars = document.querySelectorAll('.star');
+        const noteInput = document.getElementById('noteValue');
+        stars.forEach(star => {
+            star.addEventListener('click', () => {
+                const val = parseInt(star.getAttribute('data-value'));
+                noteInput.value = val;
+                stars.forEach(s => {
+                    if (parseInt(s.getAttribute('data-value')) <= val)
+                        s.classList.add('selected');
+                    else
+                        s.classList.remove('selected');
+                });
+            });
+        });
+
+        // Charger les voyages réservés et confirmés
+        fetch(`http://localhost/AGENCE_VOYAGE/backend/index.php?uri=reservations&user_id=${user.id}`)
+            .then(res => res.json())
+            .then(data => {
+                const select = document.getElementById('voyageSelect');
+                // On ne garde que les voyages dont la réservation est confirmée
+                const confirmed = data.filter(r => r.statut === 'confirmee');
+                if (confirmed.length === 0) {
+                    select.innerHTML = '<option value="">Aucun voyage confirmé trouvé</option>';
+                    select.disabled = true;
+                    return;
+                }
+                select.innerHTML = '<option value="">-- Choisissez un voyage --</option>' +
+                    confirmed.map(r => `<option value="${r.voyage_id}">${r.titre} (départ ${new Date(r.date_depart).toLocaleDateString()})</option>`).join('');
+            });
+
+        document.getElementById('submitAvis').addEventListener('click', () => {
+            const voyage_id = document.getElementById('voyageSelect').value;
+            const note = noteInput.value;
+            const commentaire = document.getElementById('commentaire').value;
+            const feedbackDiv = document.getElementById('feedback');
+
+            if (!voyage_id) {
+                feedbackDiv.textContent = 'Veuillez sélectionner un voyage.';
+                feedbackDiv.className = 'feedback-message error';
+                feedbackDiv.style.display = 'block';
+                return;
+            }
+            if (note == 0) {
+                feedbackDiv.textContent = 'Veuillez donner une note.';
+                feedbackDiv.className = 'feedback-message error';
+                feedbackDiv.style.display = 'block';
+                return;
+            }
+
+            fetch('http://localhost/AGENCE_VOYAGE/backend/index.php?uri=avis', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    user_id: user.id,
+                    voyage_id: voyage_id,
+                    note: note,
+                    commentaire: commentaire
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.error) {
+                    feedbackDiv.textContent = '❌ ' + data.error;
+                    feedbackDiv.className = 'feedback-message error';
+                } else {
+                    feedbackDiv.textContent = '✅ ' + data.success;
+                    feedbackDiv.className = 'feedback-message success';
+                    // Réinitialiser
+                    document.getElementById('voyageSelect').value = '';
+                    noteInput.value = 0;
+                    stars.forEach(s => s.classList.remove('selected'));
+                    document.getElementById('commentaire').value = '';
+                }
+                feedbackDiv.style.display = 'block';
+                setTimeout(() => feedbackDiv.style.display = 'none', 4000);
+            });
+        });
+    </script>
+</body>
+</html>

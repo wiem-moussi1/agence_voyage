@@ -1,0 +1,1390 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voyages · Admin · Horizon</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #F6F1E8;
+            --surface: #FFFFFF;
+            --surface-strong: #F5F0E8;
+            --surface2: #F0E9DE;
+            --gold: #B88D32;
+            --gold-lt: #E1C77B;
+            --gold-dim: rgba(184,141,50,0.15);
+            --ink: #1E1A14;
+            --dark: #1E1A14;
+            --light: #1E1A14;
+            --muted: rgba(30,26,20,0.55);
+            --border: rgba(30,26,20,0.12);
+            --border-strong: rgba(30,26,20,0.18);
+            --danger: #c0392b;
+            --success: #27ae60;
+            --warn: #e67e22;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Jost', sans-serif;
+            background: var(--bg);
+            color: var(--ink);
+            min-height: 100vh;
+        }
+
+        /* ── PAGE LAYOUT ── */
+        .page-wrap {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .page-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.2rem;
+            font-weight: 300;
+            letter-spacing: 0.04em;
+        }
+
+        .page-title span {
+            color: var(--gold);
+        }
+
+        .page-subtitle {
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-top: 4px;
+        }
+
+        /* ── TABS ── */
+        .tab-bar {
+            display: flex;
+            gap: 0;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tab-btn {
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid transparent;
+            font-family: 'Jost', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--muted);
+            cursor: pointer;
+            transition: color 0.2s, border-color 0.2s;
+            margin-bottom: -1px;
+        }
+
+        .tab-btn.active {
+            color: var(--gold);
+            border-bottom-color: var(--gold);
+        }
+
+        .tab-btn:hover:not(.active) {
+            background-color: var(--gold);
+        }
+
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+
+        /* ── FORM CARD ── */
+        .form-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 3px; height: 100%;
+            background: linear-gradient(to bottom, var(--gold), transparent);
+        }
+
+        .form-card-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            font-weight: 300;
+            color: var(--gold);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-card-title svg {
+            width: 18px; height: 18px;
+            stroke: var(--gold); fill: none; stroke-width: 1.5;
+        }
+
+        /* ── FORM GRID ── */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group.full { grid-column: 1 / -1; }
+        .form-group.half { grid-column: span 2; }
+
+        .form-group label {
+            font-size: 0.6rem;
+            font-weight: 600;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--gold);
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border-strong);
+            border-radius: 2px;
+            padding: 0.65rem 0.85rem;
+            font-family: 'Jost', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 300;
+            color: black;
+            outline: none;
+            transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+            width: 100%;
+        }
+
+        .form-group textarea { resize: vertical; min-height: 80px; }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: var(--gold);
+            background: rgba(201,168,76,0.04);
+            box-shadow: 0 0 0 3px rgba(201,168,76,0.08);
+        }
+
+        
+
+        .form-group select option { background: var(--surface); }
+
+        .dropzone {
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            padding: 1rem 1rem;
+            background: var(--surface2);
+            color: var(--muted);
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        .dropzone.dragover {
+            border-color: var(--gold);
+            background: rgba(184,141,50,0.12);
+        }
+        .dropzone strong { color: var(--ink); }
+        .image-preview {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 1rem;
+            align-items: center;
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--surface-strong);
+            margin-top: 0.75rem;
+        }
+        .image-preview img {
+            width: 100px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+        .image-preview span {
+            color: var(--ink);
+            font-size: 0.95rem;
+        }
+        .image-preview small {
+            color: var(--muted);
+            display: block;
+            margin-top: 0.35rem;
+        }
+
+        /* ── FORM ACTIONS ── */
+        .form-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .btn-primary {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.65rem 1.5rem;
+            background: var(--gold);
+            color: var(--dark);
+            border: none;
+            border-radius: 2px;
+            font-family: 'Jost', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: background 0.2s;
+        }
+
+        .btn-primary:hover { background: var(--gold-lt); }
+
+        .btn-primary svg {
+            width: 14px; height: 14px;
+            stroke: var(--dark); fill: none; stroke-width: 2;
+        }
+
+        .btn-secondary {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.65rem 1.2rem;
+            background: transparent;
+            color: var(--muted);
+            border: 1px solid var(--border-strong);
+            border-radius: 2px;
+            font-family: 'Jost', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: color 0.2s, border-color 0.2s;
+        }
+
+        .btn-secondary:hover { color: var(--gold); border-color: var(--gold); }
+
+        /* ── VOYAGE TABLE ── */
+        .table-wrap {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .table-header {
+            display: flex;
+            flex-direction: column;
+                gap: 12px;
+            padding: 1.2rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .table-header-title {
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--gold);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .count-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 22px;
+            height: 22px;
+            padding: 0 6px;
+            background: var(--gold-dim);
+            border: 1px solid var(--border-strong);
+            border-radius: 2px;
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: var(--gold);
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            padding: 0.4rem 0.75rem;
+        }
+
+        .search-box svg {
+            width: 13px; height: 13px;
+            stroke: var(--muted); fill: none; stroke-width: 2;
+            flex-shrink: 0;
+        }
+
+        .search-box input {
+            background: transparent;
+            border: none;
+            outline: none;
+            font-family: 'Jost', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 300;
+            color: black;
+            width: 200px;
+        }
+
+        .search-box input::placeholder { color: var(--muted); }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead tr {
+            background: rgba(201,168,76,0.06);
+        }
+
+        th {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-size: 0.58rem;
+            font-weight: 700;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--gold);
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 0.9rem 1rem;
+            font-size: 0.82rem;
+            font-weight: 300;
+            border-bottom: 1px solid rgba(201,168,76,0.08);
+            vertical-align: middle;
+        }
+
+        tbody tr {
+            transition: background 0.15s;
+            cursor: default;
+        }
+
+        tbody tr:hover { background: rgba(255,255,255,0.025); }
+        tbody tr:last-child td { border-bottom: none; }
+
+        .voyage-thumb {
+            width: 52px;
+            height: 38px;
+            object-fit: cover;
+            border-radius: 2px;
+            border: 1px solid var(--border);
+            display: block;
+        }
+
+        .voyage-thumb-placeholder {
+            width: 52px;
+            height: 38px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .voyage-thumb-placeholder svg {
+            width: 16px; height: 16px;
+            stroke: var(--muted); fill: none; stroke-width: 1.5;
+        }
+
+        .titre-cell {
+            max-width: 180px;
+        }
+
+        .titre-text {
+            font-weight: 500;
+            color: black;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 180px;
+        }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 10px;
+            border-radius: 2px;
+            font-size: 0.62rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .pill-green { background: rgba(39,174,96,0.15); color: #5cb85c; border: 1px solid rgba(39,174,96,0.25); }
+        .pill-red   { background: rgba(192,57,43,0.15); color: #e74c3c; border: 1px solid rgba(192,57,43,0.25); }
+        .pill-gold  { background: rgba(201,168,76,0.12); color: var(--gold); border: 1px solid var(--border-strong); }
+        .pill-gray  { background: rgba(255,255,255,0.05); color: var(--muted); border: 1px solid var(--border); }
+
+        .res-stat {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .res-total {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--gold);
+        }
+
+        .res-detail {
+            font-size: 0.62rem;
+            color: var(--muted);
+            letter-spacing: 0.05em;
+        }
+
+        /* ── ACTION BUTTONS ── */
+        .action-group {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .btn-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            background: transparent;
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s;
+        }
+
+        .btn-icon svg {
+            width: 13px; height: 13px;
+            fill: none; stroke-width: 1.8;
+        }
+
+        .btn-icon.edit svg { stroke: var(--gold); }
+        .btn-icon.edit:hover { background: var(--gold-dim); border-color: var(--gold); }
+
+        .btn-icon.view svg { stroke: #5bc0de; }
+        .btn-icon.view:hover { background: rgba(91,192,222,0.1); border-color: rgba(91,192,222,0.4); }
+
+        .btn-icon.del svg { stroke: #e74c3c; }
+        .btn-icon.del:hover { background: rgba(231,76,60,0.1); border-color: rgba(231,76,60,0.4); }
+
+        /* ── MODAL OVERLAY ── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(13,11,9,0.85);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-overlay.open { display: flex; }
+
+        .modal {
+            background: var(--surface);
+            border: 1px solid var(--border-strong);
+            border-radius: 4px;
+            width: 90%;
+            max-width: 860px;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.2rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+
+        .modal-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            font-weight: 300;
+            color: var(--gold);
+        }
+
+        .modal-close {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px; height: 32px;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            background: transparent;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .modal-close svg {
+            width: 14px; height: 14px;
+            stroke: var(--muted); fill: none; stroke-width: 2;
+        }
+
+        .modal-close:hover { background: rgba(255,255,255,0.05); }
+
+        .modal-body {
+            overflow-y: auto;
+            padding: 1.5rem;
+            flex: 1;
+        }
+
+        /* ── RESERVATION TABLE IN MODAL ── */
+        .res-voyage-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: var(--surface2);
+            border-radius: 4px;
+            border: 1px solid var(--border);
+        }
+
+        .res-voyage-img {
+            /* width: 100px; */
+            height: 350px;
+            /* object-fit: cover; */
+            border-radius: 2px;
+            border: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+
+        .res-voyage-img-placeholder {
+            width: 100px;
+            height: 65px;
+            background: var(--dark);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .res-voyage-img-placeholder svg {
+            width: 24px; height: 24px;
+            stroke: var(--muted); fill: none; stroke-width: 1.5;
+        }
+
+        .res-voyage-meta { flex: 1; }
+
+        .res-voyage-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            font-weight: 300;
+            margin-bottom: 8px;
+        }
+
+        .res-voyage-stats {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .res-stat-item { display: flex; flex-direction: column; gap: 2px; }
+
+        .res-stat-label {
+            font-size: 0.58rem;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        .res-stat-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--gold);
+        }
+
+        .modal-section-title {
+            font-size: 0.62rem;
+            font-weight: 600;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-section-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .res-table-wrap { overflow-x: auto; }
+
+        .res-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+        }
+
+        .res-table th {
+            font-size: 0.56rem;
+            padding: 0.6rem 0.75rem;
+        }
+
+        .res-table td {
+            padding: 0.7rem 0.75rem;
+            font-size: 0.78rem;
+        }
+
+        .statut-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 8px;
+            border-radius: 2px;
+            font-size: 0.6rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .badge-confirmee { background: rgba(39,174,96,0.15); color: #5cb85c; border: 1px solid rgba(39,174,96,0.25); }
+        .badge-attente   { background: rgba(201,168,76,0.12); color: var(--gold); border: 1px solid var(--border-strong); }
+        .badge-annulee   { background: rgba(192,57,43,0.1); color: #e74c3c; border: 1px solid rgba(192,57,43,0.2); }
+
+        /* ── EMPTY & LOADING STATES ── */
+        .state-empty, .state-loading {
+            text-align: center;
+            padding: 3rem;
+            color: var(--muted);
+        }
+
+        .state-loading::after {
+            content: '';
+            display: inline-block;
+            width: 20px; height: 20px;
+            border: 2px solid var(--border-strong);
+            border-top-color: var(--gold);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .state-empty svg {
+            width: 40px; height: 40px;
+            stroke: var(--border-strong); fill: none; stroke-width: 1;
+            display: block; margin: 0 auto 1rem;
+        }
+
+        /* ── TOAST ── */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 0.75rem 1.25rem;
+            border-radius: 4px;
+            font-size: 0.82rem;
+            font-weight: 500;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transform: translateY(80px);
+            opacity: 0;
+            transition: transform 0.3s, opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .toast.show { transform: translateY(0); opacity: 1; }
+        .toast.success { background: rgba(39,174,96,0.15); border: 1px solid rgba(39,174,96,0.3); color: #5cb85c; }
+        .toast.error   { background: rgba(192,57,43,0.15); border: 1px solid rgba(192,57,43,0.3); color: #e74c3c; }
+
+        .toast svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 900px) {
+            .form-grid { grid-template-columns: 1fr 1fr; }
+            .form-group.half { grid-column: span 1; }
+        }
+
+        @media (max-width: 600px) {
+            .form-grid { grid-template-columns: 1fr; }
+            .form-group.half, .form-group.full { grid-column: 1; }
+            .page-header { flex-direction: column; gap: 1rem; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="navbar"></div>
+
+<div class="page-wrap">
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Gestion des <span>voyages</span></h1>
+            <div class="page-subtitle">Administration · Horizon Voyages</div>
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab('liste')">
+            Liste des voyages
+        </button>
+        <button class="tab-btn" onclick="switchTab('ajouter')" id="tab-ajouter">
+            Ajouter un voyage
+        </button>
+    </div>
+
+    <!-- ── TAB : LISTE ── -->
+    <div class="tab-panel active" id="panel-liste">
+
+        <div class="table-wrap">
+            <div class="table-header">
+                <div class="table-header-title">
+                    Voyages
+                    <span class="count-badge" id="voyageCount">—</span>
+                </div>
+                <div class="search-box">
+                    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input type="text" id="searchInput" placeholder="Rechercher un voyage…" oninput="filterVoyages()">
+                </div>
+            </div>
+
+            <div id="voyagesTable">
+                <div class="state-loading">Chargement</div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ── TAB : AJOUTER / MODIFIER ── -->
+    <div class="tab-panel" id="panel-ajouter">
+        <div class="form-card">
+            <div class="form-card-title">
+                <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                <span id="formCardTitle">Nouveau voyage</span>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group half">
+                    <label for="titre">Titre du voyage *</label>
+                    <input type="text" id="titre" placeholder="Ex: Séjour à Marrakech">
+                </div>
+                <div class="form-group">
+                    <label for="prix">Prix (TND) *</label>
+                    <input type="number" id="prix" step="0.01" min="0" placeholder="0.00">
+                </div>
+                <div class="form-group">
+                    <label for="date_depart">Date de départ *</label>
+                    <input type="date" id="date_depart">
+                </div>
+                <div class="form-group">
+                    <label for="date_retour">Date de retour</label>
+                    <input type="date" id="date_retour">
+                </div>
+                <div class="form-group">
+                    <label for="places_dispo">Places disponibles</label>
+                    <input type="number" id="places_dispo" min="0" placeholder="0">
+                </div>
+                <div class="form-group full">
+                    <label for="image">URL de l'image</label>
+                    <input type="text" id="image" placeholder="https://…">
+                </div>
+                <div class="form-group full">
+                    <input type="hidden" id="currentImage">
+                    <label>Image par glisser-déposer</label>
+                    <div class="dropzone" id="imageDropzone">
+                        Glisser une image ici ou <strong>cliquer pour sélectionner</strong>
+                    </div>
+                    <input type="file" id="imageFile" accept="image/png,image/jpeg,image/webp,image/gif" style="display:none;">
+                    <div id="imagePreview" class="image-preview" style="display:none;">
+                        <img id="imagePreviewThumb" src="" alt="Aperçu de l'image">
+                        <div>
+                            <span id="imagePreviewName"></span>
+                            <small>Fichier prêt à être téléchargé</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group full">
+                    <label for="description">Description</label>
+                    <textarea id="description" placeholder="Décrivez le voyage…" rows="4"></textarea>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button class="btn-primary" id="submitBtn" onclick="submitVoyage()">
+                    <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span id="submitBtnLabel">Créer le voyage</span>
+                </button>
+                <button class="btn-secondary" id="cancelEditBtn" style="display:none;" onclick="cancelEdit()">
+                    Annuler la modification
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div><!-- /page-wrap -->
+
+<!-- ── MODAL RÉSERVATIONS ── -->
+<div class="modal-overlay" id="resModal">
+    <div class="modal">
+        <div class="modal-header">
+            <div class="modal-title" id="modalTitle">Réservations du voyage</div>
+            <button class="modal-close" onclick="closeModal()">
+                <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+        <div class="modal-body" id="modalBody">
+            <div class="state-loading">Chargement</div>
+        </div>
+    </div>
+</div>
+
+<!-- ── TOAST ── -->
+<div class="toast" id="toast">
+    <svg viewBox="0 0 24 24" id="toastIcon"></svg>
+    <span id="toastMsg"></span>
+</div>
+
+<script>
+const user = JSON.parse(localStorage.getItem('user'));
+if (!user || user.role !== 'Admin') window.location.href = '../visitor/home.html';
+
+const BASE = `http://localhost/agence_voyage/backend/index.php`;
+let allVoyages = [];
+let editingId = null;
+
+function updateImagePreview(file, previewUrl) {
+    const preview = document.getElementById('imagePreview');
+    const thumb = document.getElementById('imagePreviewThumb');
+    const name = document.getElementById('imagePreviewName');
+
+    if (!file && !previewUrl) {
+        preview.style.display = 'none';
+        thumb.src = '';
+        name.textContent = '';
+        return;
+    }
+
+    preview.style.display = 'grid';
+    thumb.src = previewUrl || URL.createObjectURL(file);
+    name.textContent = file ? file.name : 'Image actuelle';
+}
+
+function clearImagePreview() {
+    document.getElementById('imageFile').value = '';
+    document.getElementById('currentImage').value = '';
+    updateImagePreview(null, null);
+}
+
+function setupImageDropzone() {
+    const dropzone = document.getElementById('imageDropzone');
+    const fileInput = document.getElementById('imageFile');
+
+    dropzone.addEventListener('click', () => fileInput.click());
+    dropzone.addEventListener('dragover', (event) => {
+        event.preventDefault();
+        dropzone.classList.add('dragover');
+    });
+    dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+    dropzone.addEventListener('drop', (event) => {
+        event.preventDefault();
+        dropzone.classList.remove('dragover');
+        const file = event.dataTransfer.files[0];
+        if (!file) return;
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(file);
+        fileInput.files = dataTransfer.files;
+        updateImagePreview(file);
+    });
+    fileInput.addEventListener('change', () => {
+        const file = fileInput.files[0];
+        if (!file) return;
+        updateImagePreview(file);
+    });
+}
+
+// ── Load Navbar ──
+// ── Load Navbar ──
+fetch('navBarAdmin.html')
+    .then(r => r.text())
+    .then(html => {
+        document.getElementById('navbar').innerHTML = html;
+
+        // Active link
+        const page = window.location.pathname.split('/').pop();
+        const map = {
+            'dashboard.html': 'nav-dashboard',
+            'reservations.html': 'nav-reservations',
+            'voyages.html': 'nav-voyages',
+            'avis.html': 'nav-avis',
+            'messages.html': 'nav-messages'
+        };
+        if (map[page]) {
+            document.getElementById(map[page])?.classList.add('active');
+        }
+
+        // Logout
+        document.getElementById('logoutBtn')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('user');
+            window.location.href = '../visitor/home.html';
+        });
+    });
+
+// ── Tab Switcher ──
+function switchTab(tab) {
+    document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+        btn.classList.toggle('active', (i === 0 && tab === 'liste') || (i === 1 && tab === 'ajouter'));
+    });
+    document.getElementById('panel-liste').classList.toggle('active', tab === 'liste');
+    document.getElementById('panel-ajouter').classList.toggle('active', tab === 'ajouter');
+}
+
+// ── Toast ──
+function showToast(msg, type = 'success') {
+    const toast = document.getElementById('toast');
+    const icon = document.getElementById('toastIcon');
+    document.getElementById('toastMsg').textContent = msg;
+    toast.className = `toast ${type}`;
+    icon.innerHTML = type === 'success'
+        ? '<polyline points="20 6 9 17 4 12"/>'
+        : '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>';
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3500);
+}
+
+// ── Format date ──
+function fmtDate(d) {
+    if (!d) return '—';
+    return new Date(d).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' });
+}
+
+// ── Load Voyages ──
+function loadVoyages() {
+    document.getElementById('voyagesTable').innerHTML = '<div class="state-loading">Chargement</div>';
+
+    fetch(`${BASE}?uri=admin/voyages&admin_id=${user.id}`)
+        .then(r => r.json())
+        .then(data => {
+            if (data.error) {
+                document.getElementById('voyagesTable').innerHTML = `<div class="state-empty"><p>${data.error}</p></div>`;
+                return;
+            }
+            allVoyages = data;
+            document.getElementById('voyageCount').textContent = data.length;
+            renderTable(data);
+        })
+        .catch(() => {
+            document.getElementById('voyagesTable').innerHTML = '<div class="state-empty"><p>Erreur de connexion au serveur.</p></div>';
+        });
+}
+
+// ── Render Table ──
+function renderTable(data) {
+    const container = document.getElementById('voyagesTable');
+
+    if (data.length === 0) {
+        container.innerHTML = `
+            <div class="state-empty">
+                <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                <p>Aucun voyage trouvé</p>
+            </div>`;
+        return;
+    }
+
+    const rows = data.map(v => {
+        const places = parseInt(v.places_dispo);
+        const placesPill = places > 10
+            ? `<span class="status-pill pill-green">${places} places</span>`
+            : places > 0
+            ? `<span class="status-pill pill-gold">${places} places</span>`
+            : `<span class="status-pill pill-red">Complet</span>`;
+
+        const thumb = v.image
+            ? `<img src="${v.image}" alt="" class="voyage-thumb" onerror="this.style.display='none'">`
+            : `<div class="voyage-thumb-placeholder"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>`;
+
+        const resTotal = parseInt(v.total_reservations) || 0;
+        const resConfirmees = parseInt(v.reservations_confirmees) || 0;
+        const resAttente = parseInt(v.reservations_attente) || 0;
+        const ca = parseFloat(v.chiffre_affaires) || 0;
+
+        return `
+            <tr>
+                <td>${thumb}</td>
+                <td class="titre-cell">
+                    <div class="titre-text" title="${v.titre}">${v.titre}</div>
+                </td>
+                <td><strong style="color:var(--gold)">${parseFloat(v.prix).toLocaleString('fr-FR')} TND</strong></td>
+                <td style="white-space:nowrap">${fmtDate(v.date_depart)}</td>
+                <td style="white-space:nowrap">${fmtDate(v.date_retour)}</td>
+                <td>${placesPill}</td>
+                <td>
+                    <div class="res-stat">
+                        <span class="res-total">${resTotal}</span>
+                        <span class="res-detail">${resConfirmees} conf. · ${resAttente} att.</span>
+                    </div>
+                </td>
+                <td style="color:var(--gold);font-weight:500;white-space:nowrap">${ca.toLocaleString('fr-FR')} TND</td>
+                <td>
+                    <div class="action-group">
+                        <button class="btn-icon view" title="Voir les réservations" onclick="openReservations(${v.id}, '${v.titre.replace(/'/g,"\\'")}', '${v.image || ''}')">
+                            <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                        </button>
+                        <button class="btn-icon edit" title="Modifier" onclick="editVoyage(${v.id})">
+                            <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                        </button>
+                        <button class="btn-icon del" title="Supprimer" onclick="deleteVoyage(${v.id}, '${v.titre.replace(/'/g,"\\'")}')">
+                            <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                        </button>
+                    </div>
+                </td>
+            </tr>`;
+    }).join('');
+
+    container.innerHTML = `
+        <div style="overflow-x:auto">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Titre</th>
+                        <th>Prix</th>
+                        <th>Départ</th>
+                        <th>Retour</th>
+                        <th>Disponibilité</th>
+                        <th>Réservations</th>
+                        <th>Chiffre d'affaires</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>${rows}</tbody>
+            </table>
+        </div>`;
+}
+
+// ── Filter / Search ──
+function filterVoyages() {
+    const q = document.getElementById('searchInput').value.toLowerCase().trim();
+    if (!q) { renderTable(allVoyages); return; }
+    const filtered = allVoyages.filter(v =>
+        v.titre.toLowerCase().includes(q) ||
+        (v.description || '').toLowerCase().includes(q)
+    );
+    renderTable(filtered);
+}
+
+// ── Edit Voyage ──
+function editVoyage(id) {
+    const voyage = allVoyages.find(v => v.id == id);
+    if (!voyage) return;
+
+    document.getElementById('titre').value        = voyage.titre || '';
+    document.getElementById('description').value  = voyage.description || '';
+    document.getElementById('prix').value         = voyage.prix || '';
+    document.getElementById('date_depart').value  = voyage.date_depart || '';
+    document.getElementById('date_retour').value  = voyage.date_retour || '';
+    document.getElementById('image').value        = voyage.image || '';
+    document.getElementById('currentImage').value = voyage.image || '';
+    document.getElementById('places_dispo').value = voyage.places_dispo || '';
+    updateImagePreview(null, voyage.image || '');
+
+    editingId = id;
+    document.getElementById('formCardTitle').textContent    = `Modifier · ${voyage.titre}`;
+    document.getElementById('submitBtnLabel').textContent   = 'Mettre à jour';
+    document.getElementById('cancelEditBtn').style.display  = 'inline-flex';
+    switchTab('ajouter');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── Cancel Edit ──
+function cancelEdit() {
+    editingId = null;
+    document.getElementById('titre').value        = '';
+    document.getElementById('description').value  = '';
+    document.getElementById('prix').value         = '';
+    document.getElementById('date_depart').value  = '';
+    document.getElementById('date_retour').value  = '';
+    document.getElementById('image').value        = '';
+    document.getElementById('places_dispo').value = '';
+    document.getElementById('currentImage').value = '';
+    clearImagePreview();
+    document.getElementById('formCardTitle').textContent   = 'Nouveau voyage';
+    document.getElementById('submitBtnLabel').textContent  = 'Créer le voyage';
+    document.getElementById('cancelEditBtn').style.display = 'none';
+    switchTab('liste');
+}
+
+// ── Submit (Create or Update) ──
+function submitVoyage() {
+    const imageUrl = document.getElementById('image').value.trim();
+    const currentImage = document.getElementById('currentImage').value.trim();
+    const fileInput = document.getElementById('imageFile');
+    const imageFile = fileInput.files[0];
+
+    const voyage = {
+        titre:        document.getElementById('titre').value.trim(),
+        description:  document.getElementById('description').value.trim(),
+        prix:         parseFloat(document.getElementById('prix').value) || 0,
+        date_depart:  document.getElementById('date_depart').value,
+        date_retour:  document.getElementById('date_retour').value,
+        image:        imageUrl || currentImage,
+        places_dispo: parseInt(document.getElementById('places_dispo').value) || 0
+    };
+
+    if (!voyage.titre || !voyage.prix || !voyage.date_depart) {
+        showToast('Titre, prix et date de départ sont obligatoires', 'error');
+        return;
+    }
+
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.style.opacity = '0.7';
+
+    let method = 'POST';
+    if (editingId) { voyage.id = editingId; method = 'PUT'; }
+
+    let body;
+    const options = { method };
+
+    if (imageFile) {
+        const formData = new FormData();
+        formData.append('titre', voyage.titre);
+        formData.append('description', voyage.description);
+        formData.append('prix', voyage.prix);
+        formData.append('date_depart', voyage.date_depart);
+        formData.append('date_retour', voyage.date_retour);
+        formData.append('places_dispo', voyage.places_dispo);
+        formData.append('image', imageUrl || currentImage);
+        formData.append('image_file', imageFile);
+        if (editingId) {
+            formData.append('id', editingId);
+            formData.append('_method', 'PUT');
+            options.method = 'POST';
+        }
+        body = formData;
+    } else {
+        if (editingId) {
+            options.method = 'PUT';
+        }
+        options.headers = { 'Content-Type': 'application/json' };
+        body = JSON.stringify(voyage);
+    }
+
+    options.body = body;
+
+    fetch(`${BASE}?uri=admin/voyages&admin_id=${user.id}`, options)
+    .then(r => r.json())
+    .then(data => {
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        if (data.success) {
+            showToast(data.success);
+            cancelEdit();
+            loadVoyages();
+        } else {
+            showToast(data.error || 'Erreur inconnue', 'error');
+        }
+    })
+    .catch(() => {
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        showToast('Erreur de connexion au serveur', 'error');
+    });
+}
+
+setupImageDropzone();
+
+// ── Delete Voyage ──
+function deleteVoyage(id, titre) {
+    if (!confirm(`Supprimer "${titre}" ?\n\nLes réservations actives empêcheront la suppression.`)) return;
+
+    fetch(`${BASE}?uri=admin/voyages&id=${id}&admin_id=${user.id}`, { method: 'DELETE' })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                showToast(data.success);
+                loadVoyages();
+            } else {
+                showToast(data.error || 'Suppression impossible', 'error');
+            }
+        })
+        .catch(() => showToast('Erreur de connexion', 'error'));
+}
+
+// ── Open Reservations Modal ──
+function openReservations(voyageId, titre, imgUrl) {
+    document.getElementById('modalTitle').textContent = `Réservations · ${titre}`;
+    document.getElementById('modalBody').innerHTML = '<div class="state-loading">Chargement</div>';
+    document.getElementById('resModal').classList.add('open');
+
+    const voyage = allVoyages.find(v => v.id == voyageId);
+
+    fetch(`${BASE}?uri=admin/voyages/reservations&voyage_id=${voyageId}&admin_id=${user.id}`)
+        .then(r => r.json())
+        .then(data => {
+            if (data.error) {
+                document.getElementById('modalBody').innerHTML = `<div class="state-empty"><p>${data.error}</p></div>`;
+                return;
+            }
+
+            const thumb = imgUrl
+                ? `<img src="${imgUrl}" alt="" class="res-voyage-img" onerror="this.outerHTML='<div class=res-voyage-img-placeholder><svg viewBox=\\'0 0 24 24\\'><rect x=\\'3\\' y=\\'3\\' width=\\'18\\' height=\\'18\\' rx=\\'2\\'/></svg></div>'">`
+                : `<div class="res-voyage-img-placeholder"><svg viewBox="0 0 24 24" style="width:24px;height:24px;stroke:var(--muted);fill:none;stroke-width:1.5"><rect x="3" y="3" width="18" height="18" rx="2"/></svg></div>`;
+
+            const total = data.length;
+            const confirmees = data.filter(r => r.statut === 'confirmee').length;
+            const attente    = data.filter(r => r.statut === 'en_attente').length;
+            const annulees   = data.filter(r => r.statut === 'annulee').length;
+            const ca = data.filter(r => r.statut !== 'annulee').reduce((s, r) => s + parseFloat(r.prix_total || 0), 0);
+
+            const infoBox = `
+                <div class="res-voyage-info">
+                    ${thumb}
+                    <div class="res-voyage-meta">
+                        <div class="res-voyage-name">${titre}</div>
+                        <div class="res-voyage-stats">
+                            <div class="res-stat-item">
+                                <span class="res-stat-label">Total</span>
+                                <span class="res-stat-value">${total}</span>
+                            </div>
+                            <div class="res-stat-item">
+                                <span class="res-stat-label">Confirmées</span>
+                                <span class="res-stat-value" style="color:#5cb85c">${confirmees}</span>
+                            </div>
+                            <div class="res-stat-item">
+                                <span class="res-stat-label">En attente</span>
+                                <span class="res-stat-value" style="color:var(--gold)">${attente}</span>
+                            </div>
+                            <div class="res-stat-item">
+                                <span class="res-stat-label">Annulées</span>
+                                <span class="res-stat-value" style="color:#e74c3c">${annulees}</span>
+                            </div>
+                            <div class="res-stat-item">
+                                <span class="res-stat-label">C.A. actif</span>
+                                <span class="res-stat-value">${ca.toLocaleString('fr-FR')} TND</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+
+            let tableHtml = '';
+            if (data.length === 0) {
+                tableHtml = '<div class="state-empty"><p>Aucune réservation pour ce voyage.</p></div>';
+            } else {
+                const rows = data.map(r => {
+                    const badgeClass = r.statut === 'confirmee' ? 'badge-confirmee' : r.statut === 'annulee' ? 'badge-annulee' : 'badge-attente';
+                    const statutLabel = r.statut === 'confirmee' ? 'Confirmée' : r.statut === 'annulee' ? 'Annulée' : 'En attente';
+                    return `
+                        <tr>
+                            <td>#${r.id}</td>
+                            <td><strong>${r.prenom} ${r.nom}</strong><br><span style="font-size:0.7rem;color:var(--muted)">${r.email}</span></td>
+                            <td style="text-align:center">${r.nb_personnes}</td>
+                            <td><strong style="color:var(--gold)">${parseFloat(r.prix_total).toLocaleString('fr-FR')} TND</strong></td>
+                            <td>${r.mode_paiement || '—'}</td>
+                            <td><span class="statut-badge ${badgeClass}">${statutLabel}</span></td>
+                            <td style="white-space:nowrap;font-size:0.72rem;color:var(--muted)">${fmtDate(r.date_reserv)}</td>
+                        </tr>`;
+                }).join('');
+
+                tableHtml = `
+                    <div class="modal-section-title">Liste des réservations</div>
+                    <div class="res-table-wrap">
+                        <table class="res-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Client</th>
+                                    <th>Personnes</th>
+                                    <th>Total</th>
+                                    <th>Paiement</th>
+                                    <th>Statut</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>${rows}</tbody>
+                        </table>
+                    </div>`;
+            }
+
+            document.getElementById('modalBody').innerHTML = infoBox + tableHtml;
+        })
+        .catch(() => {
+            document.getElementById('modalBody').innerHTML = '<div class="state-empty"><p>Erreur de chargement des réservations.</p></div>';
+        });
+}
+
+// ── Close Modal ──
+function closeModal() {
+    document.getElementById('resModal').classList.remove('open');
+}
+
+document.getElementById('resModal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+});
+
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeModal();
+});
+
+// ── Init ──
+loadVoyages();
+</script>
+</body>
+</html>

@@ -74,3 +74,34 @@ CREATE TABLE newsletter (
     email VARCHAR(150) UNIQUE,
     date_inscription DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+
+Admin created: admin@horizon.com / Admin@2026!
+moussiiwiem@gmail.com / 11111111
+
+
+-- Étape 1 : supprimer l'ancienne colonne `age`
+ALTER TABLE `user` DROP COLUMN `age`;
+ 
+-- Étape 2 : ajouter `date_naissance` après `prenom`
+ALTER TABLE `user`
+    ADD COLUMN `date_naissance` DATE NULL DEFAULT NULL AFTER `prenom`;
+ 
+-- Étape 3 : ajouter `telephone` après `date_naissance`
+ALTER TABLE `user`
+    ADD COLUMN `telephone` VARCHAR(20) NULL DEFAULT NULL AFTER `date_naissance`;
+
+-- Table pour les messages du formulaire de contact
+CREATE TABLE IF NOT EXISTS `contact` (
+  `id`              INT            NOT NULL AUTO_INCREMENT,
+  `nom`             VARCHAR(150)   NOT NULL,
+  `email`           VARCHAR(150)   NOT NULL,
+  `telephone`       VARCHAR(30)             DEFAULT NULL,
+  `sujet`           VARCHAR(200)            DEFAULT NULL,
+  `message`         TEXT           NOT NULL,
+  `statut`          ENUM('non_lu','lu','repondu') NOT NULL DEFAULT 'non_lu',
+  `date_envoi`      DATETIME       NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+ 
+lien de l'app: 
+ http://localhost/agence_voyage/frontend/visitor/home.html
