@@ -1,0 +1,409 @@
+/* ============================================================
+     HORIZON VOYAGES — Styles pour la gestion des réservations (Admin)
+     adminReservations.css
+     ============================================================
+     DESCRIPTION:
+     Feuille de style dédiée à l'interface d'administration des réservations.
+     Inclut la table des réservations, les contrôles de statut,
+     les états vides, et les composants d'action.
+
+     ORGANISATION:
+     - Variables CSS personnalisées
+     - Layout et structure de page
+     - Table des réservations
+     - États et statuts
+     - Boutons d'action
+     - États responsives
+     ============================================================ */
+
+/* =====================================================
+         VARIABLES PERSONNALISÉES
+         ===================================================== */
+:root {
+    --gold: #C9A84C;
+    --gold-lt: #E8C97A;
+    --gold-dim: rgba(201,168,76,0.12);
+    --ink: #171412;
+    --ink-2: #4A3F35;
+    --ink-3: #7D6D58;
+    --sand: #F7F3ED;
+    --sand-2: #EDE6DB;
+    --white: #FDFBF8;
+    --border: rgba(28,24,20,0.12);
+    --shadow-sm: 0 1px 3px rgba(28,24,20,0.06), 0 1px 2px rgba(28,24,20,0.04);
+    --shadow-md: 0 4px 16px rgba(28,24,20,0.08), 0 2px 6px rgba(28,24,20,0.04);
+    --danger: #e74c3c;
+    --success: #1a7a24;
+    --warning: #ad8d0f;
+}
+
+/* =====================================================
+         RÉINITIALISATION ET BASE
+         ===================================================== */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Jost', sans-serif;
+    background: var(--sand);
+    color: var(--ink);
+    min-height: 100vh;
+}
+
+/* =====================================================
+         BARRE DE NAVIGATION
+         ===================================================== */
+#navbar {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+}
+
+/* =====================================================
+         LAYOUT DE PAGE
+         ===================================================== */
+.page-wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem 4rem;
+}
+
+.page-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+}
+
+.page-header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.page-eyebrow {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.page-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 24px;
+    height: 1px;
+    background: var(--gold);
+}
+
+.page-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem;
+    color: var(--ink);
+    line-height: 1.05;
+}
+
+.page-title em {
+    color: var(--gold);
+    font-style: italic;
+}
+
+.page-subtitle {
+    color: var(--ink-3);
+    line-height: 1.75;
+    max-width: 680px;
+}
+
+/* =====================================================
+         TABLE DES RÉSERVATIONS
+         ===================================================== */
+.table-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+}
+
+.table-card table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-card th,
+.table-card td {
+    padding: 1rem 1.2rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+}
+
+.table-card thead {
+    background: var(--sand);
+}
+
+.table-card th {
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+}
+
+.table-card td {
+    font-size: 0.9rem;
+    color: var(--ink);
+}
+
+.table-card tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* =====================================================
+         STATUTS DES RÉSERVATIONS
+         ===================================================== */
+.status {
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+}
+
+.en_attente {
+    color: var(--warning);
+}
+
+.confirmee {
+    color: var(--success);
+}
+
+.annulee {
+    color: var(--danger);
+}
+
+/* =====================================================
+         CONTRÔLES DE FORMULAIRE
+         ===================================================== */
+select,
+button {
+    border-radius: 999px;
+    padding: 0.65rem 0.95rem;
+    border: 1px solid var(--border);
+    background: var(--white);
+    color: var(--ink);
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.8rem;
+}
+
+select {
+    width: auto;
+    min-width: 140px;
+}
+
+button:hover,
+select:hover {
+    transform: translateY(-1px);
+}
+
+button.cancel {
+    background: var(--danger);
+    color: #fff;
+    border-color: var(--danger);
+}
+
+button.cancel:hover {
+    background: #c0392b;
+    border-color: #c0392b;
+}
+
+/* =====================================================
+         ÉTATS VIDES
+         ===================================================== */
+.empty-state {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: var(--shadow-sm);
+    padding: 3rem 2rem;
+    text-align: center;
+    min-height: 240px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.empty-state h2 {
+    font-size: 1.5rem;
+    color: var(--ink);
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+}
+
+.empty-state p {
+    color: var(--ink-3);
+    line-height: 1.75;
+    max-width: 520px;
+}
+
+/* =====================================================
+         CELLULES SPÉCIALES
+         ===================================================== */
+.client-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.client-name {
+    font-weight: 500;
+    color: var(--ink);
+}
+
+.client-email {
+    font-size: 0.8rem;
+    color: var(--ink-3);
+}
+
+.price-total {
+    font-weight: 700;
+    color: var(--gold);
+}
+
+.date-reservation {
+    font-size: 0.85rem;
+    color: var(--ink-2);
+}
+
+/* =====================================================
+         ACTIONS
+         ===================================================== */
+.actions-cell {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.status-select {
+    min-width: 120px;
+}
+
+/* =====================================================
+         ÉTATS RESPONSIVES
+         ===================================================== */
+@media (max-width: 1024px) {
+    .page-wrap {
+        padding: 2rem 1.5rem 3rem;
+    }
+
+    .table-card th,
+    .table-card td {
+        padding: 0.8rem 1rem;
+    }
+
+    .table-card th {
+        font-size: 0.65rem;
+    }
+
+    .table-card td {
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .page-wrap {
+        padding: 1.5rem 1rem 2rem;
+    }
+
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .page-title {
+        font-size: 1.8rem;
+    }
+
+    .table-card {
+        border-radius: 8px;
+    }
+
+    .table-card th,
+    .table-card td {
+        padding: 0.6rem 0.8rem;
+    }
+
+    /* Masquer certaines colonnes sur mobile */
+    .table-card th:nth-child(6),
+    .table-card td:nth-child(6) {
+        display: none;
+    }
+
+    .actions-cell {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.25rem;
+    }
+
+    .status-select {
+        width: 100%;
+    }
+
+    button {
+        width: 100%;
+        padding: 0.5rem 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .page-wrap {
+        padding: 1rem 0.5rem 1.5rem;
+    }
+
+    .page-header {
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+    }
+
+    .page-title {
+        font-size: 1.5rem;
+    }
+
+    .page-eyebrow {
+        font-size: 0.6rem;
+    }
+
+    .table-card th,
+    .table-card td {
+        padding: 0.5rem 0.6rem;
+        font-size: 0.75rem;
+    }
+
+    .empty-state {
+        padding: 2rem 1rem;
+        min-height: 180px;
+    }
+
+    .empty-state h2 {
+        font-size: 1.2rem;
+    }
+
+    .empty-state p {
+        font-size: 0.9rem;
+    }
+}

@@ -1,68 +1,149 @@
 <!DOCTYPE html>
 <html lang="fr">
+<!-- ============================================================
+     HORIZON VOYAGES — Ajout d'avis client
+     addAvis.html
+     ============================================================
+     DESCRIPTION:
+     Interface permettant aux clients de laisser un avis sur leurs
+     voyages réservés et confirmés. Inclut un système de notation
+     par étoiles et un champ de commentaire.
+
+     FONCTIONNALITÉS:
+     - Sélection d'un voyage confirmé
+     - Notation par étoiles (1-5)
+     - Commentaire textuel
+     - Validation et soumission
+     - Messages de feedback
+
+     DÉPENDANCES:
+     - ../css/client.css (styles généraux client)
+     - ../css/addAvis.css (styles spécifiques)
+     - navBar.html (barre de navigation)
+     - API backend pour gestion des avis
+     ============================================================ -->
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ajouter un avis · Horizon</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/client.css">
+    <!-- =====================================================
+         MÉTADONNÉES & CONFIGURATION
+         ===================================================== -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajouter un avis · Horizon</title>
+
+    <!-- =====================================================
+         POLICES GOOGLE FONTS
+         ===================================================== -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- =====================================================
+         FEUILLES DE STYLE
+         ===================================================== -->
+    <link rel="stylesheet" href="../css/client.css">
+    <link rel="stylesheet" href="../css/addAvis.css">
+
+    <!-- =====================================================
+         FAVICON & ICÔNES
+         ===================================================== -->
+    <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 </head>
+
 <body>
-  <div id="navbar"></div>
+    <!-- =====================================================
+         BARRE DE NAVIGATION
+         ===================================================== -->
+    <div id="navbar"></div>
 
-  <div class="page-wrap">
-    <div class="page-header">
-      <div>
-        <h1 class="page-title">Laisser un <span>avis</span></h1>
-        <div class="page-subtitle">Partagez votre expérience</div>
-      </div>
+    <!-- =====================================================
+         CONTENU PRINCIPAL
+         ===================================================== -->
+    <div class="page-wrap">
+
+        <!-- =====================================================
+             EN-TÊTE DE PAGE
+             ===================================================== -->
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">Laisser un <span>avis</span></h1>
+                <div class="page-subtitle">Partagez votre expérience</div>
+            </div>
+        </div>
+
+        <!-- =====================================================
+             FORMULAIRE D'AJOUT D'AVIS
+             ===================================================== -->
+        <div class="content-card">
+            <div class="form-section">
+
+                <!-- =====================================================
+                     SÉLECTION DU VOYAGE
+                     ===================================================== -->
+                <div class="form-group">
+                    <label for="voyageSelect">Voyage</label>
+                    <select id="voyageSelect" class="form-input">
+                        <option value="">-- Chargement --</option>
+                    </select>
+                </div>
+
+                <!-- =====================================================
+                     NOTATION PAR ÉTOILES
+                     ===================================================== -->
+                <div class="form-group">
+                    <label>Note</label>
+                    <div class="stars" id="starRating">
+                        <span class="star" data-value="1" tabindex="0" role="button" aria-label="1 étoile">★</span>
+                        <span class="star" data-value="2" tabindex="0" role="button" aria-label="2 étoiles">★</span>
+                        <span class="star" data-value="3" tabindex="0" role="button" aria-label="3 étoiles">★</span>
+                        <span class="star" data-value="4" tabindex="0" role="button" aria-label="4 étoiles">★</span>
+                        <span class="star" data-value="5" tabindex="0" role="button" aria-label="5 étoiles">★</span>
+                    </div>
+                    <input type="hidden" id="noteValue" value="0" aria-describedby="note-help">
+                    <div id="note-help" class="sr-only">Cliquez sur les étoiles pour donner une note de 1 à 5</div>
+                </div>
+
+                <!-- =====================================================
+                     COMMENTAIRE
+                     ===================================================== -->
+                <div class="form-group">
+                    <label for="commentaire">Commentaire</label>
+                    <textarea id="commentaire" class="form-input" rows="6" placeholder="Partagez votre expérience..." aria-describedby="comment-help"></textarea>
+                    <div id="comment-help" class="sr-only">Décrivez votre expérience du voyage (optionnel)</div>
+                </div>
+
+                <!-- =====================================================
+                     ACTIONS DU FORMULAIRE
+                     ===================================================== -->
+                <div class="form-actions">
+                    <button id="submitAvis" class="btn-primary" type="button">Publier l'avis</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- =====================================================
+             MESSAGES DE FEEDBACK
+             ===================================================== -->
+        <div id="feedback" class="feedback-message" style="display: none;" role="alert" aria-live="polite"></div>
     </div>
 
-    <div class="content-card">
-      <div class="form-section">
-        <div class="form-group">
-          <label for="voyageSelect">Voyage</label>
-          <select id="voyageSelect" class="form-input">
-            <option value="">-- Chargement --</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label>Note</label>
-          <div class="stars" id="starRating">
-            <span class="star" data-value="1">★</span>
-            <span class="star" data-value="2">★</span>
-            <span class="star" data-value="3">★</span>
-            <span class="star" data-value="4">★</span>
-            <span class="star" data-value="5">★</span>
-          </div>
-          <input type="hidden" id="noteValue" value="0">
-        </div>
-
-        <div class="form-group">
-          <label for="commentaire">Commentaire</label>
-          <textarea id="commentaire" class="form-input" rows="6" placeholder="Partagez votre expérience..."></textarea>
-        </div>
-
-        <div class="form-actions">
-          <button id="submitAvis" class="btn-primary">Publier l'avis</button>
-        </div>
-      </div>
-    </div>
-
-    <div id="feedback" class="feedback-message" style="display: none;"></div>
-  </div>
-
+    <!-- =====================================================
+         SCRIPTS JAVASCRIPT
+         ===================================================== -->
     <script>
+        // =====================================================
+        // CONFIGURATION ET CONSTANTES
+        // =====================================================
         const user = JSON.parse(localStorage.getItem('user'));
-        if (!user) window.location.href = 'index.html';
+        if (!user) window.location.href = '../visitor/home.html';
 
+        // =====================================================
+        // CHARGEMENT DE LA BARRE DE NAVIGATION
+        // =====================================================
         fetch('navBar.html')
             .then(r => r.text())
             .then(html => {
                 document.getElementById('navbar').innerHTML = html;
 
-                // Show user name
+                // Affichage du nom d'utilisateur
                 if (user) {
                     const initials = ((user.prenom?.[0] || '') + (user.nom?.[0] || '')).toUpperCase() || '?';
                     const el = document.getElementById('navUserAvatar');
@@ -71,7 +152,7 @@
                     if (nm) nm.textContent = `${user.prenom || ''} ${user.nom || ''}`.trim();
                 }
 
-                // Active link
+                // Lien actif dans la navigation
                 const page = window.location.pathname.split('/').pop();
                 const map = {
                     'dashboard.html':    'nav-dashboard',
@@ -81,7 +162,7 @@
                 };
                 if (map[page]) document.getElementById(map[page])?.classList.add('active');
 
-                // Logout
+                // Gestionnaire de déconnexion
                 document.getElementById('logoutBtn')?.addEventListener('click', (e) => {
                     e.preventDefault();
                     localStorage.removeItem('user');
@@ -89,85 +170,170 @@
                 });
             });
 
-        // Étoiles
+        // =====================================================
+        // SYSTÈME DE NOTATION PAR ÉTOILES
+        // =====================================================
         const stars = document.querySelectorAll('.star');
         const noteInput = document.getElementById('noteValue');
+
         stars.forEach(star => {
+            // Gestionnaire de clic
             star.addEventListener('click', () => {
                 const val = parseInt(star.getAttribute('data-value'));
                 noteInput.value = val;
+
+                // Mise à jour visuelle des étoiles
                 stars.forEach(s => {
-                    if (parseInt(s.getAttribute('data-value')) <= val)
+                    if (parseInt(s.getAttribute('data-value')) <= val) {
                         s.classList.add('selected');
-                    else
+                        s.setAttribute('aria-pressed', 'true');
+                    } else {
                         s.classList.remove('selected');
+                        s.setAttribute('aria-pressed', 'false');
+                    }
                 });
+            });
+
+            // Gestionnaire clavier pour accessibilité
+            star.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    star.click();
+                }
             });
         });
 
-        // Charger les voyages réservés et confirmés
-        fetch(`http://localhost/AGENCE_VOYAGE/backend/index.php?uri=reservations&user_id=${user.id}`)
+        // =====================================================
+        // CHARGEMENT DES VOYAGES CONFIRMÉS
+        // =====================================================
+        fetch(`http://localhost/agence_voyage/backend/index.php?uri=reservations&user_id=${user.id}`)
             .then(res => res.json())
             .then(data => {
                 const select = document.getElementById('voyageSelect');
-                // On ne garde que les voyages dont la réservation est confirmée
+
+                // Filtrage des voyages confirmés uniquement
                 const confirmed = data.filter(r => r.statut === 'confirmee');
+
                 if (confirmed.length === 0) {
                     select.innerHTML = '<option value="">Aucun voyage confirmé trouvé</option>';
                     select.disabled = true;
+                    select.setAttribute('aria-describedby', 'no-trips-help');
                     return;
                 }
+
+                // Construction des options
                 select.innerHTML = '<option value="">-- Choisissez un voyage --</option>' +
-                    confirmed.map(r => `<option value="${r.voyage_id}">${r.titre} (départ ${new Date(r.date_depart).toLocaleDateString()})</option>`).join('');
+                    confirmed.map(r => {
+                        const dateDepart = new Date(r.date_depart).toLocaleDateString('fr-FR');
+                        return `<option value="${r.voyage_id}">${r.titre} (départ ${dateDepart})</option>`;
+                    }).join('');
+
+                select.disabled = false;
+            })
+            .catch(() => {
+                const select = document.getElementById('voyageSelect');
+                select.innerHTML = '<option value="">Erreur de chargement</option>';
+                select.disabled = true;
             });
 
+        // =====================================================
+        // SOUMISSION DE L'AVIS
+        // =====================================================
         document.getElementById('submitAvis').addEventListener('click', () => {
             const voyage_id = document.getElementById('voyageSelect').value;
             const note = noteInput.value;
-            const commentaire = document.getElementById('commentaire').value;
+            const commentaire = document.getElementById('commentaire').value.trim();
             const feedbackDiv = document.getElementById('feedback');
 
+            // =====================================================
+            // VALIDATION DES DONNÉES
+            // =====================================================
             if (!voyage_id) {
-                feedbackDiv.textContent = 'Veuillez sélectionner un voyage.';
-                feedbackDiv.className = 'feedback-message error';
-                feedbackDiv.style.display = 'block';
-                return;
-            }
-            if (note == 0) {
-                feedbackDiv.textContent = 'Veuillez donner une note.';
-                feedbackDiv.className = 'feedback-message error';
-                feedbackDiv.style.display = 'block';
+                showFeedback('Veuillez sélectionner un voyage.', 'error');
+                document.getElementById('voyageSelect').focus();
                 return;
             }
 
-            fetch('http://localhost/AGENCE_VOYAGE/backend/index.php?uri=avis', {
+            if (note == 0) {
+                showFeedback('Veuillez donner une note.', 'error');
+                document.querySelector('.star').focus();
+                return;
+            }
+
+            // =====================================================
+            // PRÉPARATION DE LA REQUÊTE
+            // =====================================================
+            const submitBtn = document.getElementById('submitAvis');
+            const originalText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Publication en cours...';
+
+            // =====================================================
+            // ENVOI DE L'AVIS AU SERVEUR
+            // =====================================================
+            fetch('http://localhost/agence_voyage/backend/index.php?uri=avis', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
                 body: JSON.stringify({
                     user_id: user.id,
                     voyage_id: voyage_id,
-                    note: note,
+                    note: parseInt(note),
                     commentaire: commentaire
                 })
             })
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error(`Erreur HTTP: ${res.status}`);
+                }
+                return res.json();
+            })
             .then(data => {
+                // =====================================================
+                // TRAITEMENT DE LA RÉPONSE
+                // =====================================================
                 if (data.error) {
-                    feedbackDiv.textContent = '❌ ' + data.error;
-                    feedbackDiv.className = 'feedback-message error';
+                    showFeedback('❌ ' + data.error, 'error');
                 } else {
-                    feedbackDiv.textContent = '✅ ' + data.success;
-                    feedbackDiv.className = 'feedback-message success';
-                    // Réinitialiser
+                    showFeedback('✅ ' + data.success, 'success');
+
+                    // Réinitialisation du formulaire
                     document.getElementById('voyageSelect').value = '';
                     noteInput.value = 0;
-                    stars.forEach(s => s.classList.remove('selected'));
+                    stars.forEach(s => {
+                        s.classList.remove('selected');
+                        s.setAttribute('aria-pressed', 'false');
+                    });
                     document.getElementById('commentaire').value = '';
                 }
-                feedbackDiv.style.display = 'block';
-                setTimeout(() => feedbackDiv.style.display = 'none', 4000);
+            })
+            .catch(error => {
+                console.error('Erreur lors de la soumission:', error);
+                showFeedback('❌ Erreur de connexion au serveur. Veuillez réessayer.', 'error');
+            })
+            .finally(() => {
+                // Réactivation du bouton
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
             });
         });
+
+        // =====================================================
+        // GESTION DES MESSAGES DE FEEDBACK
+        // =====================================================
+        function showFeedback(message, type) {
+            const feedbackDiv = document.getElementById('feedback');
+            feedbackDiv.textContent = message;
+            feedbackDiv.className = `feedback-message ${type}`;
+            feedbackDiv.style.display = 'block';
+
+            // Masquage automatique après 4 secondes
+            setTimeout(() => {
+                feedbackDiv.style.display = 'none';
+            }, 4000);
+        }
     </script>
 </body>
 </html>

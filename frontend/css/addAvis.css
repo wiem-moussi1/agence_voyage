@@ -1,0 +1,422 @@
+/* ============================================================
+   HORIZON VOYAGES — Styles pour l'ajout d'avis
+   addAvis.css
+   ============================================================
+   DESCRIPTION:
+   Feuille de style dédiée à l'interface d'ajout d'avis client.
+   Inclut les styles pour le formulaire, la notation par étoiles,
+   et les messages de feedback.
+
+   ORGANISATION:
+   - Variables CSS pour la cohérence
+   - Mise en page générale
+   - Formulaire et champs
+   - Système de notation par étoiles
+   - Messages de feedback
+   - Responsive design
+   ============================================================ */
+
+/* =====================================================
+   VARIABLES CSS
+   ===================================================== */
+:root {
+    /* Couleurs principales */
+    --primary-color: #2c3e50;
+    --secondary-color: #3498db;
+    --accent-color: #e74c3c;
+    --success-color: #27ae60;
+    --warning-color: #f39c12;
+    --error-color: #e74c3c;
+
+    /* Couleurs de fond */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --bg-tertiary: #f1f3f4;
+
+    /* Couleurs de texte */
+    --text-primary: #2c3e50;
+    --text-secondary: #6c757d;
+    --text-muted: #adb5bd;
+
+    /* Bordures et ombres */
+    --border-color: #dee2e6;
+    --border-radius: 8px;
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.15);
+    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.2);
+
+    /* Espacement */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-xxl: 3rem;
+
+    /* Typographie */
+    --font-family-primary: 'Jost', sans-serif;
+    --font-family-secondary: 'Cormorant Garamond', serif;
+    --font-size-sm: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.25rem;
+    --font-size-2xl: 1.5rem;
+    --font-size-3xl: 1.875rem;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+
+    /* Transitions */
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+}
+
+/* =====================================================
+   MISE EN PAGE GÉNÉRALE
+   ===================================================== */
+.page-wrap {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: var(--spacing-xl);
+    min-height: calc(100vh - 80px);
+}
+
+
+
+.page-title {
+    font-family: var(--font-family-secondary);
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-normal);
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+    line-height: 1.2;
+}
+
+.page-title span {
+    color: var(--secondary-color);
+    font-weight: var(--font-weight-semibold);
+}
+
+.page-subtitle {
+    font-size: var(--font-size-lg);
+    color: var(--text-secondary);
+    font-weight: var(--font-weight-normal);
+}
+
+/* =====================================================
+   CARTE DE CONTENU
+   ===================================================== */
+.content-card {
+    background: var(--bg-primary);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+    padding: var(--spacing-xxl);
+    margin-bottom: var(--spacing-xl);
+    border: 1px solid var(--border-color);
+}
+
+/* =====================================================
+   FORMULAIRE
+   ===================================================== */
+.form-section {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.form-group {
+    margin-bottom: var(--spacing-xl);
+}
+
+.form-group label {
+    display: block;
+    font-weight: var(--font-weight-medium);
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+    font-size: var(--font-size-base);
+}
+
+.form-input {
+    width: 100%;
+    padding: var(--spacing-md);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+    font-family: var(--font-family-primary);
+    font-size: var(--font-size-base);
+    color: var(--text-primary);
+    background: var(--bg-primary);
+    transition: var(--transition-fast);
+    box-sizing: border-box;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.form-input:disabled {
+    background: var(--bg-tertiary);
+    color: var(--text-muted);
+    cursor: not-allowed;
+}
+
+.form-input::placeholder {
+    color: var(--text-muted);
+}
+
+/* Select spécifique */
+.form-input[type="select"],
+select.form-input {
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right var(--spacing-md) center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
+}
+
+/* Textarea spécifique */
+textarea.form-input {
+    resize: vertical;
+    min-height: 120px;
+    line-height: 1.5;
+}
+
+/* =====================================================
+   SYSTÈME DE NOTATION PAR ÉTOILES
+   ===================================================== */
+.stars {
+    display: flex;
+    gap: var(--spacing-xs);
+    margin-top: var(--spacing-sm);
+}
+
+.star {
+    font-size: var(--font-size-2xl);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: var(--transition-fast);
+    user-select: none;
+    line-height: 1;
+}
+
+.star:hover {
+    color: var(--warning-color);
+    transform: scale(1.1);
+}
+
+.star.selected {
+    color: var(--warning-color);
+}
+
+.star:hover ~ .star:not(.selected) {
+    color: var(--text-muted);
+}
+
+/* =====================================================
+   ACTIONS DU FORMULAIRE
+   ===================================================== */
+.form-actions {
+    text-align: center;
+    margin-top: var(--spacing-xxl);
+    padding-top: var(--spacing-xl);
+    border-top: 1px solid var(--border-color);
+}
+
+.btn-primary {
+    background: var(--secondary-color);
+    color: white;
+    border: none;
+    padding: var(--spacing-md) var(--spacing-xl);
+    border-radius: var(--border-radius);
+    font-family: var(--font-family-primary);
+    font-weight: var(--font-weight-medium);
+    font-size: var(--font-size-base);
+    cursor: pointer;
+    transition: var(--transition-fast);
+    min-width: 160px;
+}
+
+.btn-primary:hover {
+    background: #2980b9;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-primary:disabled {
+    background: var(--text-muted);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* =====================================================
+   MESSAGES DE FEEDBACK
+   ===================================================== */
+.feedback-message {
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-radius: var(--border-radius);
+    font-weight: var(--font-weight-medium);
+    text-align: center;
+    margin-top: var(--spacing-lg);
+    font-size: var(--font-size-base);
+    animation: slideIn 0.3s ease-out;
+}
+
+.feedback-message.success {
+    background: rgba(39, 174, 96, 0.1);
+    color: var(--success-color);
+    border: 1px solid rgba(39, 174, 96, 0.2);
+}
+
+.feedback-message.error {
+    background: rgba(231, 76, 60, 0.1);
+    color: var(--error-color);
+    border: 1px solid rgba(231, 76, 60, 0.2);
+}
+
+/* =====================================================
+   ANIMATIONS
+   ===================================================== */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =====================================================
+   RESPONSIVE DESIGN
+   ===================================================== */
+
+/* Tablettes */
+@media (max-width: 768px) {
+    .page-wrap {
+        padding: var(--spacing-lg);
+    }
+
+    .content-card {
+        padding: var(--spacing-xl);
+    }
+
+    .page-title {
+        font-size: var(--font-size-2xl);
+    }
+
+    .form-actions {
+        padding-top: var(--spacing-lg);
+    }
+
+    .btn-primary {
+        width: 100%;
+        padding: var(--spacing-lg);
+    }
+}
+
+/* Mobiles */
+@media (max-width: 480px) {
+    .page-wrap {
+        padding: var(--spacing-md);
+    }
+
+    .content-card {
+        padding: var(--spacing-lg);
+    }
+
+    .page-header {
+        margin-bottom: var(--spacing-xl);
+    }
+
+    .page-title {
+        font-size: var(--font-size-xl);
+    }
+
+    .page-subtitle {
+        font-size: var(--font-size-base);
+    }
+
+    .form-group {
+        margin-bottom: var(--spacing-lg);
+    }
+
+    .form-input {
+        padding: var(--spacing-sm);
+        font-size: var(--font-size-base);
+    }
+
+    .star {
+        font-size: var(--font-size-xl);
+    }
+
+    .feedback-message {
+        padding: var(--spacing-sm) var(--spacing-md);
+        font-size: var(--font-size-sm);
+    }
+}
+
+/* =====================================================
+   ACCESSIBILITÉ
+   ===================================================== */
+
+/* Classe pour contenu accessible aux lecteurs d'écran uniquement */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Focus visible pour la navigation clavier */
+.star:focus,
+.form-input:focus,
+.btn-primary:focus {
+    outline: 2px solid var(--secondary-color);
+    outline-offset: 2px;
+}
+
+/* Réduction de mouvement pour les utilisateurs sensibles */
+@media (prefers-reduced-motion: reduce) {
+    .star,
+    .form-input,
+    .btn-primary,
+    .feedback-message {
+        transition: none;
+        animation: none;
+    }
+
+    .star:hover {
+        transform: none;
+    }
+
+    .btn-primary:hover {
+        transform: none;
+    }
+}
+
+/* Mode sombre (support préparatoire) */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-primary: #1a1a1a;
+        --bg-secondary: #2d2d2d;
+        --bg-tertiary: #404040;
+        --text-primary: #ffffff;
+        --text-secondary: #cccccc;
+        --text-muted: #888888;
+        --border-color: #555555;
+    }
+}

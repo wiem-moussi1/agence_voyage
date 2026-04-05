@@ -1,0 +1,538 @@
+/* ============================================================
+   HORIZON VOYAGES — Styles spécifiques à la page d'accueil
+   home.css
+   ============================================================
+   TABLE DES MATIÈRES
+   ─────────────────────────────────────────────────────────────
+   1.  STYLES SPÉCIFIQUES À LA PAGE D'ACCUEIL
+   2.  NAVBAR CLIENT (quand connecté)
+   3.  BANDEAU BIENVENUE ET PROMOTIONS
+   4.  COMPOSANTS DE RECHERCHE
+   5.  ANIMATIONS ET TRANSITIONS
+   ============================================================ */
+
+/* ============================================================
+   1. STYLES SPÉCIFIQUES À LA PAGE D'ACCUEIL
+   ============================================================ */
+
+/* Masquage d'accessibilité pour les lecteurs d'écran */
+.sr-only {
+    color: var(--gold);
+    font-size: large;
+}
+
+/* ============================================================
+   2. NAVBAR CLIENT (quand connecté)
+   ============================================================ */
+
+#client-nav-wrapper {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 200;
+}
+
+body.has-client-nav #client-nav-wrapper {
+    display: block;
+}
+
+body.has-client-nav #mainNav {
+    top: 64px !important;
+    z-index: 99 !important;
+    height: 60px;
+}
+
+/* Styles pour la navbar client */
+.nav-user-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-right: 0.25rem;
+}
+
+.nav-user-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--gold-dim);
+    border: 1px solid var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--gold);
+    flex-shrink: 0;
+}
+
+/* ── 2ème navbar (#mainNav) : fond OR quand client connecté ── */
+body.has-client-nav #mainNav {
+    background: var(--gold) !important;
+    border-bottom: none !important;
+}
+
+/* Masquer le logo (nav-brand) de la 2ème navbar quand client connecté */
+body.has-client-nav #mainNav .nav-brand {
+    display: none !important;
+}
+
+/* Liens de la 2ème navbar : texte sombre sur fond or */
+body.has-client-nav #mainNav .nav-links a {
+    color: #0D0B09 !important;
+}
+
+body.has-client-nav #mainNav .nav-links a:hover,
+body.has-client-nav #mainNav .nav-links a.active {
+    color: #3b2600 !important;
+    border-bottom-color: rgba(0, 0, 0, 0.35) !important;
+}
+
+/* Bouton connexion sur fond or */
+body.has-client-nav #mainNav .btn-cnx {
+    border-color: rgba(0, 0, 0, 0.3) !important;
+    color: #0D0B09 !important;
+}
+
+/* Hamburger sombre */
+body.has-client-nav #mainNav .nav-hamburger span {
+    background: #0D0B09 !important;
+}
+
+/* ============================================================
+   3. BANDEAU BIENVENUE ET PROMOTIONS
+   ============================================================ */
+
+#welcome-banner {
+    display: none;
+    background: #fff;
+    border-bottom: 1px solid rgba(201, 168, 76, 0.2);
+    padding: 0;
+    overflow: hidden;
+    margin-top: 9rem;
+}
+
+body.has-client-nav #welcome-banner {
+    display: block;
+}
+
+.welcome-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 28px 40px;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+}
+
+.welcome-text-col {
+    flex: 1;
+}
+
+.welcome-greeting {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.7rem;
+    font-weight: 400;
+    color: #0D0B09;
+    line-height: 1.2;
+    margin-bottom: 6px;
+}
+
+.welcome-greeting span {
+    color: var(--gold);
+    font-style: italic;
+}
+
+.welcome-sub {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.82rem;
+    color: #555;
+    font-weight: 300;
+    letter-spacing: 0.03em;
+}
+
+/* Carte promo anniversaire */
+#promo-birthday {
+    display: none;
+    background: linear-gradient(135deg, #0D0B09 60%, #1a1510);
+    border: 1px solid var(--gold);
+    border-radius: 6px;
+    padding: 18px 28px;
+    min-width: 320px;
+    position: relative;
+    overflow: hidden;
+}
+
+#promo-birthday::before {
+    content: '🎂';
+    position: absolute;
+    right: -8px;
+    top: -12px;
+    font-size: 5rem;
+    opacity: 0.08;
+}
+
+.promo-label {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.55rem;
+    font-weight: 700;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.promo-label::before {
+    content: '';
+    display: inline-block;
+    width: 16px;
+    height: 1px;
+    background: var(--gold);
+}
+
+.promo-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.35rem;
+    font-weight: 400;
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: 4px;
+}
+
+.promo-title strong {
+    color: var(--gold);
+    font-style: italic;
+}
+
+.promo-desc {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.75rem;
+    color: rgba(245, 240, 232, 0.65);
+    font-weight: 300;
+    line-height: 1.5;
+}
+
+.promo-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    background: var(--gold);
+    color: #0D0B09;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 2px;
+}
+
+/* Message promo non-anniversaire discret */
+#promo-generic {
+    display: none;
+    background: linear-gradient(135deg, #fdf8ef 0%, #fff 100%);
+    border: 1px solid rgba(201, 168, 76, 0.35);
+    border-radius: 6px;
+    padding: 14px 24px;
+    min-width: 280px;
+}
+
+.promo-generic-label {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.55rem;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 4px;
+}
+
+.promo-generic-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    color: #0D0B09;
+    font-weight: 400;
+    line-height: 1.3;
+}
+
+.promo-generic-sub {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.72rem;
+    color: #888;
+    font-weight: 300;
+    margin-top: 4px;
+}
+
+/* Responsive pour le bandeau bienvenue */
+@media (max-width: 768px) {
+    .welcome-inner {
+        flex-direction: column;
+        padding: 20px 20px;
+        gap: 18px;
+    }
+
+    #promo-birthday,
+    #promo-generic {
+        min-width: unset;
+        width: 100%;
+    }
+}
+
+/* Styles spécifiques pour les éléments de home.html */
+.hero-section {
+    padding: 0 0 100px 0 !important;
+}
+
+.welcome-banner-offset {
+    margin-top: 9rem;
+}
+
+.voyage-load-more {
+    text-align: center;
+    margin-top: 1.5rem;
+}
+
+.brand-letter-spacing {
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    font-size: 0.65rem;
+}
+
+/* ============================================================
+   4. COMPOSANTS DE RECHERCHE
+   ============================================================ */
+
+/* ============================================================
+   5. ANIMATIONS ET TRANSITIONS
+   ============================================================ */
+
+
+/* Navbar client (1ère) : fond sombre inchangé */
+.client-nav {
+    background: #0D0B09;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(201, 168, 76, 0.3);
+    height: 64px;
+    font-family: 'Jost', sans-serif;
+}
+
+/* Branding et logo */
+.client-nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+}
+
+.client-nav-brand .brand-logo {
+    width: 34px;
+    height: 34px;
+    border: 1.5px solid var(--gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.client-nav-brand .brand-logo svg {
+    width: 18px;
+    height: 18px;
+    fill: var(--gold);
+}
+
+.client-nav-brand .brand-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+
+.client-nav-brand .brand-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    color: var(--light);
+}
+
+.client-nav-brand .brand-tagline {
+    font-size: 0.52rem;
+    font-weight: 600;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold);
+}
+
+/* Liens de navigation */
+.client-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    scrollbar-width: none;
+}
+
+.client-nav-links a {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 0 1.1rem;
+    height: 45px;
+    text-decoration: none;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(245, 240, 232, 0.6);
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s ease, border-color 0.2s ease;
+    white-space: nowrap;
+}
+
+.client-nav-links a svg {
+    width: 15px;
+    height: 15px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 1.5;
+    flex-shrink: 0;
+}
+
+.client-nav-links a:hover {
+    color: var(--light);
+    border-bottom-color: var(--gold);
+}
+
+.client-nav-links a.active {
+    color: var(--gold);
+    border-bottom-color: var(--gold);
+}
+
+/* Bouton de déconnexion */
+.client-nav .logout-btn {
+    background: transparent;
+    border: 1px solid rgba(201, 168, 76, 0.4);
+    color: var(--gold);
+    padding: 0.4rem 1rem;
+    border-radius: 4px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-left: 1rem;
+}
+
+.client-nav .logout-btn:hover {
+    background: var(--gold);
+    color: #0D0B09;
+    border-color: var(--gold);
+}
+
+/* ============================================================
+   3. COMPOSANTS DE RECHERCHE
+   ============================================================ */
+
+#voyageSearch {
+    width: 100%;
+    border: 1px solid rgba(201, 168, 76, 0.3);
+    border-radius: 4px;
+    padding: 0.75rem;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--light);
+    font-family: 'Jost', sans-serif;
+    font-size: 0.9rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#voyageSearch:focus {
+    outline: none;
+    border-color: var(--gold);
+    box-shadow: 0 0 0 2px rgba(201, 168, 76, 0.2);
+}
+
+#voyageSearch::placeholder {
+    color: rgba(0, 0, 0, 0.4);
+}
+
+/* ============================================================
+   4. ANIMATIONS ET TRANSITIONS
+   ============================================================ */
+
+/* Animation d'apparition pour les éléments */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* Animation de pulse pour les éléments importants */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.pulse-animation {
+    animation: pulse 2s infinite;
+}
+
+/* ============================================================
+   MEDIA QUERIES — Responsive
+   ============================================================ */
+
+@media (max-width: 768px) {
+    .client-nav {
+        padding: 0 1rem;
+    }
+
+    .client-nav-brand .brand-name {
+        font-size: 1rem;
+    }
+
+    .client-nav-links a {
+        padding: 0 0.8rem;
+        font-size: 0.65rem;
+    }
+
+    .client-nav .logout-btn {
+        padding: 0.3rem 0.8rem;
+        font-size: 0.6rem;
+        margin-left: 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .client-nav-links {
+        gap: 0;
+    }
+
+    .client-nav-links a {
+        padding: 0 0.6rem;
+        gap: 4px;
+    }
+
+    .client-nav-links a svg {
+        width: 12px;
+        height: 12px;
+    }
+}

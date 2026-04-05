@@ -1,0 +1,444 @@
+/* ============================================================
+   HORIZON VOYAGES — Styles pour le tableau de bord admin
+   adminDashboard.css
+   ============================================================
+   DESCRIPTION:
+   Feuille de style dédiée au tableau de bord administrateur.
+   Inclut les styles pour les statistiques, listes récentes,
+   et mise en page générale de l'administration.
+
+   FONCTIONNALITÉS:
+   - Grille de statistiques avec cartes
+   - Liste des dernières réservations
+   - Mise en page responsive
+   - Thème admin cohérent
+
+   ORGANISATION:
+   - Variables CSS pour la cohérence
+   - Mise en page générale
+   - Cartes de statistiques
+   - Listes et éléments
+   - Responsive design
+   ============================================================ */
+
+/* =====================================================
+   VARIABLES CSS
+   ===================================================== */
+:root {
+    /* Couleurs principales */
+    --primary-color: #2c3e50;
+    --secondary-color: #3498db;
+    --accent-color: #e74c3c;
+    --success-color: #27ae60;
+    --warning-color: #f39c12;
+    --error-color: #e74c3c;
+
+    /* Couleurs de fond */
+    --bg-primary: #f6f1e8;
+    --bg-secondary: #fbf7f1;
+    --bg-surface: #ffffff;
+
+    /* Couleurs de texte */
+    --text-primary: #1e1a14;
+    --text-secondary: #6c757d;
+    --text-muted: rgba(30, 26, 20, 0.65);
+
+    /* Couleurs spécifiques admin */
+    --admin-gold: #b88d32;
+    --admin-gold-soft: #e1c77b;
+    --admin-border: rgba(30, 26, 20, 0.12);
+    --admin-shadow: 0 10px 30px rgba(30, 26, 20, 0.06);
+
+    /* Bordures et ombres */
+    --border-color: var(--admin-border);
+    --border-radius: 18px;
+    --shadow-sm: var(--admin-shadow);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.15);
+
+    /* Espacement */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-xxl: 3rem;
+
+    /* Typographie */
+    --font-family-primary: 'Jost', sans-serif;
+    --font-family-secondary: 'Cormorant Garamond', serif;
+    --font-size-sm: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.25rem;
+    --font-size-2xl: 1.5rem;
+    --font-size-3xl: 1.875rem;
+    --font-weight-light: 300;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+
+    /* Transitions */
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+}
+
+/* =====================================================
+   RÉINITIALISATION ET BASE
+   ===================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family-primary);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+}
+
+/* =====================================================
+   CONTENEUR PRINCIPAL
+   ===================================================== */
+.container {
+    max-width: 1200px;
+    margin: 2.5rem auto;
+    padding: 0 1.2rem;
+}
+
+/* =====================================================
+   EN-TÊTE DE PAGE
+   ===================================================== */
+.page-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.page-title {
+    font-family: var(--font-family-secondary);
+    font-size: 2.2rem;
+    font-weight: var(--font-weight-light);
+    letter-spacing: 0.04em;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.page-title span {
+    color: var(--admin-gold);
+    font-weight: var(--font-weight-normal);
+}
+
+.page-subtitle {
+    font-size: 0.72rem;
+    font-weight: var(--font-weight-medium);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+/* =====================================================
+   TITRES DE SECTION
+   ===================================================== */
+h1, h2 {
+    font-family: var(--font-family-secondary);
+    font-weight: var(--font-weight-light);
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+}
+
+h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+/* =====================================================
+   STATISTIQUES
+   ===================================================== */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* =====================================================
+   CARTES
+   ===================================================== */
+.card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 1.75rem;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition-normal);
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.card-number {
+    font-size: 2.2rem;
+    font-weight: var(--font-weight-bold);
+    color: var(--admin-gold);
+    margin-bottom: var(--spacing-sm);
+    display: block;
+}
+
+.card div:last-child {
+    color: var(--text-muted);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    margin-top: var(--spacing-sm);
+}
+
+/* =====================================================
+   LISTES RÉCENTES
+   ===================================================== */
+.recent-list {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+    padding: 1.25rem;
+    margin-top: var(--spacing-lg);
+}
+
+.list-item {
+    border-bottom: 1px solid var(--border-color);
+    padding: 0.9rem 0;
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 0.75rem;
+    align-items: center;
+    transition: var(--transition-fast);
+}
+
+.list-item:hover {
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    padding-left: var(--spacing-sm);
+    padding-right: var(--spacing-sm);
+    margin-left: -0.5rem;
+    margin-right: -0.5rem;
+}
+
+.list-item span {
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    font-weight: var(--font-weight-medium);
+}
+
+.list-item span:nth-child(2) {
+    color: var(--text-secondary);
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: var(--font-weight-normal);
+}
+
+.list-item span:last-child {
+    color: var(--text-muted);
+    text-align: right;
+    font-size: 0.85rem;
+    font-weight: var(--font-weight-normal);
+}
+
+.list-item:last-child {
+    border-bottom: none;
+}
+
+/* État de chargement */
+.recent-list p {
+    color: var(--text-muted);
+    margin: 0;
+    padding: 2rem 0;
+    text-align: center;
+    font-style: italic;
+}
+
+/* =====================================================
+   ÉTATS SPÉCIAUX
+   ===================================================== */
+
+/* Statut des réservations */
+.statut-confirmee {
+    color: var(--success-color);
+    font-weight: var(--font-weight-semibold);
+}
+
+.statut-en_attente {
+    color: var(--warning-color);
+    font-weight: var(--font-weight-semibold);
+}
+
+.statut-annulee {
+    color: var(--error-color);
+    font-weight: var(--font-weight-semibold);
+}
+
+/* =====================================================
+   RESPONSIVE DESIGN
+   ===================================================== */
+
+/* Tablettes */
+@media (max-width: 768px) {
+    .container {
+        margin: 2rem auto;
+        padding: 0 1rem;
+    }
+
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-md);
+        margin-bottom: 2rem;
+    }
+
+    .page-title {
+        font-size: 1.8rem;
+    }
+
+    .stats {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .card {
+        padding: 1.5rem;
+    }
+
+    .card-number {
+        font-size: 1.8rem;
+    }
+
+    .list-item {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-xs);
+        text-align: left;
+    }
+
+    .list-item span:nth-child(2),
+    .list-item span:last-child {
+        text-align: left;
+        font-size: 0.8rem;
+    }
+}
+
+/* Mobiles */
+@media (max-width: 480px) {
+    .container {
+        margin: 1.5rem auto;
+        padding: 0 0.75rem;
+    }
+
+    .page-header {
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+    }
+
+    .page-title {
+        font-size: 1.5rem;
+    }
+
+    .page-subtitle {
+        font-size: 0.65rem;
+    }
+
+    .stats {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+    }
+
+    .card {
+        padding: 1.25rem;
+    }
+
+    .card-number {
+        font-size: 1.5rem;
+    }
+
+    h2 {
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+    }
+
+    .recent-list {
+        padding: 1rem;
+    }
+
+    .list-item {
+        padding: 0.75rem 0;
+        gap: var(--spacing-xs);
+    }
+
+    .list-item span {
+        font-size: 0.9rem;
+    }
+
+    .list-item span:nth-child(2),
+    .list-item span:last-child {
+        font-size: 0.8rem;
+    }
+}
+
+/* =====================================================
+   ACCESSIBILITÉ
+   ===================================================== */
+
+/* Focus visible pour la navigation clavier */
+.card:focus-within {
+    outline: 2px solid var(--admin-gold);
+    outline-offset: 2px;
+}
+
+/* Amélioration du contraste */
+@media (prefers-contrast: high) {
+    .card-number {
+        color: #000000;
+    }
+
+    .page-title span {
+        color: #000000;
+    }
+}
+
+/* Réduction de mouvement pour les utilisateurs sensibles */
+@media (prefers-reduced-motion: reduce) {
+    .card,
+    .list-item {
+        transition: none;
+    }
+
+    .card:hover {
+        transform: none;
+    }
+}
+
+/* Mode sombre (support préparatoire) */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-primary: #1a1a1a;
+        --bg-secondary: #2d2d2d;
+        --bg-surface: #333333;
+        --text-primary: #ffffff;
+        --text-secondary: #cccccc;
+        --text-muted: #888888;
+        --admin-border: #555555;
+        --admin-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+}

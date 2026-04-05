@@ -24,10 +24,6 @@ require_once __DIR__ . '/controllers/avisController.php';
 require_once __DIR__ . '/controllers/messageController.php';
 require_once __DIR__ . '/controllers/newsletterController.php';
 require_once __DIR__ . '/controllers/contactController.php';
-require_once __DIR__ . '/controllers/adminVoyageController.php';
-require_once __DIR__ . '/controllers/adminReservationController.php';
-require_once __DIR__ . '/controllers/adminAvisController.php';
-require_once __DIR__ . '/controllers/adminMessageController.php';
 
 $uri = $_GET['uri'] ?? '';
 
@@ -82,33 +78,33 @@ switch ($uri) {
 
     /* Admin — Voyages */
     case 'admin/voyages':
-        if ($_SERVER['REQUEST_METHOD'] === 'GET')         adminVoyageController::getAll();
-        elseif ($_SERVER['REQUEST_METHOD'] === 'POST')    adminVoyageController::create();
-        elseif ($_SERVER['REQUEST_METHOD'] === 'PUT')     adminVoyageController::update();
-        elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE')  adminVoyageController::delete();
+        if ($_SERVER['REQUEST_METHOD'] === 'GET')         voyageController::adminGetAll();
+        elseif ($_SERVER['REQUEST_METHOD'] === 'POST')    voyageController::adminCreate();
+        elseif ($_SERVER['REQUEST_METHOD'] === 'PUT')     voyageController::adminUpdate();
+        elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE')  voyageController::adminDelete();
         break;
 
     case 'admin/voyages/reservations':
-        if ($_SERVER['REQUEST_METHOD'] === 'GET')         adminVoyageController::getReservationsByVoyage();
+        if ($_SERVER['REQUEST_METHOD'] === 'GET')         voyageController::adminGetReservationsByVoyage();
         break;
 
     /* Admin — Réservations */
     case 'admin/reservations':
-        if ($_SERVER['REQUEST_METHOD'] === 'GET')         adminReservationController::getAll();
-        elseif ($_SERVER['REQUEST_METHOD'] === 'PUT')     adminReservationController::updateStatus();
-        elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE')  adminReservationController::cancel();
+        if ($_SERVER['REQUEST_METHOD'] === 'GET')         reservationController::adminGetAll();
+        elseif ($_SERVER['REQUEST_METHOD'] === 'PUT')     reservationController::adminUpdateStatus();
+        elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE')  reservationController::adminCancel();
         break;
 
     /* Admin — Avis */
     case 'admin/avis':
-        if ($_SERVER['REQUEST_METHOD'] === 'GET')         adminAvisController::getAll();
-        elseif ($_SERVER['REQUEST_METHOD'] === 'PUT')     adminAvisController::validate();
+        if ($_SERVER['REQUEST_METHOD'] === 'GET')         avisController::adminGetAll();
+        elseif ($_SERVER['REQUEST_METHOD'] === 'PUT')     avisController::adminValidate();
         break;
 
     /* Admin — Messages */
     case 'admin/messages':
-        if ($_SERVER['REQUEST_METHOD'] === 'GET')         adminMessageController::getAll();
-        elseif ($_SERVER['REQUEST_METHOD'] === 'POST')    adminMessageController::reply();
+        if ($_SERVER['REQUEST_METHOD'] === 'GET')         messageController::adminGetAll();
+        elseif ($_SERVER['REQUEST_METHOD'] === 'POST')    messageController::adminReply();
         break;
 
     /* Admin — Newsletter */

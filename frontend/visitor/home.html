@@ -1,435 +1,58 @@
 <!DOCTYPE html>
 <html lang="fr">
+<!-- ============================================================
+     HORIZON VOYAGES — Page d'accueil visiteur
+     home.html
+     ============================================================
+     DESCRIPTION:
+     Page d'accueil principale du site web Horizon Voyages.
+     Présente les voyages disponibles, les services, et permet
+     la navigation vers les différentes sections du site.
+
+     FONCTIONNALITÉS:
+     - Carrousel vidéo hero
+     - Grille des voyages disponibles
+     - Section "À propos" / services
+     - Formulaire de contact
+     - Inscription newsletter
+     - Avis clients
+     - Navbar responsive avec gestion connexion/déconnexion
+
+     DÉPENDANCES:
+     - ../css/visitor.css (styles principaux)
+     - ../css/home.css (styles spécifiques)
+     - ../js/main.js (fonctionnalités JavaScript)
+     ============================================================ -->
 
 <head>
+    <!-- =====================================================
+         MÉTADONNÉES & CONFIGURATION
+         ===================================================== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Horizon Voyages</title>
+    <meta name="description" content="Découvrez Horizon Voyages - Votre agence de voyages de luxe pour des expériences inoubliables à travers le monde.">
+    <meta name="keywords" content="voyages, agence, luxe, destinations, vacances">
+    <meta name="author" content="Horizon Voyages">
+
+    <title>Horizon Voyages - Agence de Voyages de Luxe</title>
+
+    <!-- =====================================================
+         FEUILLES DE STYLE
+         ===================================================== -->
     <link rel="stylesheet" href="../css/visitor.css">
+    <link rel="stylesheet" href="../css/home.css">
 
-    <style>
-        :root {
-            --gold: #C9A84C;
-            --gold-lt: #E8C97A;
-            --gold-dim: rgba(201, 168, 76, 0.15);
-            --dark: #0D0B09;
-            --light: #F5F0E8;
-            --muted: rgba(245, 240, 232, 0.45);
-            --border: rgba(201, 168, 76, 0.18);
-        }
+    <!-- =====================================================
+         POLICES GOOGLE FONTS
+         ===================================================== -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700&family=Jost:ital,wght@0,300;0,400;0,500;0,600;0,700&display=swap" rel="stylesheet">
 
-        /* ═══════════════════════════════════════════
-         NAVBAR CLIENT — fond or quand connecté
-      ═══════════════════════════════════════════ */
-        #client-nav-wrapper {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 200;
-        }
-
-        .sr-only{
-            color: var(--gold);
-        }
-        #voyageSearch {
-            width: 100%;
-            
-            border: 1px solid rgba(201, 168, 76, 0.3);
-            border-radius: 4px;
-            padding: 0.75rem;
-        }
-        body.has-client-nav #client-nav-wrapper {
-            display: block;
-        }
-
-        body.has-client-nav #mainNav {
-            top: 64px !important;
-            z-index: 99 !important;
-            height: 60px;
-        }
-
-
-
-
-        /* ── Navbar client (1ère) : fond sombre inchangé ── */
-        .client-nav {
-            background: #0D0B09;
-            padding: 0 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(201, 168, 76, 0.3);
-            height: 64px;
-            font-family: 'Jost', sans-serif;
-        }
-
-        .client-nav-brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-        }
-
-        .client-nav-brand .brand-logo {
-            width: 34px;
-            height: 34px;
-            border: 1.5px solid var(--gold);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .client-nav-brand .brand-logo svg {
-            width: 18px;
-            height: 18px;
-            fill: var(--gold);
-        }
-
-        .client-nav-brand .brand-text {
-            display: flex;
-            flex-direction: column;
-            line-height: 1.2;
-        }
-
-        .client-nav-brand .brand-name {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.1rem;
-            font-weight: 300;
-            letter-spacing: 0.1em;
-            color: var(--light);
-        }
-
-        .client-nav-brand .brand-tagline {
-            font-size: 0.52rem;
-            font-weight: 600;
-            letter-spacing: 0.35em;
-            text-transform: uppercase;
-            color: var(--gold);
-        }
-
-        .client-nav-links {
-            display: flex;
-            align-items: center;
-            gap: 0;
-            overflow-x: auto;
-            flex-wrap: nowrap;
-            scrollbar-width: none;
-        }
-
-        .client-nav-links a {
-            display: flex;
-            align-items: center;
-            gap: 7px;
-            padding: 0 1.1rem;
-            height: 64px;
-            text-decoration: none;
-            font-family: 'Jost', sans-serif;
-            font-size: 0.7rem;
-            font-weight: 500;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            color: rgba(245, 240, 232, 0.6);
-            border-bottom: 2px solid transparent;
-            transition: color 0.2s, border-color 0.2s;
-            white-space: nowrap;
-        }
-
-        .client-nav-links a svg {
-            width: 15px;
-            height: 15px;
-            stroke: currentColor;
-            fill: none;
-            stroke-width: 1.5;
-            flex-shrink: 0;
-        }
-
-        .client-nav-links a:hover {
-            color: var(--light);
-            border-bottom-color: rgba(201, 168, 76, 0.4);
-        }
-
-        .client-nav-links a.active {
-            color: var(--gold);
-            border-bottom-color: var(--gold);
-        }
-
-        .client-nav-divider {
-            width: 1px;
-            height: 24px;
-            background: rgba(201, 168, 76, 0.2);
-            margin: 0 0.5rem;
-        }
-
-        .client-nav-links a.logout-btn {
-            color: rgba(201, 168, 76, 0.7);
-        }
-
-        .client-nav-links a.logout-btn:hover {
-            color: var(--gold);
-        }
-
-        .client-nav-links a.visitor-btn {
-            color: var(--gold);
-            border: 1px solid rgba(201, 168, 76, 0.4);
-            border-radius: 4px;
-            height: 36px;
-            padding: 0 1rem;
-            margin: 0 0.4rem;
-            font-size: 0.65rem;
-        }
-
-        .client-nav-links a.visitor-btn:hover {
-            background: var(--gold-dim);
-            border-color: var(--gold);
-            color: var(--gold-lt);
-        }
-
-        /* User chip */
-        .nav-user-chip {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 0 1rem;
-            height: 64px;
-            font-size: 0.72rem;
-            color: var(--muted);
-            letter-spacing: 0.05em;
-            border-right: 1px solid var(--border);
-            margin-right: 0.25rem;
-        }
-
-        .nav-user-avatar {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background: var(--gold-dim);
-            border: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.65rem;
-            font-weight: 700;
-            color: var(--gold);
-            flex-shrink: 0;
-        }
-
-        /* ── 2ème navbar (#mainNav) : fond OR quand client connecté ── */
-        body.has-client-nav #mainNav {
-            background: var(--gold) !important;
-            border-bottom: none !important;
-        }
-
-        /* Masquer le logo (nav-brand) de la 2ème navbar quand client connecté */
-        body.has-client-nav #mainNav .nav-brand {
-            display: none !important;
-        }
-
-        /* Liens de la 2ème navbar : texte sombre sur fond or */
-        body.has-client-nav #mainNav .nav-links a {
-            color: #0D0B09 !important;
-        }
-
-        body.has-client-nav #mainNav .nav-links a:hover,
-        body.has-client-nav #mainNav .nav-links a.active {
-            color: #3b2600 !important;
-            border-bottom-color: rgba(0, 0, 0, 0.35) !important;
-        }
-
-        /* Bouton connexion sur fond or */
-        body.has-client-nav #mainNav .btn-cnx {
-            border-color: rgba(0, 0, 0, 0.3) !important;
-            color: #0D0B09 !important;
-        }
-
-        /* Hamburger sombre */
-        body.has-client-nav #mainNav .nav-hamburger span {
-            background: #0D0B09 !important;
-        }
-
-        /* ═══════════════════════════════════════════
-         BANDEAU BIENVENUE + PROMOTION ANNIVERSAIRE
-      ═══════════════════════════════════════════ */
-        #welcome-banner {
-            display: none;
-            background: #fff;
-            border-bottom: 1px solid rgba(201, 168, 76, 0.2);
-            padding: 0;
-            overflow: hidden;
-        }
-
-        body.has-client-nav #welcome-banner {
-            display: block;
-        }
-
-        .welcome-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 28px 40px;
-            display: flex;
-            align-items: center;
-            gap: 32px;
-        }
-
-        .welcome-text-col {
-            flex: 1;
-        }
-
-        .welcome-greeting {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.7rem;
-            font-weight: 400;
-            color: #0D0B09;
-            line-height: 1.2;
-            margin-bottom: 6px;
-        }
-
-        .welcome-greeting span {
-            color: var(--gold);
-            font-style: italic;
-        }
-
-        .welcome-sub {
-            font-family: 'Jost', sans-serif;
-            font-size: 0.82rem;
-            color: #555;
-            font-weight: 300;
-            letter-spacing: 0.03em;
-        }
-
-        /* Carte promo anniversaire */
-        #promo-birthday {
-            display: none;
-            background: linear-gradient(135deg, #0D0B09 60%, #1a1510);
-            border: 1px solid var(--gold);
-            border-radius: 6px;
-            padding: 18px 28px;
-            min-width: 320px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        #promo-birthday::before {
-            content: '🎂';
-            position: absolute;
-            right: -8px;
-            top: -12px;
-            font-size: 5rem;
-            opacity: 0.08;
-        }
-
-        .promo-label {
-            font-family: 'Jost', sans-serif;
-            font-size: 0.55rem;
-            font-weight: 700;
-            letter-spacing: 0.35em;
-            text-transform: uppercase;
-            color: var(--gold);
-            margin-bottom: 6px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .promo-label::before {
-            content: '';
-            display: inline-block;
-            width: 16px;
-            height: 1px;
-            background: var(--gold);
-        }
-
-        .promo-title {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.35rem;
-            font-weight: 400;
-            color: #fff;
-            line-height: 1.2;
-            margin-bottom: 4px;
-        }
-
-        .promo-title strong {
-            color: var(--gold);
-            font-style: italic;
-        }
-
-        .promo-desc {
-            font-family: 'Jost', sans-serif;
-            font-size: 0.75rem;
-            color: rgba(245, 240, 232, 0.65);
-            font-weight: 300;
-            line-height: 1.5;
-        }
-
-        .promo-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            margin-top: 10px;
-            background: var(--gold);
-            color: #0D0B09;
-            font-family: 'Jost', sans-serif;
-            font-size: 0.65rem;
-            font-weight: 700;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            padding: 5px 12px;
-            border-radius: 2px;
-        }
-
-        /* Message promo non-anniversaire discret */
-        #promo-generic {
-            display: none;
-            background: linear-gradient(135deg, #fdf8ef 0%, #fff 100%);
-            border: 1px solid rgba(201, 168, 76, 0.35);
-            border-radius: 6px;
-            padding: 14px 24px;
-            min-width: 280px;
-        }
-
-        .promo-generic-label {
-            font-family: 'Jost', sans-serif;
-            font-size: 0.55rem;
-            font-weight: 700;
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-            color: var(--gold);
-            margin-bottom: 4px;
-        }
-
-        .promo-generic-text {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.1rem;
-            color: #0D0B09;
-            font-weight: 400;
-            line-height: 1.3;
-        }
-
-        .promo-generic-sub {
-            font-family: 'Jost', sans-serif;
-            font-size: 0.72rem;
-            color: #888;
-            font-weight: 300;
-            margin-top: 4px;
-        }
-
-        @media (max-width: 768px) {
-            .welcome-inner {
-                flex-direction: column;
-                padding: 20px 20px;
-                gap: 18px;
-            }
-
-            #promo-birthday,
-            #promo-generic {
-                min-width: unset;
-                width: 100%;
-            }
-        }
-    </style>
-
+    <!-- =====================================================
+         FAVICON & ICÔNES
+         ===================================================== -->
+    <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
     <!-- Fonts nécessaires pour le welcome banner -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link
@@ -516,7 +139,7 @@
   BANDEAU BIENVENUE + PROMOTION
   (visible seulement si client connecté)
 ══════════════════════════════════════════════ -->
-    <div id="welcome-banner" style="margin-top: 9rem;">
+    <div id="welcome-banner" class="welcome-banner-offset">
         <div class="welcome-inner">
             <div class="welcome-text-col">
                 <div class="welcome-greeting">
@@ -586,8 +209,7 @@
     <!-- ══════════════════════════════════════════════
   HERO
 ══════════════════════════════════════════════ -->
-    <section class="hero" id="heroCarousel" aria-label="Carrousel de destinations"
-        style="padding: 0 0 100px 0 !important;">
+    <section class="hero hero-section" id="heroCarousel" aria-label="Carrousel de destinations">
         <div class="video-track" id="videoTrack" role="list">
             <div class="video-slide active" role="listitem" aria-label="Paris, France">
                 <video src="../images/282814.mp4" autoplay muted loop playsinline aria-hidden="true"></video>
@@ -651,7 +273,13 @@
     </section>
 
 
-    <!-- ACCUEIL -->
+    <!-- =====================================================
+         SECTIONS PRINCIPALES
+         ===================================================== -->
+
+    <!-- =====================================================
+         SECTION ACCUEIL - Présentation de l'agence
+         ===================================================== -->
     <section id="home" class="home-section" aria-labelledby="homeTitle">
         <div class="home-identity">
             <div class="home-logo-wrap">
@@ -758,7 +386,7 @@
         </div>
 
         <div id="voyageCards" class="cards-grid" role="list"></div>
-        <div class="voyage-load-more" style="text-align:center; margin-top:1.5rem;">
+        <div class="voyage-load-more">
             <button id="loadMoreVoyagesBtn" class="btn-details" type="button"><span>Voir plus</span></button>
         </div>
     </section>
@@ -854,7 +482,9 @@
     </section>
 
 
-    <!-- AVIS -->
+    <!-- =====================================================
+         SECTION AVIS - Témoignages clients
+         ===================================================== -->
     <section id="avis" class="avis-section" aria-labelledby="avisTitle">
         <div class="avis-header">
             <div class="section-label">Témoignages</div>
@@ -941,7 +571,9 @@
     </section>
 
 
-    <!-- NEWSLETTER -->
+    <!-- =====================================================
+         SECTION NEWSLETTER - Inscription à la newsletter
+         ===================================================== -->
     <section id="newsletter" class="newsletter-section" aria-labelledby="newsletterTitle">
         <div class="nl-bg-deco" aria-hidden="true"></div>
         <div class="nl-content">
@@ -981,7 +613,9 @@
     </section>
 
 
-    <!-- MODAL VOYAGE -->
+    <!-- =====================================================
+         MODAL VOYAGE - Détails et réservation d'un voyage
+         ===================================================== -->
     <div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle"
         onclick="closeModalOutside(event)">
         <div class="modal-box" id="modalBox">
@@ -1026,16 +660,18 @@
     </div>
 
 
-    <!-- FOOTER -->
+    <!-- =====================================================
+         FOOTER - Informations légales et branding
+         ===================================================== -->
     <footer role="contentinfo">
         <span>© 2026 Horizon Voyages. Tous droits réservés.</span>
-        <span style="letter-spacing:0.3em;color:var(--clr-gold);font-size:0.65rem;">HORIZON VOYAGES</span>
+        <span class="brand-letter-spacing">HORIZON VOYAGES</span>
     </footer>
 
 
-    <!-- ══════════════════════════════════════════════
-  SCRIPTS
-══════════════════════════════════════════════ -->
+    <!-- =====================================================
+         SCRIPTS JAVASCRIPT - Fonctionnalités interactives
+         ===================================================== -->
     <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
     <script>
         /* ════════════════════════════════════════════

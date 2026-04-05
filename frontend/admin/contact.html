@@ -1,412 +1,175 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact — Horizon Admin</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <style>
-        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-        :root {
-            --gold: #C9A84C;
-            --gold-lt: #E8C97A;
-            --gold-dim: rgba(201,168,76,0.12);
-            --dark: #0D0B09;
-            --ink: #1C1814;
-            --ink-2: #4A3F35;
-            --ink-3: #8C7B6E;
-            --sand: #F7F3ED;
-            --sand-2: #EDE6DB;
-            --sand-3: #E0D5C5;
-            --white: #FDFBF8;
-            --border: rgba(28,24,20,0.1);
-            --border-gold: rgba(201,168,76,0.25);
-            --shadow-sm: 0 1px 3px rgba(28,24,20,0.06), 0 1px 2px rgba(28,24,20,0.04);
-            --shadow-md: 0 4px 16px rgba(28,24,20,0.08), 0 2px 6px rgba(28,24,20,0.04);
-            --shadow-lg: 0 12px 40px rgba(28,24,20,0.1), 0 4px 12px rgba(28,24,20,0.06);
-        }
-
-        body {
-            font-family: 'DM Sans', sans-serif;
-            background: var(--sand);
-            color: var(--ink);
-            min-height: 100vh;
-        }
-
-        #navbar { position: sticky; top: 0; z-index: 200; }
-
-        .page-wrap { max-width: 1200px; margin: 0 auto; padding: 2.5rem 2rem 4rem; }
-
-        /* ── Header ── */
-        .page-header {
-            display: flex; align-items: flex-end; justify-content: space-between;
-            margin-bottom: 2rem; padding-bottom: 1.5rem;
-            border-bottom: 1px solid var(--border);
-            gap: 1.5rem; flex-wrap: wrap;
-        }
-        .page-eyebrow {
-            font-size: 0.6rem; font-weight: 600; letter-spacing: 0.25em;
-            text-transform: uppercase; color: var(--gold);
-            display: flex; align-items: center; gap: 8px; margin-bottom: 4px;
-        }
-        .page-eyebrow::before { content: ''; display: inline-block; width: 20px; height: 1px; background: var(--gold); }
-        .page-title {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 2.2rem; font-weight: 400; color: var(--ink); line-height: 1.1;
-        }
-        .page-title em { color: var(--gold); font-style: italic; }
-
-        /* ── Stats ── */
-        .stats-row {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1rem; margin-bottom: 2rem;
-        }
-        .stat-card {
-            background: var(--white); border: 1px solid var(--border);
-            border-radius: 10px; padding: 1.1rem 1.3rem;
-            box-shadow: var(--shadow-sm);
-            position: relative; overflow: hidden;
-            transition: box-shadow 0.2s, transform 0.2s;
-        }
-        .stat-card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
-        .stat-card::after {
-            content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
-            background: linear-gradient(90deg, var(--gold), var(--gold-lt));
-            transform: scaleX(0); transform-origin: left; transition: transform 0.3s;
-        }
-        .stat-card:hover::after { transform: scaleX(1); }
-        .stat-card.accent-yellow::after { background: linear-gradient(90deg, #f1c40f, #f7dc6f); }
-        .stat-card.accent-green::after  { background: linear-gradient(90deg, #2ecc71, #58d68d); }
-        .stat-card.accent-gold::after   { background: linear-gradient(90deg, var(--gold), var(--gold-lt)); }
-        .stat-num {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 2.2rem; font-weight: 600; color: var(--ink); line-height: 1;
-            margin-bottom: 4px;
-        }
-        .stat-num.yellow { color: #d4ac0d; }
-        .stat-num.green  { color: #1a7a4a; }
-        .stat-num.gold   { color: var(--gold); }
-        .stat-lbl { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); }
-
-        /* ── Toolbar ── */
-        .toolbar { display: flex; align-items: center;justify-content: space-between; gap: 1rem; margin-bottom: 1.25rem; flex-wrap: wrap; }
-        .search-wrap { position: relative; flex: 1;  }
-        .search-wrap svg {
-            position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
-            width: 15px; height: 15px; stroke: var(--ink-3); fill: none; stroke-width: 1.8; pointer-events: none;
-        }
-        .search-box, .filter-sel {
-            padding: 0.6rem 1rem; background: var(--white);
-            border: 1px solid var(--border); border-radius: 8px;
-            font-family: 'DM Sans', sans-serif; font-size: 0.85rem;
-            color: var(--ink); box-shadow: var(--shadow-sm);
-            transition: border-color 0.2s, box-shadow 0.2s; outline: none;
-        }
-        .search-box { width: 100%; padding-left: 2.5rem; }
-        .search-box::placeholder { color: var(--ink-3); }
-        .search-box:focus, .filter-sel:focus {
-            border-color: var(--gold); box-shadow: 0 0 0 3px var(--gold-dim);
-        }
-        .filter-sel { cursor: pointer; min-width: 160px; }
-
-        /* ── Table card ── */
-        .table-card {
-            background: var(--white); border: 1px solid var(--border);
-            border-radius: 12px; box-shadow: var(--shadow-md); overflow: hidden;
-        }
-        table { width: 100%; border-collapse: collapse; }
-        thead tr { background: var(--sand-2); border-bottom: 1px solid var(--border); }
-        th {
-            padding: 0.85rem 1.25rem; text-align: left;
-            font-size: 0.61rem; font-weight: 600; letter-spacing: 0.15em;
-            text-transform: uppercase; color: var(--ink-2);
-        }
-        td {
-            padding: 0.9rem 1.25rem; font-size: 0.84rem;
-            color: var(--ink); border-bottom: 1px solid var(--border); vertical-align: middle;
-        }
-        tbody tr:last-child td { border-bottom: none; }
-        tbody tr { transition: background 0.15s; }
-        tbody tr:hover td { background: var(--sand); }
-
-        /* unread row highlight */
-        tbody tr.unread td { background: rgba(201,168,76,0.04); }
-        tbody tr.unread td:first-child { box-shadow: inset 3px 0 0 var(--gold); }
-
-        .td-id { color: var(--ink-3); font-size: 0.75rem; }
-        .td-sender strong { font-weight: 500; display: block; }
-        .td-sender small { font-size: 0.75rem; color: var(--ink-3); }
-        .td-subject { color: var(--ink-2); font-size: 0.82rem; }
-        .msg-preview {
-            max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-            color: var(--ink-3); font-size: 0.78rem;
-        }
-        .td-date { font-size: 0.75rem; color: var(--ink-3); white-space: nowrap; }
-
-        /* ── Status badges ── */
-        .badge {
-            display: inline-flex; align-items: center; gap: 4px;
-            padding: 3px 10px; border-radius: 20px;
-            font-size: 0.63rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
-            white-space: nowrap;
-        }
-        .badge::before { content: ''; display: inline-block; width: 5px; height: 5px; border-radius: 50%; }
-        .badge.non_lu  { background: rgba(241,196,15,0.12);  color: #a07c00; border: 1px solid rgba(241,196,15,0.4); }
-        .badge.non_lu::before { background: #f1c40f; }
-        .badge.lu      { background: rgba(46,204,113,0.1);   color: #1a7a4a; border: 1px solid rgba(46,204,113,0.3); }
-        .badge.lu::before { background: #2ecc71; }
-        .badge.repondu { background: var(--gold-dim); color: #8a6200; border: 1px solid var(--border-gold); }
-        .badge.repondu::before { background: var(--gold); }
-
-        /* ── Action buttons ── */
-        .actions { display: flex; gap: 5px; flex-wrap: wrap; }
-        .btn {
-            display: inline-flex; align-items: center; gap: 4px;
-            padding: 0.28rem 0.65rem; border-radius: 6px; cursor: pointer;
-            font-size: 0.7rem; font-weight: 500; font-family: 'DM Sans', sans-serif;
-            border: 1px solid; transition: background 0.2s, color 0.2s, border-color 0.2s;
-            white-space: nowrap;
-        }
-        .btn svg { width: 11px; height: 11px; stroke: currentColor; fill: none; stroke-width: 2; }
-        .btn-view { border-color: var(--border); color: var(--ink-2); background: transparent; }
-        .btn-view:hover { background: var(--sand-2); border-color: var(--sand-3); }
-        .btn-lu   { border-color: rgba(46,204,113,0.4); color: #1a7a4a; background: transparent; }
-        .btn-lu:hover { background: #2ecc71; border-color: #2ecc71; color: #fff; }
-        .btn-rep  { border-color: var(--border-gold); color: #8a6200; background: transparent; }
-        .btn-rep:hover { background: var(--gold); border-color: var(--gold); color: #fff; }
-        .btn-del  { border-color: rgba(192,57,43,0.3); color: #c0392b; background: transparent; }
-        .btn-del:hover { background: #c0392b; border-color: #c0392b; color: #fff; }
-
-        /* ── Empty ── */
-        .empty-state {
-            display: flex; flex-direction: column; align-items: center;
-            padding: 4rem 2rem; gap: 1rem;
-        }
-        .empty-icon {
-            width: 52px; height: 52px; border-radius: 50%;
-            background: var(--sand-2); border: 1px solid var(--border);
-            display: flex; align-items: center; justify-content: center;
-        }
-        .empty-icon svg { width: 22px; height: 22px; stroke: var(--ink-3); fill: none; stroke-width: 1.4; }
-        .empty-state p { font-size: 0.9rem; color: var(--ink-3); }
-
-        /* ── Modal ── */
-        .modal-bg {
-            display: none; position: fixed; inset: 0;
-            background: rgba(28,24,20,0.5); backdrop-filter: blur(4px);
-            z-index: 500; align-items: center; justify-content: center; padding: 1rem;
-        }
-        .modal-bg.open { display: flex; }
-        .modal-box {
-            background: var(--white); border: 1px solid var(--border);
-            border-radius: 14px; padding: 2rem; max-width: 560px; width: 100%;
-            position: relative; box-shadow: var(--shadow-lg);
-            animation: modalIn 0.2s ease;
-        }
-        @keyframes modalIn { from { opacity: 0; transform: scale(0.97) translateY(8px); } to { opacity: 1; transform: none; } }
-        .modal-close {
-            position: absolute; top: 1rem; right: 1rem;
-            background: var(--sand-2); border: 1px solid var(--border);
-            border-radius: 6px; width: 28px; height: 28px;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; font-size: 0.85rem; color: var(--ink-3);
-            transition: background 0.2s;
-        }
-        .modal-close:hover { background: var(--sand-3); color: var(--ink); }
-        .modal-eyebrow { font-size: 0.58rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
-        .modal-title {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.5rem; font-weight: 400; color: var(--ink); margin-bottom: 1.5rem;
-        }
-        .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
-        .modal-field .lbl {
-            font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.12em;
-            color: var(--ink-3); margin-bottom: 3px; font-weight: 600;
-        }
-        .modal-field .val {
-            font-size: 0.85rem; color: var(--ink); line-height: 1.5;
-        }
-        .modal-msg {
-            background: var(--sand); border: 1px solid var(--border);
-            border-radius: 8px; padding: 1rem; font-size: 0.85rem;
-            color: var(--ink-2); line-height: 1.7; white-space: pre-wrap;
-            max-height: 220px; overflow-y: auto; margin-top: 0.5rem;
-        }
-        .modal-actions { display: flex; gap: 8px; margin-top: 1.5rem; justify-content: flex-end; }
-
-        /* ── Loading ── */
-        .loading {
-            display: flex; align-items: center; justify-content: center;
-            padding: 3rem; gap: 10px; color: var(--ink-3); font-size: 0.85rem;
-        }
-        .spinner { width: 18px; height: 18px; border: 2px solid var(--sand-3); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.7s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* ── Toast ── */
-        .toast {
-            position: fixed; bottom: 2rem; right: 2rem;
-            padding: 0.75rem 1.25rem; border-radius: 8px;
-            font-size: 0.83rem; font-weight: 500;
-            opacity: 0; transform: translateY(8px);
-            transition: opacity 0.25s, transform 0.25s;
-            pointer-events: none; z-index: 999;
-            box-shadow: var(--shadow-lg);
-            display: flex; align-items: center; gap: 8px;
-        }
-        .toast.show { opacity: 1; transform: translateY(0); }
-        .toast.success { background: var(--white); color: #1a7a4a; border: 1px solid rgba(26,122,74,0.2); }
-        .toast.error   { background: var(--white); color: #c0392b; border: 1px solid rgba(192,57,43,0.2); }
-
-        @media (max-width: 900px) {
-            .stats-row { grid-template-columns: repeat(2, 1fr); }
-        }
-        @media (max-width: 640px) {
-            .page-wrap { padding: 1.5rem 1rem 3rem; }
-            .page-title { font-size: 1.7rem; }
-            .stats-row { grid-template-columns: 1fr 1fr; }
-            .modal-grid { grid-template-columns: 1fr; }
-        }
-    </style>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../css/adminContact.css">
 </head>
+
 <body>
 
-<div id="navbar"></div>
+    <div id="navbar"></div>
 
-<div class="page-wrap">
+    <div class="page-wrap">
 
-    <!-- Header -->
-    <div class="page-header">
-        <div>
-            <div class="page-eyebrow">Administration</div>
-            <h1 class="page-title">Formulaires de <em>Contact</em></h1>
+        <!-- Header -->
+        <div class="page-header">
+            <div>
+                <div class="page-eyebrow">Administration</div>
+                <h1 class="page-title">Formulaires de <em>Contact</em></h1>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-num" id="s-total">—</div>
+                <div class="stat-lbl">Total messages</div>
+            </div>
+            <div class="stat-card accent-yellow">
+                <div class="stat-num yellow" id="s-nonlu">—</div>
+                <div class="stat-lbl">Non lus</div>
+            </div>
+            <div class="stat-card accent-green">
+                <div class="stat-num green" id="s-lu">—</div>
+                <div class="stat-lbl">Lus</div>
+            </div>
+            <div class="stat-card accent-gold">
+                <div class="stat-num gold" id="s-rep">—</div>
+                <div class="stat-lbl">Répondus</div>
+            </div>
+        </div>
+
+        <!-- Toolbar -->
+        <div class="toolbar">
+            <div class="search-wrap">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+                <input type="text" class="search-box" id="search-input" placeholder="Rechercher…"
+                    oninput="applyFilters()">
+            </div>
+            <select class="filter-sel" id="filter-statut" onchange="applyFilters()">
+                <option value="">Tous les statuts</option>
+                <option value="non_lu">Non lu</option>
+                <option value="lu">Lu</option>
+                <option value="repondu">Répondu</option>
+            </select>
+        </div>
+
+        <!-- Table -->
+        <div class="table-card" id="tableWrap">
+            <div class="loading">
+                <div class="spinner"></div> Chargement…
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-bg" id="detailModal" onclick="closeModalBg(event)">
+        <div class="modal-box">
+            <button class="modal-close"
+                onclick="document.getElementById('detailModal').classList.remove('open')">✕</button>
+            <div class="modal-eyebrow">Message reçu</div>
+            <h2 class="modal-title" id="m-sujet">—</h2>
+            <div class="modal-grid">
+                <div class="modal-field">
+                    <div class="lbl">Expéditeur</div>
+                    <div class="val" id="m-nom">—</div>
+                </div>
+                <div class="modal-field">
+                    <div class="lbl">Email</div>
+                    <div class="val" id="m-email">—</div>
+                </div>
+                <div class="modal-field">
+                    <div class="lbl">Téléphone</div>
+                    <div class="val" id="m-tel">—</div>
+                </div>
+                <div class="modal-field">
+                    <div class="lbl">Date</div>
+                    <div class="val" id="m-date">—</div>
+                </div>
+            </div>
+            <div class="modal-field">
+                <div class="lbl">Message</div>
+                <div class="modal-msg" id="m-msg"></div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-rep" id="modal-btn-rep" onclick="modalSetStatus('repondu')">
+                    <svg viewBox="0 0 24 24">
+                        <polyline points="9 17 4 12 9 7" />
+                        <path d="M20 18v-2a4 4 0 0 0-4-4H4" />
+                    </svg>
+                    Marquer répondu
+                </button>
+            </div>
         </div>
     </div>
 
-    <!-- Stats -->
-    <div class="stats-row">
-        <div class="stat-card">
-            <div class="stat-num" id="s-total">—</div>
-            <div class="stat-lbl">Total messages</div>
-        </div>
-        <div class="stat-card accent-yellow">
-            <div class="stat-num yellow" id="s-nonlu">—</div>
-            <div class="stat-lbl">Non lus</div>
-        </div>
-        <div class="stat-card accent-green">
-            <div class="stat-num green" id="s-lu">—</div>
-            <div class="stat-lbl">Lus</div>
-        </div>
-        <div class="stat-card accent-gold">
-            <div class="stat-num gold" id="s-rep">—</div>
-            <div class="stat-lbl">Répondus</div>
-        </div>
-    </div>
+    <div class="toast" id="toast"></div>
 
-    <!-- Toolbar -->
-    <div class="toolbar">
-        <div class="search-wrap">
-            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" class="search-box" id="search-input" placeholder="Rechercher…" oninput="applyFilters()">
-        </div>
-        <select class="filter-sel" id="filter-statut" onchange="applyFilters()">
-            <option value="">Tous les statuts</option>
-            <option value="non_lu">Non lu</option>
-            <option value="lu">Lu</option>
-            <option value="repondu">Répondu</option>
-        </select>
-    </div>
+    <script>
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (!user || user.role !== 'Admin') window.location.href = '../index.html';
 
-    <!-- Table -->
-    <div class="table-card" id="tableWrap">
-        <div class="loading"><div class="spinner"></div> Chargement…</div>
-    </div>
+        let allData = [];
+        let currentModalId = null;
 
-</div>
-
-<!-- Modal -->
-<div class="modal-bg" id="detailModal" onclick="closeModalBg(event)">
-    <div class="modal-box">
-        <button class="modal-close" onclick="document.getElementById('detailModal').classList.remove('open')">✕</button>
-        <div class="modal-eyebrow">Message reçu</div>
-        <h2 class="modal-title" id="m-sujet">—</h2>
-        <div class="modal-grid">
-            <div class="modal-field"><div class="lbl">Expéditeur</div><div class="val" id="m-nom">—</div></div>
-            <div class="modal-field"><div class="lbl">Email</div><div class="val" id="m-email">—</div></div>
-            <div class="modal-field"><div class="lbl">Téléphone</div><div class="val" id="m-tel">—</div></div>
-            <div class="modal-field"><div class="lbl">Date</div><div class="val" id="m-date">—</div></div>
-        </div>
-        <div class="modal-field">
-            <div class="lbl">Message</div>
-            <div class="modal-msg" id="m-msg"></div>
-        </div>
-        <div class="modal-actions">
-            <button class="btn btn-rep" id="modal-btn-rep" onclick="modalSetStatus('repondu')">
-                <svg viewBox="0 0 24 24"><polyline points="9 17 4 12 9 7"/><path d="M20 18v-2a4 4 0 0 0-4-4H4"/></svg>
-                Marquer répondu
-            </button>
-        </div>
-    </div>
-</div>
-
-<div class="toast" id="toast"></div>
-
-<script>
-    const user = JSON.parse(localStorage.getItem('user'));
-    if (!user || user.role !== 'Admin') window.location.href = '../index.html';
-
-    let allData = [];
-    let currentModalId = null;
-
-    // ── Navbar ──
-    fetch('navBarAdmin.html').then(r => r.text()).then(html => {
-        document.getElementById('navbar').innerHTML = html;
-        document.getElementById('nav-contact')?.classList.add('active');
-        document.getElementById('logoutBtn')?.addEventListener('click', e => {
-            e.preventDefault();
-            localStorage.removeItem('user');
-            window.location.href = '../visitor/home.html';
+        // ── Navbar ──
+        fetch('navBarAdmin.html').then(r => r.text()).then(html => {
+            document.getElementById('navbar').innerHTML = html;
+            document.getElementById('nav-contact')?.classList.add('active');
+            document.getElementById('logoutBtn')?.addEventListener('click', e => {
+                e.preventDefault();
+                localStorage.removeItem('user');
+                window.location.href = '../visitor/home.html';
+            });
         });
-    });
 
-    // ── Toast ──
-    function showToast(msg, type = 'success') {
-        const icon = type === 'success' ? '✓' : '✕';
-        const t = document.getElementById('toast');
-        t.innerHTML = `<span>${icon}</span> ${msg}`;
-        t.className = `toast show ${type}`;
-        setTimeout(() => t.className = 'toast', 3200);
-    }
+        // ── Toast ──
+        function showToast(msg, type = 'success') {
+            const icon = type === 'success' ? '✓' : '✕';
+            const t = document.getElementById('toast');
+            t.innerHTML = `<span>${icon}</span> ${msg}`;
+            t.className = `toast show ${type}`;
+            setTimeout(() => t.className = 'toast', 3200);
+        }
 
-    // ── Format ──
-    function formatDate(d) {
-        if (!d) return '—';
-        return new Date(d).toLocaleString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-    }
+        // ── Format ──
+        function formatDate(d) {
+            if (!d) return '—';
+            return new Date(d).toLocaleString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+        }
 
-    // ── Filters ──
-    function applyFilters() {
-        const q = document.getElementById('search-input').value.toLowerCase();
-        const s = document.getElementById('filter-statut').value;
-        renderTable(allData.filter(r =>
-            (!s || r.statut === s) &&
-            (!q || r.nom.toLowerCase().includes(q) || r.email.toLowerCase().includes(q) || (r.sujet || '').toLowerCase().includes(q))
-        ));
-    }
+        // ── Filters ──
+        function applyFilters() {
+            const q = document.getElementById('search-input').value.toLowerCase();
+            const s = document.getElementById('filter-statut').value;
+            renderTable(allData.filter(r =>
+                (!s || r.statut === s) &&
+                (!q || r.nom.toLowerCase().includes(q) || r.email.toLowerCase().includes(q) || (r.sujet || '').toLowerCase().includes(q))
+            ));
+        }
 
-    // ── Render ──
-    function renderTable(data) {
-        const wrap = document.getElementById('tableWrap');
-        if (!data.length) {
-            wrap.innerHTML = `
+        // ── Render ──
+        function renderTable(data) {
+            const wrap = document.getElementById('tableWrap');
+            if (!data.length) {
+                wrap.innerHTML = `
                 <div class="empty-state">
                     <div class="empty-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
                     <p>Aucun message trouvé</p>
                 </div>`;
-            return;
-        }
-        wrap.innerHTML = `
+                return;
+            }
+            wrap.innerHTML = `
             <table>
                 <thead><tr>
                     <th>#</th><th>Expéditeur</th><th>Sujet</th><th>Aperçu</th>
@@ -433,7 +196,9 @@
                                     ${r.statut === 'non_lu' ? `<button class="btn btn-lu" onclick="setStatus(${r.id},'lu')">Lu</button>` : ''}
                                     ${r.statut !== 'repondu' ? `<button class="btn btn-rep" onclick="setStatus(${r.id},'repondu')">Répondu</button>` : ''}
                                     <button class="btn btn-del" onclick="deleteMsg(${r.id})">
-                                        <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg>
+                                        <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+                                    Supprimer
+                                        
                                     </button>
                                 </div>
                             </td>
@@ -441,89 +206,90 @@
                     `).join('')}
                 </tbody>
             </table>`;
-    }
-
-    // ── Stats ──
-    function updateStats(data) {
-        document.getElementById('s-total').textContent = data.length;
-        document.getElementById('s-nonlu').textContent = data.filter(r => r.statut === 'non_lu').length;
-        document.getElementById('s-lu').textContent    = data.filter(r => r.statut === 'lu').length;
-        document.getElementById('s-rep').textContent   = data.filter(r => r.statut === 'repondu').length;
-    }
-
-    // ── Load ──
-    function loadContact() {
-        fetch(`http://localhost/agence_voyage/backend/index.php?uri=admin/contact&admin_id=${user.id}`)
-            .then(r => r.json())
-            .then(data => {
-                allData = Array.isArray(data) ? data : [];
-                updateStats(allData);
-                renderTable(allData);
-            })
-            .catch(() => {
-                document.getElementById('tableWrap').innerHTML =
-                    '<div class="empty-state"><p>Erreur de chargement.</p></div>';
-            });
-    }
-
-    // ── View modal ──
-    window.viewMessage = function(id) {
-        const r = allData.find(x => x.id == id);
-        if (!r) return;
-        currentModalId = id;
-        document.getElementById('m-sujet').textContent = r.sujet || 'Message sans sujet';
-        document.getElementById('m-nom').textContent   = r.nom;
-        document.getElementById('m-email').textContent = r.email;
-        document.getElementById('m-tel').textContent   = r.telephone || '—';
-        document.getElementById('m-date').textContent  = formatDate(r.date_envoi);
-        document.getElementById('m-msg').textContent   = r.message;
-        const btnRep = document.getElementById('modal-btn-rep');
-        btnRep.style.display = r.statut === 'repondu' ? 'none' : 'inline-flex';
-        document.getElementById('detailModal').classList.add('open');
-        if (r.statut === 'non_lu') setStatus(id, 'lu', true);
-    };
-
-    window.closeModalBg = function(e) {
-        if (e.target.id === 'detailModal') document.getElementById('detailModal').classList.remove('open');
-    };
-
-    window.modalSetStatus = function(statut) {
-        if (currentModalId) {
-            setStatus(currentModalId, statut);
-            document.getElementById('detailModal').classList.remove('open');
         }
-    };
 
-    // ── Set status ──
-    window.setStatus = function(id, statut, silent = false) {
-        fetch(`http://localhost/agence_voyage/backend/index.php?uri=admin/contact&admin_id=${user.id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id, statut })
-        })
-        .then(r => r.json())
-        .then(res => {
-            if (res.success) { if (!silent) showToast('Statut mis à jour'); loadContact(); }
-            else showToast(res.error || 'Erreur', 'error');
-        });
-    };
+        // ── Stats ──
+        function updateStats(data) {
+            document.getElementById('s-total').textContent = data.length;
+            document.getElementById('s-nonlu').textContent = data.filter(r => r.statut === 'non_lu').length;
+            document.getElementById('s-lu').textContent = data.filter(r => r.statut === 'lu').length;
+            document.getElementById('s-rep').textContent = data.filter(r => r.statut === 'repondu').length;
+        }
 
-    // ── Delete ──
-    window.deleteMsg = function(id) {
-        if (!confirm('Supprimer ce message définitivement ?')) return;
-        fetch(`http://localhost/agence_voyage/backend/index.php?uri=admin/contact&admin_id=${user.id}`, {
-            method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id })
-        })
-        .then(r => r.json())
-        .then(res => {
-            if (res.success) { showToast('Message supprimé'); loadContact(); }
-            else showToast(res.error || 'Erreur', 'error');
-        });
-    };
+        // ── Load ──
+        function loadContact() {
+            fetch(`http://localhost/agence_voyage/backend/index.php?uri=admin/contact&admin_id=${user.id}`)
+                .then(r => r.json())
+                .then(data => {
+                    allData = Array.isArray(data) ? data : [];
+                    updateStats(allData);
+                    renderTable(allData);
+                })
+                .catch(() => {
+                    document.getElementById('tableWrap').innerHTML =
+                        '<div class="empty-state"><p>Erreur de chargement.</p></div>';
+                });
+        }
 
-    loadContact();
-</script>
+        // ── View modal ──
+        window.viewMessage = function (id) {
+            const r = allData.find(x => x.id == id);
+            if (!r) return;
+            currentModalId = id;
+            document.getElementById('m-sujet').textContent = r.sujet || 'Message sans sujet';
+            document.getElementById('m-nom').textContent = r.nom;
+            document.getElementById('m-email').textContent = r.email;
+            document.getElementById('m-tel').textContent = r.telephone || '—';
+            document.getElementById('m-date').textContent = formatDate(r.date_envoi);
+            document.getElementById('m-msg').textContent = r.message;
+            const btnRep = document.getElementById('modal-btn-rep');
+            btnRep.style.display = r.statut === 'repondu' ? 'none' : 'inline-flex';
+            document.getElementById('detailModal').classList.add('open');
+            if (r.statut === 'non_lu') setStatus(id, 'lu', true);
+        };
+
+        window.closeModalBg = function (e) {
+            if (e.target.id === 'detailModal') document.getElementById('detailModal').classList.remove('open');
+        };
+
+        window.modalSetStatus = function (statut) {
+            if (currentModalId) {
+                setStatus(currentModalId, statut);
+                document.getElementById('detailModal').classList.remove('open');
+            }
+        };
+
+        // ── Set status ──
+        window.setStatus = function (id, statut, silent = false) {
+            fetch(`http://localhost/agence_voyage/backend/index.php?uri=admin/contact&admin_id=${user.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id, statut })
+            })
+                .then(r => r.json())
+                .then(res => {
+                    if (res.success) { if (!silent) showToast('Statut mis à jour'); loadContact(); }
+                    else showToast(res.error || 'Erreur', 'error');
+                });
+        };
+
+        // ── Delete ──
+        window.deleteMsg = function (id) {
+            if (!confirm('Supprimer ce message définitivement ?')) return;
+            fetch(`http://localhost/agence_voyage/backend/index.php?uri=admin/contact&admin_id=${user.id}`, {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id })
+            })
+                .then(r => r.json())
+                .then(res => {
+                    if (res.success) { showToast('Message supprimé'); loadContact(); }
+                    else showToast(res.error || 'Erreur', 'error');
+                });
+        };
+
+        loadContact();
+    </script>
 </body>
+
 </html>

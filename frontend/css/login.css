@@ -1,0 +1,832 @@
+/* ============================================================
+   HORIZON VOYAGES — Styles de la page de connexion/inscription
+   login.css
+   ============================================================
+   TABLE DES MATIÈRES
+   ─────────────────────────────────────────────────────────────
+   1.  RESET & VARIABLES CSS
+   2.  TYPOGRAPHIE & BASE
+   3.  ARRIÈRE-PLAN & OVERLAYS
+   4.  LAYOUT PRINCIPAL
+   5.  PANEL GAUCHE (branding)
+   6.  PANEL DROIT (formulaires)
+   7.  FORMULAIRES & CHAMPS
+   8.  BOUTONS & INTERACTIONS
+   9.  ANIMATIONS & TRANSITIONS
+   10. RESPONSIVE DESIGN
+   ============================================================ */
+
+/* ============================================================
+   1. RESET & VARIABLES CSS
+   ============================================================ */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --gold: #C9A84C;
+    --gold-lt: #E8C97A;
+    --dark: #0D0B09;
+    --mid: #1A1814;
+    --panel: #141210;
+    --light: #F5F0E8;
+    --muted: rgba(245, 240, 232, 0.5);
+    --border: rgba(201, 168, 76, 0.2);
+}
+
+/* ============================================================
+   2. TYPOGRAPHIE & BASE
+   ============================================================ */
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Jost', sans-serif;
+    color: var(--light);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* ============================================================
+   3. ARRIÈRE-PLAN & OVERLAYS
+   ============================================================ */
+
+.bg-wrap {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+}
+
+.bg-image {
+    position: absolute;
+    inset: 0;
+    background: url('https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1600&q=80') center/cover no-repeat;
+}
+
+.bg-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse at 20% 50%, rgba(201, 168, 76, 0.07) 0%, transparent 60%),
+        linear-gradient(135deg, rgba(13, 11, 9, 0.297) 0%, rgba(13, 11, 9, 0.461) 100%);
+}
+
+.bg-lines {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(201, 168, 76, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201, 168, 76, 0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+}
+
+/* ============================================================
+   4. LAYOUT PRINCIPAL
+   ============================================================ */
+
+.page {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 520px;
+}
+
+/* ============================================================
+   5. PANEL GAUCHE (branding)
+   ============================================================ */
+
+.left-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 48px 64px;
+    position: relative;
+    padding-right: 0;
+}
+
+.brand-link {
+    background-color: rgba(20, 18, 16, 0.96);
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    text-decoration: none;
+    padding: 10px 14px;
+}
+
+.brand-logo {
+    width: 44px;
+    height: 44px;
+    border: 1.5px solid var(--gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.brand-logo svg {
+    width: 24px;
+    height: 24px;
+    fill: var(--gold);
+}
+
+.brand-name {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+}
+
+.brand-wordmark {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 300;
+    letter-spacing: 0.12em;
+    color: var(--light);
+}
+
+.brand-tagline {
+    font-size: 0.58rem;
+    font-weight: 600;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold);
+}
+
+.left-center {
+    max-width: 500px;
+}
+
+.left-eyebrow {
+    font-size: 2rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.left-eyebrow::before {
+    content: '';
+    display: block;
+    width: 28px;
+    height: 1px;
+    background: var(--gold);
+}
+
+.left-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.4rem, 4vw, 3.6rem);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.1;
+    color: var(--light);
+    margin-bottom: 24px;
+}
+
+.left-title em {
+    color: var(--gold);
+    font-style: italic;
+}
+
+.left-desc {
+    font-size: 1.125rem;
+    font-weight: 300;
+    line-height: 1.85;
+    color: white;
+    max-width: 380px;
+    margin-bottom: 48px;
+}
+
+.dest-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.dest-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border: 1px solid gold;
+    background: rgba(201, 168, 76, 0.4);
+    border-radius: 2px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    color: rgb(255, 255, 255);
+    animation: fadeUp 0.6s ease both;
+}
+
+.dest-pill:nth-child(1) { animation-delay: 0.1s; }
+.dest-pill:nth-child(2) { animation-delay: 0.2s; }
+.dest-pill:nth-child(3) { animation-delay: 0.3s; }
+.dest-pill:nth-child(4) { animation-delay: 0.4s; }
+.dest-pill:nth-child(5) { animation-delay: 0.5s; }
+
+.dest-pill .dot-gold {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: gold;
+    opacity: 0.7;
+}
+
+.left-footer {
+    font-size: 1rem;
+    letter-spacing: 0.15em;
+    color: rgb(245, 240, 232);
+    text-transform: uppercase;
+}
+
+/* ============================================================
+   6. PANEL DROIT (formulaires)
+   ============================================================ */
+
+.right-panel {
+    background: white;
+    border-left: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 48px 52px;
+    position: relative;
+    backdrop-filter: blur(20px);
+}
+
+.right-panel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 80px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+}
+
+/* ============================================================
+   7. FORMULAIRES & CHAMPS
+   ============================================================ */
+
+.tab-bar {
+    display: flex;
+    gap: 0;
+    margin-bottom: 40px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 12px;
+    background: transparent;
+    border: 1px solid gold;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: black;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.3s;
+}
+
+.tab-btn.active {
+    background: rgba(201, 168, 76, 0.1);
+    color: var(--gold);
+}
+
+.tab-btn::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--gold);
+    transition: width 0.3s;
+}
+
+.tab-btn.active::after {
+    width: 100%;
+}
+
+.form-panel {
+    display: none;
+}
+
+.form-panel.active {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-heading {
+    margin-bottom: 4px;
+}
+
+.form-label-top {
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+    display: block;
+}
+
+.form-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 400;
+    color: black;
+    line-height: 1.1;
+}
+
+.form-subtitle {
+    font-size: 1rem;
+    font-weight: 400;
+    color: black;
+    margin-top: 6px;
+}
+
+.form-divider {
+    width: 40px;
+    height: 1px;
+    background: linear-gradient(to right, var(--gold), transparent);
+}
+
+.field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.field label {
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: black;
+}
+
+.field-wrap {
+    position: relative;
+}
+
+.field-wrap svg {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 15px;
+    height: 15px;
+    stroke: rgb(201, 168, 76);
+    fill: none;
+    stroke-width: 1.5;
+    pointer-events: none;
+    transition: stroke 0.3s;
+}
+
+.field input {
+    width: 100%;
+    padding: 12px 48px 12px 40px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(201, 168, 76, 0.635);
+    border-radius: 2px;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 300;
+    outline: none;
+    transition: border-color 0.3s, background 0.3s, box-shadow 0.3s;
+}
+
+.field input::placeholder {
+    color: rgba(0, 0, 0, 0.728);
+}
+
+.field input:focus {
+    border-color: var(--gold);
+    background: rgba(0, 0, 0, 0.04);
+    box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.08);
+}
+
+.field input:focus + svg,
+.field-wrap:focus-within svg {
+    stroke: var(--gold);
+}
+
+.pw-toggle {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    min-width: 34px;
+    min-height: 34px;
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+}
+
+.pw-toggle:hover {
+    color: var(--gold);
+}
+
+.pw-toggle svg {
+    width: 15px;
+    height: 15px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 1.5;
+}
+
+.field input[type="password"] {
+    padding-right: 42px;
+}
+
+.check-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.terms-row {
+    justify-content: flex-start;
+    gap: 10px;
+}
+
+.check-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.check-label input[type="checkbox"] {
+    display: none;
+}
+
+.custom-check {
+    width: 16px;
+    height: 16px;
+    border: 1px solid var(--gold);
+    border-radius: 2px;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.2s, background 0.2s;
+    flex-shrink: 0;
+}
+
+.check-label input:checked ~ .custom-check {
+    background: var(--gold);
+    border-color: var(--gold);
+}
+
+.custom-check svg {
+    width: 10px;
+    height: 10px;
+    stroke: #1A1814;
+    fill: none;
+    stroke-width: 3;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.check-label input:checked ~ .custom-check svg {
+    opacity: 1;
+}
+
+.check-text {
+    font-size: 0.78rem;
+    font-weight: 300;
+    color: black;
+}
+
+.forgot-link {
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: var(--gold);
+    text-decoration: none;
+    opacity: 0.75;
+    transition: opacity 0.2s;
+}
+
+.forgot-link:hover {
+    opacity: 1;
+}
+
+/* ============================================================
+   8. BOUTONS & INTERACTIONS
+   ============================================================ */
+
+.btn-submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 14px;
+    background: var(--gold);
+    border: none;
+    color: #0D0B09;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    border-radius: 2px;
+    transition: background 0.3s;
+}
+
+.btn-submit::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gold-lt);
+    transform: translateX(-101%);
+    transition: transform 0.35s cubic-bezier(.4, 0, .2, 1);
+}
+
+.btn-submit:hover::before {
+    transform: translateX(0);
+}
+
+.btn-submit span,
+.btn-submit svg {
+    position: relative;
+    z-index: 1;
+}
+
+.btn-submit svg {
+    width: 15px;
+    height: 15px;
+    stroke: #0D0B09;
+    fill: none;
+    stroke-width: 2;
+}
+
+.or-sep {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--gold);
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+}
+
+.or-sep::before,
+.or-sep::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--gold);
+}
+
+.social-btns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.btn-social {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 11px;
+    background: transparent;
+    border: 1px solid var(--gold);
+    border-radius: 2px;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    color: black;
+    cursor: pointer;
+    transition: border-color 0.3s, color 0.3s, background 0.3s;
+}
+
+.btn-social:hover {
+    border-color: var(--gold);
+    color: var(--light);
+    background: rgba(201, 168, 76, 0.05);
+}
+
+.btn-social svg {
+    width: 16px;
+    height: 16px;
+}
+
+.strength-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.strength-bars {
+    display: flex;
+    gap: 4px;
+}
+
+.strength-bar {
+    flex: 1;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.07);
+    border-radius: 2px;
+    transition: background 0.3s;
+}
+
+.strength-bar.weak { background: #c0392b; }
+.strength-bar.fair { background: #e67e22; }
+.strength-bar.good { background: #f1c40f; }
+.strength-bar.strong { background: #27ae60; }
+
+.strength-text {
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    transition: color 0.3s;
+}
+
+.terms-text {
+    font-size: 0.72rem;
+    font-weight: 300;
+    color: rgba(245, 240, 232, 0.3);
+    line-height: 1.7;
+}
+
+.terms-text a {
+    color: var(--gold);
+    text-decoration: none;
+}
+
+.terms-link {
+    color: var(--gold);
+    text-decoration: none;
+}
+
+.form-feedback {
+    font-size: 0.78rem;
+    font-weight: 500;
+    padding: 10px 14px;
+    border-radius: 2px;
+    display: none;
+    align-items: center;
+    gap: 8px;
+}
+
+.form-feedback.success {
+    display: flex;
+    background: rgba(34, 139, 34, 0.08);
+    border: 1px solid rgba(34, 139, 34, 0.25);
+    color: #5cb85c;
+}
+
+.form-feedback.error {
+    display: flex;
+    background: rgba(180, 50, 50, 0.08);
+    border: 1px solid rgba(180, 50, 50, 0.25);
+    color: #d9534f;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: black;
+    text-decoration: none;
+    transition: color 0.3s;
+    margin-bottom: 32px;
+}
+
+.back-link:hover {
+    color: var(--gold);
+}
+
+.back-link svg {
+    width: 14px;
+    height: 14px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    transition: transform 0.2s;
+}
+
+.back-link:hover svg {
+    transform: translateX(-3px);
+}
+
+/* ============================================================
+   9. ANIMATIONS & TRANSITIONS
+   ============================================================ */
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.anim {
+    animation: fadeUp 0.6s ease both;
+}
+
+.anim-1 { animation-delay: 0.05s; }
+.anim-2 { animation-delay: 0.12s; }
+.anim-3 { animation-delay: 0.19s; }
+.anim-4 { animation-delay: 0.26s; }
+.anim-5 { animation-delay: 0.33s; }
+.anim-6 { animation-delay: 0.40s; }
+.anim-7 { animation-delay: 0.47s; }
+.anim-8 { animation-delay: 0.54s; }
+
+/* ============================================================
+   10. RESPONSIVE DESIGN
+   ============================================================ */
+
+@media (max-width: 900px) {
+    .page {
+        grid-template-columns: 1fr;
+    }
+
+    .left-panel {
+        padding: 40px 32px 20px;
+        min-height: auto;
+    }
+
+    .left-center {
+        margin: 0;
+    }
+
+    .right-panel {
+        padding: 40px 32px;
+        border-left: none;
+        border-top: 1px solid var(--border);
+    }
+}
+
+@media (max-width: 480px) {
+    .left-panel {
+        padding: 32px 24px 16px;
+    }
+
+    .right-panel {
+        padding: 32px 24px;
+    }
+
+    .field-row {
+        grid-template-columns: 1fr;
+    }
+
+    .social-btns {
+        grid-template-columns: 1fr;
+    }
+
+    .check-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+}

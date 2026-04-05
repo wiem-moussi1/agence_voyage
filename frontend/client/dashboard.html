@@ -1,28 +1,85 @@
 <!DOCTYPE html>
 <html lang="fr">
+<!-- ============================================================
+     HORIZON VOYAGES — Tableau de bord client
+     dashboard.html
+     ============================================================
+     DESCRIPTION:
+     Page principale de l'espace client affichant un aperçu
+     personnalisé des réservations, statistiques et accès rapide
+     aux fonctionnalités principales.
+
+     FONCTIONNALITÉS:
+     - Message de bienvenue personnalisé
+     - Statistiques des réservations, avis et messages
+     - Liste des dernières réservations
+     - Navigation vers les autres sections client
+     - Déconnexion sécurisée
+
+     DÉPENDANCES:
+     - ../css/client.css (styles généraux client)
+     - ../css/dashboard.css (styles spécifiques)
+     - navBar.html (barre de navigation)
+     - API backend pour données utilisateur
+     ============================================================ -->
+
 <head>
+    <!-- =====================================================
+         MÉTADONNÉES & CONFIGURATION
+         ===================================================== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tableau de bord - Horizon Voyages</title>
+
+    <!-- =====================================================
+         POLICES GOOGLE FONTS
+         ===================================================== -->
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- =====================================================
+         FEUILLES DE STYLE
+         ===================================================== -->
     <link rel="stylesheet" href="../css/client.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+
+    <!-- =====================================================
+         FAVICON & ICÔNES
+         ===================================================== -->
+    <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 </head>
+
 <body>
+    <!-- =====================================================
+         BARRE DE NAVIGATION
+         ===================================================== -->
     <div id="navbar"></div>
 
+    <!-- =====================================================
+         CONTENU PRINCIPAL
+         ===================================================== -->
     <div class="page-wrap">
+
+        <!-- =====================================================
+             EN-TÊTE DE PAGE
+             ===================================================== -->
         <div class="page-header">
             <div>
-                <h1  class="page-title">Tableau de <span>bord</span></h1>
+                <h1 class="page-title">Tableau de <span>bord</span></h1>
                 <div class="page-subtitle">Votre espace personnel</div>
             </div>
         </div>
 
+        <!-- =====================================================
+             CARTE DE BIENVENUE
+             ===================================================== -->
         <div class="welcome-card">
             <h1>Bonjour, <span id="userName">Client</span></h1>
             <p>Bienvenue dans votre espace personnel. Gérez vos voyages, partagez votre expérience et restez connecté avec nous.</p>
         </div>
 
+        <!-- =====================================================
+             STATISTIQUES UTILISATEUR
+             ===================================================== -->
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-number" id="reservationsCount">0</div>
@@ -38,28 +95,35 @@
             </div>
         </div>
 
+        <!-- =====================================================
+             DERNIÈRES RÉSERVATIONS
+             ===================================================== -->
         <div class="content-card">
             <h3>Mes dernières réservations</h3>
             <div id="recentReservations">
                 <p>Chargement...</p>
             </div>
-            <a href="reservations.html" class="btn" style="margin-top: 1rem;display: flex;justify-content: center;align-items: center;">Voir toutes mes réservations</a>
+            <a href="reservations.html" class="btn btn-dashboard">Voir toutes mes réservations</a>
         </div>
     </div>
 
+    <!-- =====================================================
+         JAVASCRIPT - FONCTIONNALITÉS INTERACTIVES
+         ===================================================== -->
     <script>
+        /* ── VÉRIFICATION AUTHENTIFICATION ── */
         const user = JSON.parse(localStorage.getItem('user'));
         if (!user) window.location.href = 'index.html';
 
         document.getElementById('userName').innerText = user.prenom + ' ' + user.nom;
 
-        // Charger navbar
+        /* ── CHARGEMENT DE LA BARRE DE NAVIGATION ── */
         fetch('navBar.html')
             .then(res => res.text())
             .then(html => {
                 document.getElementById('navbar').innerHTML = html;
 
-                // Show user name
+                // Affichage des informations utilisateur
                 if (user) {
                     const initials = ((user.prenom?.[0] || '') + (user.nom?.[0] || '')).toUpperCase() || '?';
                     const el = document.getElementById('navUserAvatar');
@@ -68,7 +132,7 @@
                     if (nm) nm.textContent = `${user.prenom || ''} ${user.nom || ''}`.trim();
                 }
 
-                // Active link
+                // Activation du lien de navigation actif
                 const page = window.location.pathname.split('/').pop();
                 const map = {
                     'dashboard.html':    'nav-dashboard',
@@ -78,7 +142,7 @@
                 };
                 if (map[page]) document.getElementById(map[page])?.classList.add('active');
 
-                // Logout
+                // Gestionnaire de déconnexion
                 document.getElementById('logoutBtn')?.addEventListener('click', (e) => {
                     e.preventDefault();
                     localStorage.removeItem('user');
@@ -86,15 +150,17 @@
                 });
             });
 
-        // Récupérer les statistiques
-        fetch(`http://localhost/AGENCE_VOYAGE/backend/index.php?uri=reservations&user_id=${user.id}`)
+        /* ── CHARGEMENT DES STATISTIQUES UTILISATEUR ── */
+
+        // Récupération des réservations
+        fetch(`http://localhost/agence_voyage/backend/index.php?uri=reservations&user_id=${user.id}`)
             .then(res => res.json())
             .then(data => {
                 document.getElementById('reservationsCount').innerText = data.length;
-                // Afficher les 3 dernières
+                // Affichage des 3 dernières réservations
                 const recent = data.slice(0,3);
                 const container = document.getElementById('recentReservations');
-                if (recent.length === 0) container.innerHTML = '<p style="text-align: center;">Aucune réservation pour le moment.</p>';
+                if (recent.length === 0) container.innerHTML = '<p class="no-reservations">Aucune réservation pour le moment.</p>';
                 else {
                     container.innerHTML = recent.map(r => `
                         <div class="reservation-item">
@@ -106,11 +172,13 @@
                 }
             });
 
-        fetch(`http://localhost/AGENCE_VOYAGE/backend/index.php?uri=avis&user_id=${user.id}`)
+        // Récupération du nombre d'avis
+        fetch(`http://localhost/agence_voyage/backend/index.php?uri=avis&user_id=${user.id}`)
             .then(res => res.json())
             .then(data => document.getElementById('avisCount').innerText = data.length);
 
-        fetch(`http://localhost/AGENCE_VOYAGE/backend/index.php?uri=messages&user_id=${user.id}`)
+        // Récupération des messages non lus
+        fetch(`http://localhost/agence_voyage/backend/index.php?uri=messages&user_id=${user.id}`)
             .then(res => res.json())
             .then(data => {
                 const unread = data.messages.filter(m => m.receiver_id === user.id && m.lu == 0).length;

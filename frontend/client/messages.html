@@ -1,44 +1,133 @@
 <!DOCTYPE html>
 <html lang="fr">
+<!-- ============================================================
+     HORIZON VOYAGES — Messagerie client-administrateur
+     messages.html
+     ============================================================
+     DESCRIPTION:
+     Interface de messagerie permettant aux clients d'échanger
+     avec l'administrateur. Inclut un système de chat en temps
+     réel avec historique des messages.
+
+     FONCTIONNALITÉS:
+     - Affichage des messages envoyés/reçus
+     - Envoi de nouveaux messages
+     - Mise à jour automatique toutes les 3 secondes
+     - Défilement automatique vers les nouveaux messages
+     - Interface responsive
+
+     DÉPENDANCES:
+     - ../css/client.css (styles généraux client)
+     - ../css/messages.css (styles spécifiques)
+     - navBar.html (barre de navigation)
+     - API backend pour gestion des messages
+     ============================================================ -->
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Messagerie · Horizon</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/client.css">
+    <!-- =====================================================
+         MÉTADONNÉES & CONFIGURATION
+         ===================================================== -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messagerie · Horizon</title>
+
+    <!-- =====================================================
+         POLICES GOOGLE FONTS
+         ===================================================== -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- =====================================================
+         FEUILLES DE STYLE
+         ===================================================== -->
+    <link rel="stylesheet" href="../css/client.css">
+    <link rel="stylesheet" href="../css/messages.css">
+
+    <!-- =====================================================
+         FAVICON & ICÔNES
+         ===================================================== -->
+    <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 </head>
+
 <body>
-  <div id="navbar"></div>
+    <!-- =====================================================
+         BARRE DE NAVIGATION
+         ===================================================== -->
+    <div id="navbar"></div>
 
-  <div class="page-wrap">
-    <div class="page-header">
-      <div>
-        <h1 class="page-title">Messagerie avec <span>l'administrateur</span></h1>
-        <div class="page-subtitle">Échangez avec notre équipe</div>
-      </div>
+    <!-- =====================================================
+         CONTENU PRINCIPAL
+         ===================================================== -->
+    <div class="page-wrap">
+
+        <!-- =====================================================
+             EN-TÊTE DE PAGE
+             ===================================================== -->
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">Messagerie avec <span>l'administrateur</span></h1>
+                <div class="page-subtitle">Échangez avec notre équipe</div>
+            </div>
+        </div>
+
+        <!-- =====================================================
+             ZONE DE CHAT
+             ===================================================== -->
+        <div class="content-card">
+
+            <!-- =====================================================
+                 BOÎTE DE CONVERSATION
+                 ===================================================== -->
+            <div id="chat" class="chat-box" role="log" aria-live="polite" aria-label="Conversation avec l'administrateur">
+                <div class="empty-chat">Chargement des messages...</div>
+            </div>
+
+            <!-- =====================================================
+                 ZONE DE SAISIE DE MESSAGE
+                 ===================================================== -->
+            <div class="input-area">
+                <input
+                    type="text"
+                    id="messageInput"
+                    class="form-input"
+                    placeholder="Écrivez votre message..."
+                    aria-label="Saisir un message"
+                    maxlength="500"
+                >
+                <button
+                    id="sendBtn"
+                    class="btn-primary"
+                    type="button"
+                    aria-label="Envoyer le message"
+                >
+                    Envoyer
+                </button>
+            </div>
+        </div>
     </div>
 
-    <div class="content-card">
-      <div id="chat" class="chat-box">
-        <div class="empty-chat">Chargement des messages...</div>
-      </div>
-      <div class="input-area">
-        <input type="text" id="messageInput" class="form-input" placeholder="Écrivez votre message...">
-        <button id="sendBtn" class="btn-primary">Envoyer</button>
-      </div>
-    </div>
-  </div>
-
+    <!-- =====================================================
+         SCRIPTS JAVASCRIPT
+         ===================================================== -->
     <script>
+        // =====================================================
+        // CONFIGURATION ET CONSTANTES
+        // =====================================================
         const user = JSON.parse(localStorage.getItem('user'));
-        if (!user) window.location.href = 'index.html';
+        if (!user) window.location.href = '../visitor/home.html';
 
+        let adminId = null;
+        let lastRefresh = 0;
+        let isLoading = false;
+
+        // =====================================================
+        // CHARGEMENT DE LA BARRE DE NAVIGATION
+        // =====================================================
         fetch('navBar.html')
             .then(r => r.text())
             .then(html => {
                 document.getElementById('navbar').innerHTML = html;
 
-                // Show user name
+                // Affichage du nom d'utilisateur
                 if (user) {
                     const initials = ((user.prenom?.[0] || '') + (user.nom?.[0] || '')).toUpperCase() || '?';
                     const el = document.getElementById('navUserAvatar');
@@ -47,7 +136,7 @@
                     if (nm) nm.textContent = `${user.prenom || ''} ${user.nom || ''}`.trim();
                 }
 
-                // Active link
+                // Lien actif dans la navigation
                 const page = window.location.pathname.split('/').pop();
                 const map = {
                     'dashboard.html':    'nav-dashboard',
@@ -57,7 +146,7 @@
                 };
                 if (map[page]) document.getElementById(map[page])?.classList.add('active');
 
-                // Logout
+                // Gestionnaire de déconnexion
                 document.getElementById('logoutBtn')?.addEventListener('click', (e) => {
                     e.preventDefault();
                     localStorage.removeItem('user');
@@ -65,74 +154,181 @@
                 });
             });
 
-        let adminId = null;
-        let lastRefresh = 0;
+        // =====================================================
+        // GESTION DES MESSAGES
+        // =====================================================
 
+        /**
+         * Charge et affiche les messages depuis le serveur
+         */
         function loadMessages() {
-            fetch(`http://localhost/AGENCE_VOYAGE/backend/index.php?uri=messages&user_id=${user.id}`)
-                .then(res => res.json())
+            if (isLoading) return;
+            isLoading = true;
+
+            fetch(`http://localhost/agence_voyage/backend/index.php?uri=messages&user_id=${user.id}`)
+                .then(res => {
+                    if (!res.ok) {
+                        throw new Error(`Erreur HTTP: ${res.status}`);
+                    }
+                    return res.json();
+                })
                 .then(data => {
                     if (data.error) {
                         document.getElementById('chat').innerHTML = `<div class="empty-chat">Erreur : ${data.error}</div>`;
                         return;
                     }
+
                     adminId = data.admin_id;
                     const messages = data.messages;
                     const chatDiv = document.getElementById('chat');
+
                     if (messages.length === 0) {
                         chatDiv.innerHTML = '<div class="empty-chat">Aucun message pour le moment. Commencez la conversation !</div>';
                         return;
                     }
+
+                    // Construction des messages
                     chatDiv.innerHTML = messages.map(msg => {
                         const isSent = msg.sender_id == user.id;
+                        const messageClass = isSent ? 'sent' : 'received';
+                        const timeString = new Date(msg.date_envoi).toLocaleString('fr-FR', {
+                            day: '2-digit',
+                            month: 'short',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
+
                         return `
-                            <div class="message ${isSent ? 'sent' : 'received'}">
-                                <div>${msg.message}</div>
-                                <div class="time">${new Date(msg.date_envoi).toLocaleString()}</div>
+                            <div class="message ${messageClass}">
+                                <div>${escapeHtml(msg.message)}</div>
+                                <div class="time">${timeString}</div>
                             </div>
                         `;
                     }).join('');
-                    // Scroll en bas
+
+                    // Défilement automatique vers le bas
                     chatDiv.scrollTop = chatDiv.scrollHeight;
+                })
+                .catch(error => {
+                    console.error('Erreur lors du chargement des messages:', error);
+                    document.getElementById('chat').innerHTML =
+                        '<div class="empty-chat">Erreur de connexion au serveur.</div>';
+                })
+                .finally(() => {
+                    isLoading = false;
                 });
         }
 
+        /**
+         * Envoie un nouveau message
+         */
         function sendMessage() {
             const input = document.getElementById('messageInput');
             const text = input.value.trim();
-            if (!text) return;
-            if (!adminId) {
-                alert("Impossible d'envoyer : admin non trouvé.");
+
+            // Validation
+            if (!text) {
+                input.focus();
                 return;
             }
-            fetch('http://localhost/AGENCE_VOYAGE/backend/index.php?uri=messages', {
+
+            if (!adminId) {
+                alert("Impossible d'envoyer : administrateur non trouvé.");
+                return;
+            }
+
+            if (text.length > 500) {
+                alert("Le message est trop long (maximum 500 caractères).");
+                return;
+            }
+
+            // Préparation de l'envoi
+            const sendBtn = document.getElementById('sendBtn');
+            const originalText = sendBtn.textContent;
+            sendBtn.disabled = true;
+            sendBtn.textContent = 'Envoi...';
+
+            // Envoi au serveur
+            fetch('http://localhost/agence_voyage/backend/index.php?uri=messages', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
                 body: JSON.stringify({
                     sender_id: user.id,
                     receiver_id: adminId,
                     message: text
                 })
             })
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error(`Erreur HTTP: ${res.status}`);
+                }
+                return res.json();
+            })
             .then(data => {
                 if (data.success) {
                     input.value = '';
-                    loadMessages();
+                    loadMessages(); // Recharger pour afficher le nouveau message
                 } else {
-                    alert('Erreur : ' + data.error);
+                    alert('Erreur : ' + (data.error || 'Erreur inconnue'));
                 }
+            })
+            .catch(error => {
+                console.error('Erreur lors de l\'envoi:', error);
+                alert('Erreur de connexion. Veuillez réessayer.');
+            })
+            .finally(() => {
+                sendBtn.disabled = false;
+                sendBtn.textContent = originalText;
             });
         }
 
+        /**
+         * Échappe les caractères HTML pour éviter les injections XSS
+         */
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // =====================================================
+        // GESTIONNAIRES D'ÉVÉNEMENTS
+        // =====================================================
+
+        // Envoi par clic sur le bouton
         document.getElementById('sendBtn').addEventListener('click', sendMessage);
+
+        // Envoi par pression de la touche Entrée
         document.getElementById('messageInput').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') sendMessage();
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
         });
 
-        // Charger les messages toutes les 3 secondes
+        // Gestion de la longueur du message
+        document.getElementById('messageInput').addEventListener('input', (e) => {
+            const maxLength = 500;
+            if (e.target.value.length > maxLength) {
+                e.target.value = e.target.value.substring(0, maxLength);
+            }
+        });
+
+        // =====================================================
+        // INITIALISATION
+        // =====================================================
+
+        // Chargement initial des messages
         loadMessages();
+
+        // Mise à jour automatique toutes les 3 secondes
         setInterval(loadMessages, 3000);
+
+        // Focus sur le champ de saisie au chargement
+        document.getElementById('messageInput').focus();
     </script>
 </body>
 </html>

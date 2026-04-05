@@ -1,0 +1,264 @@
+/* ============================================================
+   HORIZON VOYAGES — Styles du tableau de bord client
+   dashboard.css
+   ============================================================
+   TABLE DES MATIÈRES
+   ─────────────────────────────────────────────────────────────
+   1.  LAYOUT GÉNÉRAL
+   2.  HEADER DE PAGE
+   3.  CARTE DE BIENVENUE
+   4.  GRILLE DE STATISTIQUES
+   5.  CARTES DE CONTENU
+   6.  ÉLÉMENTS SPÉCIFIQUES
+   ============================================================ */
+
+/* ============================================================
+   1. LAYOUT GÉNÉRAL
+   ============================================================ */
+
+.page-wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* ============================================================
+   2. HEADER DE PAGE
+   ============================================================ */
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.page-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: var(--dark);
+    margin: 0;
+}
+
+.page-title span {
+    color: var(--gold);
+    font-style: italic;
+}
+
+.page-subtitle {
+    font-size: 1rem;
+    color: var(--muted);
+    margin-top: 0.5rem;
+}
+
+/* ============================================================
+   3. CARTE DE BIENVENUE
+   ============================================================ */
+
+.welcome-card {
+    background: linear-gradient(135deg, var(--light) 0%, #f8f6f0 100%);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.welcome-card h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 400;
+    color: var(--dark);
+    margin-bottom: 1rem;
+}
+
+.welcome-card h1 span {
+    color: var(--gold);
+}
+
+.welcome-card p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: var(--text);
+    margin: 0;
+}
+
+/* ============================================================
+   4. GRILLE DE STATISTIQUES
+   ============================================================ */
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: var(--light);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.stat-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem;
+    font-weight: 300;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ============================================================
+   5. CARTES DE CONTENU
+   ============================================================ */
+
+.content-card {
+    background: var(--light);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.content-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--dark);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.reservation-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.reservation-item:last-child {
+    border-bottom: none;
+}
+
+.reservation-item span:first-child {
+    font-weight: 500;
+    color: var(--dark);
+}
+
+.reservation-item span:nth-child(2) {
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.reservation-item span:last-child {
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.reservation-item span:last-child {
+    background: var(--gold-dim);
+    color: var(--gold);
+}
+
+/* Statuts spécifiques */
+.reservation-item span:last-child[data-status="confirmée"],
+.reservation-item span:last-child[data-status="confirmé"] {
+    background: rgba(76, 175, 80, 0.1);
+    color: #4caf50;
+}
+
+.reservation-item span:last-child[data-status="en attente"] {
+    background: rgba(255, 152, 0, 0.1);
+    color: #ff9800;
+}
+
+.reservation-item span:last-child[data-status="annulée"] {
+    background: rgba(244, 67, 54, 0.1);
+    color: #f44336;
+}
+
+/* ============================================================
+   6. ÉLÉMENTS SPÉCIFIQUES
+   ============================================================ */
+
+.btn-dashboard {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.no-reservations {
+    text-align: center;
+    color: var(--dark);
+    font-style: italic;
+    padding: 2rem;
+}
+
+/* ============================================================
+   RESPONSIVE DESIGN
+   ============================================================ */
+
+@media (max-width: 768px) {
+    .page-wrap {
+        padding: 1rem;
+    }
+
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .page-title {
+        font-size: 2rem;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .welcome-card {
+        padding: 1.5rem;
+    }
+
+    .welcome-card h1 {
+        font-size: 1.5rem;
+    }
+
+    .content-card {
+        padding: 1.5rem;
+    }
+
+    .reservation-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+}

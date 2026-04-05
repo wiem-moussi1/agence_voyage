@@ -5,766 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Voyages · Admin · Horizon</title>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-        :root {
-            --bg: #F6F1E8;
-            --surface: #FFFFFF;
-            --surface-strong: #F5F0E8;
-            --surface2: #F0E9DE;
-            --gold: #B88D32;
-            --gold-lt: #E1C77B;
-            --gold-dim: rgba(184,141,50,0.15);
-            --ink: #1E1A14;
-            --dark: #1E1A14;
-            --light: #1E1A14;
-            --muted: rgba(30,26,20,0.55);
-            --border: rgba(30,26,20,0.12);
-            --border-strong: rgba(30,26,20,0.18);
-            --danger: #c0392b;
-            --success: #27ae60;
-            --warn: #e67e22;
-        }
-
-        html { scroll-behavior: smooth; }
-
-        body {
-            font-family: 'Jost', sans-serif;
-            background: var(--bg);
-            color: var(--ink);
-            min-height: 100vh;
-        }
-
-        /* ── PAGE LAYOUT ── */
-        .page-wrap {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem 1.5rem 4rem;
-        }
-
-        .page-header {
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
-            margin-bottom: 2.5rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .page-title {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 2.2rem;
-            font-weight: 300;
-            letter-spacing: 0.04em;
-        }
-
-        .page-title span {
-            color: var(--gold);
-        }
-
-        .page-subtitle {
-            font-size: 0.72rem;
-            font-weight: 500;
-            letter-spacing: 0.25em;
-            text-transform: uppercase;
-            color: var(--muted);
-            margin-top: 4px;
-        }
-
-        /* ── TABS ── */
-        .tab-bar {
-            display: flex;
-            gap: 0;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .tab-btn {
-            padding: 0.75rem 1.5rem;
-            background: transparent;
-            border: none;
-            border-bottom: 2px solid transparent;
-            font-family: 'Jost', sans-serif;
-            font-size: 0.7rem;
-            font-weight: 600;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: var(--muted);
-            cursor: pointer;
-            transition: color 0.2s, border-color 0.2s;
-            margin-bottom: -1px;
-        }
-
-        .tab-btn.active {
-            color: var(--gold);
-            border-bottom-color: var(--gold);
-        }
-
-        .tab-btn:hover:not(.active) {
-            background-color: var(--gold);
-        }
-
-        .tab-panel { display: none; }
-        .tab-panel.active { display: block; }
-
-        /* ── FORM CARD ── */
-        .form-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 4px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .form-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0;
-            width: 3px; height: 100%;
-            background: linear-gradient(to bottom, var(--gold), transparent);
-        }
-
-        .form-card-title {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.3rem;
-            font-weight: 300;
-            color: var(--gold);
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .form-card-title svg {
-            width: 18px; height: 18px;
-            stroke: var(--gold); fill: none; stroke-width: 1.5;
-        }
-
-        /* ── FORM GRID ── */
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 1rem;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .form-group.full { grid-column: 1 / -1; }
-        .form-group.half { grid-column: span 2; }
-
-        .form-group label {
-            font-size: 0.6rem;
-            font-weight: 600;
-            letter-spacing: 0.25em;
-            text-transform: uppercase;
-            color: var(--gold);
-        }
-
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            background: rgba(255,255,255,0.04);
-            border: 1px solid var(--border-strong);
-            border-radius: 2px;
-            padding: 0.65rem 0.85rem;
-            font-family: 'Jost', sans-serif;
-            font-size: 0.875rem;
-            font-weight: 300;
-            color: black;
-            outline: none;
-            transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
-            width: 100%;
-        }
-
-        .form-group textarea { resize: vertical; min-height: 80px; }
-
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            border-color: var(--gold);
-            background: rgba(201,168,76,0.04);
-            box-shadow: 0 0 0 3px rgba(201,168,76,0.08);
-        }
-
-        
-
-        .form-group select option { background: var(--surface); }
-
-        .dropzone {
-            border: 2px dashed var(--border);
-            border-radius: 12px;
-            padding: 1rem 1rem;
-            background: var(--surface2);
-            color: var(--muted);
-            text-align: center;
-            cursor: pointer;
-            transition: border-color 0.2s, background 0.2s;
-        }
-        .dropzone.dragover {
-            border-color: var(--gold);
-            background: rgba(184,141,50,0.12);
-        }
-        .dropzone strong { color: var(--ink); }
-        .image-preview {
-            display: grid;
-            grid-template-columns: auto 1fr;
-            gap: 1rem;
-            align-items: center;
-            padding: 1rem;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            background: var(--surface-strong);
-            margin-top: 0.75rem;
-        }
-        .image-preview img {
-            width: 100px;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 10px;
-            border: 1px solid var(--border);
-        }
-        .image-preview span {
-            color: var(--ink);
-            font-size: 0.95rem;
-        }
-        .image-preview small {
-            color: var(--muted);
-            display: block;
-            margin-top: 0.35rem;
-        }
-
-        /* ── FORM ACTIONS ── */
-        .form-actions {
-            display: flex;
-            gap: 0.75rem;
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid var(--border);
-        }
-
-        .btn-primary {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 0.65rem 1.5rem;
-            background: var(--gold);
-            color: var(--dark);
-            border: none;
-            border-radius: 2px;
-            font-family: 'Jost', sans-serif;
-            font-size: 0.72rem;
-            font-weight: 700;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            transition: background 0.2s;
-        }
-
-        .btn-primary:hover { background: var(--gold-lt); }
-
-        .btn-primary svg {
-            width: 14px; height: 14px;
-            stroke: var(--dark); fill: none; stroke-width: 2;
-        }
-
-        .btn-secondary {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 0.65rem 1.2rem;
-            background: transparent;
-            color: var(--muted);
-            border: 1px solid var(--border-strong);
-            border-radius: 2px;
-            font-family: 'Jost', sans-serif;
-            font-size: 0.72rem;
-            font-weight: 600;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: color 0.2s, border-color 0.2s;
-        }
-
-        .btn-secondary:hover { color: var(--gold); border-color: var(--gold); }
-
-        /* ── VOYAGE TABLE ── */
-        .table-wrap {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .table-header {
-            display: flex;
-            flex-direction: column;
-                gap: 12px;
-            padding: 1.2rem 1.5rem;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .table-header-title {
-            font-size: 0.65rem;
-            font-weight: 600;
-            letter-spacing: 0.25em;
-            text-transform: uppercase;
-            color: var(--gold);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .count-badge {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            min-width: 22px;
-            height: 22px;
-            padding: 0 6px;
-            background: var(--gold-dim);
-            border: 1px solid var(--border-strong);
-            border-radius: 2px;
-            font-size: 0.68rem;
-            font-weight: 700;
-            color: var(--gold);
-        }
-
-        .search-box {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid var(--border);
-            border-radius: 2px;
-            padding: 0.4rem 0.75rem;
-        }
-
-        .search-box svg {
-            width: 13px; height: 13px;
-            stroke: var(--muted); fill: none; stroke-width: 2;
-            flex-shrink: 0;
-        }
-
-        .search-box input {
-            background: transparent;
-            border: none;
-            outline: none;
-            font-family: 'Jost', sans-serif;
-            font-size: 0.8rem;
-            font-weight: 300;
-            color: black;
-            width: 200px;
-        }
-
-        .search-box input::placeholder { color: var(--muted); }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        thead tr {
-            background: rgba(201,168,76,0.06);
-        }
-
-        th {
-            padding: 0.75rem 1rem;
-            text-align: left;
-            font-size: 0.58rem;
-            font-weight: 700;
-            letter-spacing: 0.25em;
-            text-transform: uppercase;
-            color: var(--gold);
-            border-bottom: 1px solid var(--border);
-            white-space: nowrap;
-        }
-
-        td {
-            padding: 0.9rem 1rem;
-            font-size: 0.82rem;
-            font-weight: 300;
-            border-bottom: 1px solid rgba(201,168,76,0.08);
-            vertical-align: middle;
-        }
-
-        tbody tr {
-            transition: background 0.15s;
-            cursor: default;
-        }
-
-        tbody tr:hover { background: rgba(255,255,255,0.025); }
-        tbody tr:last-child td { border-bottom: none; }
-
-        .voyage-thumb {
-            width: 52px;
-            height: 38px;
-            object-fit: cover;
-            border-radius: 2px;
-            border: 1px solid var(--border);
-            display: block;
-        }
-
-        .voyage-thumb-placeholder {
-            width: 52px;
-            height: 38px;
-            background: var(--surface2);
-            border: 1px solid var(--border);
-            border-radius: 2px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .voyage-thumb-placeholder svg {
-            width: 16px; height: 16px;
-            stroke: var(--muted); fill: none; stroke-width: 1.5;
-        }
-
-        .titre-cell {
-            max-width: 180px;
-        }
-
-        .titre-text {
-            font-weight: 500;
-            color: black;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 180px;
-        }
-
-        .status-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            padding: 3px 10px;
-            border-radius: 2px;
-            font-size: 0.62rem;
-            font-weight: 600;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            white-space: nowrap;
-        }
-
-        .pill-green { background: rgba(39,174,96,0.15); color: #5cb85c; border: 1px solid rgba(39,174,96,0.25); }
-        .pill-red   { background: rgba(192,57,43,0.15); color: #e74c3c; border: 1px solid rgba(192,57,43,0.25); }
-        .pill-gold  { background: rgba(201,168,76,0.12); color: var(--gold); border: 1px solid var(--border-strong); }
-        .pill-gray  { background: rgba(255,255,255,0.05); color: var(--muted); border: 1px solid var(--border); }
-
-        .res-stat {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-
-        .res-total {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: var(--gold);
-        }
-
-        .res-detail {
-            font-size: 0.62rem;
-            color: var(--muted);
-            letter-spacing: 0.05em;
-        }
-
-        /* ── ACTION BUTTONS ── */
-        .action-group {
-            display: flex;
-            gap: 4px;
-            align-items: center;
-        }
-
-        .btn-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 30px;
-            height: 30px;
-            border: 1px solid var(--border);
-            border-radius: 2px;
-            background: transparent;
-            cursor: pointer;
-            transition: background 0.15s, border-color 0.15s;
-        }
-
-        .btn-icon svg {
-            width: 13px; height: 13px;
-            fill: none; stroke-width: 1.8;
-        }
-
-        .btn-icon.edit svg { stroke: var(--gold); }
-        .btn-icon.edit:hover { background: var(--gold-dim); border-color: var(--gold); }
-
-        .btn-icon.view svg { stroke: #5bc0de; }
-        .btn-icon.view:hover { background: rgba(91,192,222,0.1); border-color: rgba(91,192,222,0.4); }
-
-        .btn-icon.del svg { stroke: #e74c3c; }
-        .btn-icon.del:hover { background: rgba(231,76,60,0.1); border-color: rgba(231,76,60,0.4); }
-
-        /* ── MODAL OVERLAY ── */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(13,11,9,0.85);
-            z-index: 200;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(4px);
-        }
-
-        .modal-overlay.open { display: flex; }
-
-        .modal {
-            background: var(--surface);
-            border: 1px solid var(--border-strong);
-            border-radius: 4px;
-            width: 90%;
-            max-width: 860px;
-            max-height: 85vh;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
-
-        .modal-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 1.2rem 1.5rem;
-            border-bottom: 1px solid var(--border);
-            flex-shrink: 0;
-        }
-
-        .modal-title {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.2rem;
-            font-weight: 300;
-            color: var(--gold);
-        }
-
-        .modal-close {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 32px; height: 32px;
-            border: 1px solid var(--border);
-            border-radius: 2px;
-            background: transparent;
-            cursor: pointer;
-            transition: background 0.15s;
-        }
-
-        .modal-close svg {
-            width: 14px; height: 14px;
-            stroke: var(--muted); fill: none; stroke-width: 2;
-        }
-
-        .modal-close:hover { background: rgba(255,255,255,0.05); }
-
-        .modal-body {
-            overflow-y: auto;
-            padding: 1.5rem;
-            flex: 1;
-        }
-
-        /* ── RESERVATION TABLE IN MODAL ── */
-        .res-voyage-info {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            
-            margin-bottom: 1.5rem;
-            padding: 1rem;
-            background: var(--surface2);
-            border-radius: 4px;
-            border: 1px solid var(--border);
-        }
-
-        .res-voyage-img {
-            /* width: 100px; */
-            height: 350px;
-            /* object-fit: cover; */
-            border-radius: 2px;
-            border: 1px solid var(--border);
-            flex-shrink: 0;
-        }
-
-        .res-voyage-img-placeholder {
-            width: 100px;
-            height: 65px;
-            background: var(--dark);
-            border: 1px solid var(--border);
-            border-radius: 2px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .res-voyage-img-placeholder svg {
-            width: 24px; height: 24px;
-            stroke: var(--muted); fill: none; stroke-width: 1.5;
-        }
-
-        .res-voyage-meta { flex: 1; }
-
-        .res-voyage-name {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.1rem;
-            font-weight: 300;
-            margin-bottom: 8px;
-        }
-
-        .res-voyage-stats {
-            display: flex;
-            gap: 1.5rem;
-        }
-
-        .res-stat-item { display: flex; flex-direction: column; gap: 2px; }
-
-        .res-stat-label {
-            font-size: 0.58rem;
-            font-weight: 600;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: var(--muted);
-        }
-
-        .res-stat-value {
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--gold);
-        }
-
-        .modal-section-title {
-            font-size: 0.62rem;
-            font-weight: 600;
-            letter-spacing: 0.25em;
-            text-transform: uppercase;
-            color: var(--muted);
-            margin-bottom: 0.75rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .modal-section-title::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: var(--border);
-        }
-
-        .res-table-wrap { overflow-x: auto; }
-
-        .res-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.8rem;
-        }
-
-        .res-table th {
-            font-size: 0.56rem;
-            padding: 0.6rem 0.75rem;
-        }
-
-        .res-table td {
-            padding: 0.7rem 0.75rem;
-            font-size: 0.78rem;
-        }
-
-        .statut-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 2px 8px;
-            border-radius: 2px;
-            font-size: 0.6rem;
-            font-weight: 600;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-        }
-
-        .badge-confirmee { background: rgba(39,174,96,0.15); color: #5cb85c; border: 1px solid rgba(39,174,96,0.25); }
-        .badge-attente   { background: rgba(201,168,76,0.12); color: var(--gold); border: 1px solid var(--border-strong); }
-        .badge-annulee   { background: rgba(192,57,43,0.1); color: #e74c3c; border: 1px solid rgba(192,57,43,0.2); }
-
-        /* ── EMPTY & LOADING STATES ── */
-        .state-empty, .state-loading {
-            text-align: center;
-            padding: 3rem;
-            color: var(--muted);
-        }
-
-        .state-loading::after {
-            content: '';
-            display: inline-block;
-            width: 20px; height: 20px;
-            border: 2px solid var(--border-strong);
-            border-top-color: var(--gold);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin-left: 10px;
-            vertical-align: middle;
-        }
-
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        .state-empty svg {
-            width: 40px; height: 40px;
-            stroke: var(--border-strong); fill: none; stroke-width: 1;
-            display: block; margin: 0 auto 1rem;
-        }
-
-        /* ── TOAST ── */
-        .toast {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            padding: 0.75rem 1.25rem;
-            border-radius: 4px;
-            font-size: 0.82rem;
-            font-weight: 500;
-            z-index: 999;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transform: translateY(80px);
-            opacity: 0;
-            transition: transform 0.3s, opacity 0.3s;
-            pointer-events: none;
-        }
-
-        .toast.show { transform: translateY(0); opacity: 1; }
-        .toast.success { background: rgba(39,174,96,0.15); border: 1px solid rgba(39,174,96,0.3); color: #5cb85c; }
-        .toast.error   { background: rgba(192,57,43,0.15); border: 1px solid rgba(192,57,43,0.3); color: #e74c3c; }
-
-        .toast svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 2; }
-
-        /* ── RESPONSIVE ── */
-        @media (max-width: 900px) {
-            .form-grid { grid-template-columns: 1fr 1fr; }
-            .form-group.half { grid-column: span 1; }
-        }
-
-        @media (max-width: 600px) {
-            .form-grid { grid-template-columns: 1fr; }
-            .form-group.half, .form-group.full { grid-column: 1; }
-            .page-header { flex-direction: column; gap: 1rem; align-items: flex-start; }
-        }
-    </style>
+    <link rel="stylesheet" href="../css/adminVoyages.css">
 </head>
 <body>
 
@@ -841,10 +82,10 @@
                     <label for="places_dispo">Places disponibles</label>
                     <input type="number" id="places_dispo" min="0" placeholder="0">
                 </div>
-                <div class="form-group full">
+                <!-- <div class="form-group full">
                     <label for="image">URL de l'image</label>
                     <input type="text" id="image" placeholder="https://…">
-                </div>
+                </div> -->
                 <div class="form-group full">
                     <input type="hidden" id="currentImage">
                     <label>Image par glisser-déposer</label>
@@ -959,7 +200,7 @@ function setupImageDropzone() {
     });
 }
 
-// ── Load Navbar ──
+
 // ── Load Navbar ──
 fetch('navBarAdmin.html')
     .then(r => r.text())
@@ -1135,22 +376,29 @@ function editVoyage(id) {
     const voyage = allVoyages.find(v => v.id == id);
     if (!voyage) return;
 
-    document.getElementById('titre').value        = voyage.titre || '';
-    document.getElementById('description').value  = voyage.description || '';
-    document.getElementById('prix').value         = voyage.prix || '';
-    document.getElementById('date_depart').value  = voyage.date_depart || '';
-    document.getElementById('date_retour').value  = voyage.date_retour || '';
-    document.getElementById('image').value        = voyage.image || '';
-    document.getElementById('currentImage').value = voyage.image || '';
-    document.getElementById('places_dispo').value = voyage.places_dispo || '';
-    updateImagePreview(null, voyage.image || '');
-
-    editingId = id;
-    document.getElementById('formCardTitle').textContent    = `Modifier · ${voyage.titre}`;
-    document.getElementById('submitBtnLabel').textContent   = 'Mettre à jour';
-    document.getElementById('cancelEditBtn').style.display  = 'inline-flex';
+    // Basculer vers l'onglet d'ajout avant d'accéder aux éléments du formulaire
     switchTab('ajouter');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Attendre un court instant pour que le DOM soit mis à jour
+    setTimeout(() => {
+        document.getElementById('titre').value        = voyage.titre || '';
+        document.getElementById('description').value  = voyage.description || '';
+        document.getElementById('prix').value         = voyage.prix || '';
+        document.getElementById('date_depart').value  = voyage.date_depart || '';
+        document.getElementById('date_retour').value  = voyage.date_retour || '';
+        document.getElementById('currentImage').value = voyage.image || '';
+        document.getElementById('places_dispo').value = voyage.places_dispo || '';
+        updateImagePreview(null, voyage.image || '');
+
+        editingId = id;
+        document.getElementById('formCardTitle').textContent    = `Modifier · ${voyage.titre}`;
+        document.getElementById('submitBtnLabel').textContent   = 'Mettre à jour';
+        document.getElementById('cancelEditBtn').style.display  = 'inline-flex';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        // Initialiser la dropzone d'image
+        setupImageDropzone();
+    }, 10);
 }
 
 // ── Cancel Edit ──
@@ -1161,7 +409,6 @@ function cancelEdit() {
     document.getElementById('prix').value         = '';
     document.getElementById('date_depart').value  = '';
     document.getElementById('date_retour').value  = '';
-    document.getElementById('image').value        = '';
     document.getElementById('places_dispo').value = '';
     document.getElementById('currentImage').value = '';
     clearImagePreview();
@@ -1173,7 +420,6 @@ function cancelEdit() {
 
 // ── Submit (Create or Update) ──
 function submitVoyage() {
-    const imageUrl = document.getElementById('image').value.trim();
     const currentImage = document.getElementById('currentImage').value.trim();
     const fileInput = document.getElementById('imageFile');
     const imageFile = fileInput.files[0];
@@ -1184,7 +430,7 @@ function submitVoyage() {
         prix:         parseFloat(document.getElementById('prix').value) || 0,
         date_depart:  document.getElementById('date_depart').value,
         date_retour:  document.getElementById('date_retour').value,
-        image:        imageUrl || currentImage,
+        image:        currentImage,
         places_dispo: parseInt(document.getElementById('places_dispo').value) || 0
     };
 
@@ -1211,7 +457,7 @@ function submitVoyage() {
         formData.append('date_depart', voyage.date_depart);
         formData.append('date_retour', voyage.date_retour);
         formData.append('places_dispo', voyage.places_dispo);
-        formData.append('image', imageUrl || currentImage);
+        formData.append('image', currentImage);
         formData.append('image_file', imageFile);
         if (editingId) {
             formData.append('id', editingId);
@@ -1385,6 +631,13 @@ document.addEventListener('keydown', e => {
 
 // ── Init ──
 loadVoyages();
+
+// Initialiser la dropzone d'image quand l'onglet du formulaire est affiché
+document.addEventListener('click', function(e) {
+    if (e.target.closest('#tab-ajouter') || e.target.id === 'tab-ajouter') {
+        setTimeout(() => setupImageDropzone(), 100);
+    }
+});
 </script>
 </body>
 </html>

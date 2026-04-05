@@ -1,154 +1,228 @@
 ﻿<!DOCTYPE html>
 <html lang="fr">
+<!-- ============================================================
+     HORIZON VOYAGES — Tableau de bord administrateur
+     admin/dashboard.html
+     ============================================================
+     DESCRIPTION:
+     Interface d'administration principale affichant les statistiques
+     globales et les dernières activités du système. Accessible
+     uniquement aux administrateurs connectés.
+
+     FONCTIONNALITÉS:
+     - Statistiques générales (réservations, voyages, avis, messages)
+     - Liste des dernières réservations
+     - Navigation vers les différentes sections d'administration
+     - Gestion de session administrateur
+
+     DÉPENDANCES:
+     - ../css/admin.css (styles généraux admin)
+     - ../css/adminDashboard.css (styles spécifiques)
+     - navBarAdmin.html (barre de navigation admin)
+     - API backend admin pour les statistiques
+     ============================================================ -->
+
 <head>
+    <!-- =====================================================
+         MÉTADONNÉES & CONFIGURATION
+         ===================================================== -->
     <meta charset="UTF-8">
-    <title>Dashboard Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau de bord · Administration</title>
+
+    <!-- =====================================================
+         POLICES GOOGLE FONTS
+         ===================================================== -->
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root {
-            --bg: #F6F1E8;
-            --surface: #FFFFFF;
-            --surface-soft: #FBF7F1;
-            --gold: #B88D32;
-            --gold-soft: #E1C77B;
-            --ink: #1E1A14;
-            --ink-muted: rgba(30,26,20,0.65);
-            --border: rgba(30,26,20,0.12);
-            --shadow: 0 10px 30px rgba(30,26,20,0.06);
-        }
-        .page-header {
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
-            margin-bottom: 2.5rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid var(--border);
-        }
 
-        .page-title {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 2.2rem;
-            font-weight: 300;
-            letter-spacing: 0.04em;
-        }
+    <!-- =====================================================
+         FEUILLES DE STYLE
+         ===================================================== -->
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="../css/adminDashboard.css">
 
-        .page-title span {
-            color: var(--gold);
-        }
-
-        .page-subtitle {
-            font-size: 0.72rem;
-            font-weight: 500;
-            letter-spacing: 0.25em;
-            text-transform: uppercase;
-            color: var(--muted);
-            margin-top: 4px;
-        }
-        body { font-family: 'Jost', sans-serif; background: var(--bg); color: var(--ink); }
-        .container { max-width: 1200px; margin: 2.5rem auto; padding: 0 1.2rem; }
-        h1, h2 { font-family: 'Cormorant Garamond', serif; font-weight: 300; color: var(--ink); margin-bottom: 1rem; }
-        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
-        .card { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 1.75rem; text-align: center; box-shadow: var(--shadow); }
-        .card-number { font-size: 2.2rem; font-weight: 700; color: var(--gold); }
-        .card div:last-child { color: var(--ink-muted); margin-top: 0.5rem; }
-        .recent-list { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; box-shadow: var(--shadow); padding: 1.25rem; }
-        .list-item { border-bottom: 1px solid var(--border); padding: 0.9rem 0; display: grid; grid-template-columns: 1fr auto; gap: 0.75rem; align-items: center; }
-        .list-item span { color: var(--ink); font-size: 0.95rem; }
-        .list-item span:last-child { color: var(--ink-muted); text-align: right; font-size: 0.85rem; }
-        .list-item:last-child { border-bottom: none; }
-        .recent-list p { color: var(--ink-muted); margin: 0; padding: 2rem 0; }
-    </style> 
-    
+    <!-- =====================================================
+         FAVICON & ICÔNES
+         ===================================================== -->
+    <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 </head>
+
 <body>
+    <!-- =====================================================
+         BARRE DE NAVIGATION ADMINISTRATEUR
+         ===================================================== -->
     <div id="navbar"></div>
+
+    <!-- =====================================================
+         CONTENU PRINCIPAL
+         ===================================================== -->
     <div class="container">
-        <!-- Page Header -->
-    <div class="page-header">
-        <div>
-            <h1 class="page-title">Tableau de bord  <span>administrateur</span></h1>
-            <div class="page-subtitle">Administration · Horizon Voyages</div>
+
+        <!-- =====================================================
+             EN-TÊTE DE PAGE
+             ===================================================== -->
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">Tableau de bord <span>administrateur</span></h1>
+                <div class="page-subtitle">Administration · Horizon Voyages</div>
+            </div>
         </div>
-    </div>
-        
+
+        <!-- =====================================================
+             STATISTIQUES GLOBALES
+             ===================================================== -->
         <div class="stats">
-            <div class="card"><div class="card-number" id="totalReservations">-</div><div>Réservations totales</div></div>
-            <div class="card"><div class="card-number" id="totalVoyages">-</div><div>Voyages actifs</div></div>
-            <div class="card"><div class="card-number" id="pendingAvis">-</div><div>Avis en attente</div></div>
-            <div class="card"><div class="card-number" id="totalMessages">-</div><div>Messages reçus</div></div>
+            <div class="card">
+                <div class="card-number" id="totalReservations">-</div>
+                <div>Réservations totales</div>
+            </div>
+            <div class="card">
+                <div class="card-number" id="totalVoyages">-</div>
+                <div>Voyages actifs</div>
+            </div>
+            <div class="card">
+                <div class="card-number" id="pendingAvis">-</div>
+                <div>Avis en attente</div>
+            </div>
+            <div class="card">
+                <div class="card-number" id="totalMessages">-</div>
+                <div>Messages reçus</div>
+            </div>
         </div>
+
+        <!-- =====================================================
+             DERNIÈRES RÉSERVATIONS
+             ===================================================== -->
         <h2>📋 Dernières réservations</h2>
-        <div class="recent-list" id="recentReservations">Chargement...</div>
+        <div class="recent-list" id="recentReservations">
+            <p>Chargement des données...</p>
+        </div>
     </div>
 
+    <!-- =====================================================
+         SCRIPTS JAVASCRIPT
+         ===================================================== -->
     <script>
+        // =====================================================
+        // CONFIGURATION ET SÉCURITÉ
+        // =====================================================
         const user = JSON.parse(localStorage.getItem('user'));
-        if (!user || user.role !== 'Admin') window.location.href = '../index.html';
-
-        // ── Load Navbar ──
-fetch('navBarAdmin.html')
-    .then(r => r.text())
-    .then(html => {
-        document.getElementById('navbar').innerHTML = html;
-
-        // Active link
-        const page = window.location.pathname.split('/').pop();
-        const map = {
-            'dashboard.html': 'nav-dashboard',
-            'reservations.html': 'nav-reservations',
-            'voyages.html': 'nav-voyages',
-            'avis.html': 'nav-avis',
-            'messages.html': 'nav-messages'
-        };
-        if (map[page]) {
-            document.getElementById(map[page])?.classList.add('active');
+        if (!user || user.role !== 'Admin') {
+            window.location.href = '../visitor/home.html';
         }
 
-        // Logout
-        document.getElementById('logoutBtn')?.addEventListener('click', (e) => {
-            e.preventDefault();
-            localStorage.removeItem('user');
-            window.location.href = '../visitor/home.html';
-        });
-    });
+        // =====================================================
+        // CHARGEMENT DE LA BARRE DE NAVIGATION
+        // =====================================================
+        fetch('navBarAdmin.html')
+            .then(r => r.text())
+            .then(html => {
+                document.getElementById('navbar').innerHTML = html;
 
-        // Récupérer les stats
-        fetch(`http://localhost/AGENCE_VOYAGE/backend/index.php?uri=admin/reservations&admin_id=${user.id}`)
-            .then(r => r.json())
-            .then(data => {
-                document.getElementById('totalReservations').innerText = data.length;
-                const recent = data.slice(0,5);
-                const container = document.getElementById('recentReservations');
-                if (recent.length === 0) container.innerHTML = '<p>Aucune réservation.</p>';
-                else {
-                    container.innerHTML = recent.map(r => `
-                        <div class="list-item">
-                            <span>${r.titre} - ${r.nom} ${r.prenom}</span>
-                            <span>${r.nb_personnes} pers. | ${r.statut}</span>
-                            <span>${new Date(r.date_reserv).toLocaleDateString()}</span>
-                        </div>
-                    `).join('');
+                // Activation du lien actif
+                const page = window.location.pathname.split('/').pop();
+                const map = {
+                    'dashboard.html': 'nav-dashboard',
+                    'reservations.html': 'nav-reservations',
+                    'voyages.html': 'nav-voyages',
+                    'avis.html': 'nav-avis',
+                    'messages.html': 'nav-messages',
+                    'contact.html': 'nav-contact',
+                    'newsletter.html': 'nav-newsletter'
+                };
+                if (map[page]) {
+                    document.getElementById(map[page])?.classList.add('active');
                 }
+
+                // Gestionnaire de déconnexion
+                document.getElementById('logoutBtn')?.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    localStorage.removeItem('user');
+                    window.location.href = '../visitor/home.html';
+                });
             });
 
-        fetch(`http://localhost/AGENCE_VOYAGE/backend/index.php?uri=admin/voyages&admin_id=${user.id}`)
-            .then(r => r.json())
-            .then(data => document.getElementById('totalVoyages').innerText = data.length);
+        // =====================================================
+        // CHARGEMENT DES STATISTIQUES
+        // =====================================================
 
-        fetch(`http://localhost/AGENCE_VOYAGE/backend/index.php?uri=admin/avis&admin_id=${user.id}`)
+        /**
+         * Charge les statistiques des réservations
+         */
+        fetch(`http://localhost/agence_voyage/backend/index.php?uri=admin/reservations&admin_id=${user.id}`)
+            .then(r => r.json())
+            .then(data => {
+                // Nombre total de réservations
+                document.getElementById('totalReservations').innerText = data.length;
+
+                // Affichage des 5 dernières réservations
+                const recent = data.slice(0, 5);
+                const container = document.getElementById('recentReservations');
+
+                if (recent.length === 0) {
+                    container.innerHTML = '<p>Aucune réservation trouvée.</p>';
+                } else {
+                    container.innerHTML = recent.map(r => {
+                        // Détermination de la classe CSS pour le statut
+                        const statusClass = r.statut === 'confirmee' ? 'statut-confirmee' :
+                                          r.statut === 'en_attente' ? 'statut-en_attente' :
+                                          'statut-annulee';
+
+                        return `
+                            <div class="list-item">
+                                <span>${r.titre} - ${r.nom} ${r.prenom}</span>
+                                <span class="${statusClass}">${r.nb_personnes} pers. | ${r.statut.replace('_', ' ')}</span>
+                                <span>${new Date(r.date_reserv).toLocaleDateString('fr-FR')}</span>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            })
+            .catch(error => {
+                console.error('Erreur lors du chargement des réservations:', error);
+                document.getElementById('recentReservations').innerHTML = '<p>Erreur de chargement des réservations.</p>';
+            });
+
+        /**
+         * Charge le nombre total de voyages
+         */
+        fetch(`http://localhost/agence_voyage/backend/index.php?uri=admin/voyages&admin_id=${user.id}`)
+            .then(r => r.json())
+            .then(data => {
+                document.getElementById('totalVoyages').innerText = data.length;
+            })
+            .catch(error => {
+                console.error('Erreur lors du chargement des voyages:', error);
+                document.getElementById('totalVoyages').innerText = '—';
+            });
+
+        /**
+         * Charge le nombre d'avis en attente
+         */
+        fetch(`http://localhost/agence_voyage/backend/index.php?uri=admin/avis&admin_id=${user.id}`)
             .then(r => r.json())
             .then(data => {
                 const pending = data.filter(a => a.statut === 'en_attente').length;
                 document.getElementById('pendingAvis').innerText = pending;
+            })
+            .catch(error => {
+                console.error('Erreur lors du chargement des avis:', error);
+                document.getElementById('pendingAvis').innerText = '—';
             });
 
-        fetch(`http://localhost/AGENCE_VOYAGE/backend/index.php?uri=admin/messages&admin_id=${user.id}`)
+        /**
+         * Charge le nombre de messages reçus
+         */
+        fetch(`http://localhost/agence_voyage/backend/index.php?uri=admin/messages&admin_id=${user.id}`)
             .then(r => r.json())
             .then(data => {
                 // Compter les messages reçus par l'admin (receiver_id = admin)
                 const received = data.filter(m => m.receiver_id == user.id).length;
                 document.getElementById('totalMessages').innerText = received;
+            })
+            .catch(error => {
+                console.error('Erreur lors du chargement des messages:', error);
+                document.getElementById('totalMessages').innerText = '—';
             });
     </script>
 </body>

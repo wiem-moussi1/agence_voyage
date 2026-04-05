@@ -1,0 +1,497 @@
+/* ============================================================
+   HORIZON VOYAGES — Styles des réservations client
+   reservations.css
+   ============================================================
+   TABLE DES MATIÈRES
+   ─────────────────────────────────────────────────────────────
+   1.  STATISTIQUES & FILTRES
+   2.  GRILLE DE RÉSERVATIONS
+   3.  CARTES DE RÉSERVATION
+   4.  MODALES & TOASTS
+   5.  ÉTATS DE CHARGEMENT
+   ============================================================ */
+
+/* ============================================================
+   1. STATISTIQUES & FILTRES
+   ============================================================ */
+
+.stats-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: var(--light);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+
+.stat-card {
+    text-align: center;
+}
+
+.stat-card .stat-label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--dark);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.5rem;
+}
+
+.stat-card .stat-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--gold);
+}
+
+/* Couleurs spécifiques pour les statuts */
+.stat-confirmees {
+    color: #5cb85c !important;
+}
+
+.stat-attente {
+    color: var(--gold);
+}
+
+.stat-annulees {
+    color: #e74c3c;
+}
+
+.filter-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1rem;
+}
+
+.filter-tab {
+    padding: 0.75rem 1.5rem;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.filter-tab:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+}
+
+.filter-tab.active {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--dark);
+}
+
+/* ============================================================
+   2. GRILLE DE RÉSERVATIONS
+   ============================================================ */
+
+.reservations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+}
+
+/* ============================================================
+   3. CARTES DE RÉSERVATION
+   ============================================================ */
+
+.reservation-card {
+    background: var(--light);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.reservation-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.reservation-header {
+    position: relative;
+    height: 180px;
+    overflow: hidden;
+}
+
+.reservation-thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.reservation-thumb-placeholder {
+    width: 100%;
+    height: 100%;
+    background: var(--muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--light);
+}
+
+.reservation-thumb-placeholder svg {
+    width: 48px;
+    height: 48px;
+    opacity: 0.5;
+}
+
+.reservation-status {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+}
+
+.status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.badge-confirmee {
+    background: rgba(76, 175, 80, 0.1);
+    color: #4caf50;
+}
+
+.badge-attente {
+    background: rgba(255, 152, 0, 0.1);
+    color: #ff9800;
+}
+
+.badge-annulee {
+    background: rgba(244, 67, 54, 0.1);
+    color: #f44336;
+}
+
+.reservation-body {
+    padding: 1.5rem;
+}
+
+.reservation-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: var(--dark);
+    margin-bottom: 1rem;
+    line-height: 1.3;
+}
+
+.reservation-dates {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-bottom: 1rem;
+}
+
+.reservation-dates svg {
+    width: 16px;
+    height: 16px;
+    stroke: var(--gold);
+    fill: none;
+    stroke-width: 1.5;
+    flex-shrink: 0;
+}
+
+.reservation-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text);
+}
+
+.detail-item svg {
+    width: 14px;
+    height: 14px;
+    stroke: var(--gold);
+    fill: none;
+    stroke-width: 1.5;
+    flex-shrink: 0;
+}
+
+.reservation-price {
+    font-size: 1.1rem;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+}
+
+.reservation-price strong {
+    font-weight: 600;
+}
+
+.reservation-date {
+    font-size: 0.8rem;
+    color: var(--muted);
+}
+
+.reservation-actions {
+    padding: 1rem 1.5rem 1.5rem;
+    border-top: 1px solid var(--border-light);
+}
+
+.btn-cancel {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: transparent;
+    border: 1px solid #e74c3c;
+    border-radius: 4px;
+    color: #e74c3c;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-cancel:hover {
+    background: #e74c3c;
+    color: white;
+}
+
+.btn-cancel svg {
+    width: 14px;
+    height: 14px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+}
+
+/* ============================================================
+   4. MODALES & TOASTS
+   ============================================================ */
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s;
+}
+
+.modal-overlay.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-box {
+    background: var(--light);
+    border-radius: 8px;
+    padding: 2rem;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    transform: scale(0.9);
+    transition: transform 0.3s;
+}
+
+.modal-overlay.open .modal-box {
+    transform: scale(1);
+}
+
+.modal-icon {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 1rem;
+    color: #e74c3c;
+}
+
+.modal-icon svg {
+    width: 100%;
+    height: 100%;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 1.5;
+}
+
+.modal-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--dark);
+    margin-bottom: 1rem;
+}
+
+.modal-text {
+    color: var(--text);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.btn-dismiss {
+    padding: 0.75rem 1.5rem;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text);
+    font-family: 'Jost', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-dismiss:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+}
+
+.btn-confirm-cancel {
+    padding: 0.75rem 1.5rem;
+    background: #e74c3c;
+    border: 1px solid #e74c3c;
+    border-radius: 4px;
+    color: white;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-confirm-cancel:hover {
+    background: #c0392b;
+    border-color: #c0392b;
+}
+
+.btn-confirm-cancel:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.toast {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    border-radius: 4px;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    z-index: 1001;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.3s;
+}
+
+.toast.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.toast.success {
+    background: #4caf50;
+    color: white;
+}
+
+.toast.error {
+    background: #f44336;
+    color: white;
+}
+
+.toast svg {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    flex-shrink: 0;
+}
+
+/* ============================================================
+   5. ÉTATS DE CHARGEMENT
+   ============================================================ */
+
+.state-loading,
+.state-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--muted);
+}
+
+.state-loading {
+    font-style: italic;
+}
+
+.state-empty svg {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 1rem;
+    opacity: 0.5;
+}
+
+.state-empty p {
+    font-size: 1.1rem;
+    margin: 0;
+    color: var(--dark);
+}
+
+/* ============================================================
+   RESPONSIVE DESIGN
+   ============================================================ */
+
+@media (max-width: 768px) {
+    .stats-strip {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+
+    .filter-tabs {
+        flex-wrap: wrap;
+    }
+
+    .reservations-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .reservation-card {
+        margin: 0;
+    }
+
+    .modal-actions {
+        flex-direction: column;
+    }
+
+    .modal-box {
+        padding: 1.5rem;
+    }
+}
